@@ -1,0 +1,139 @@
+.panel {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.panel__title {
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-4);
+}
+
+/* Wide content scrolls inside its own box; the page never scrolls sideways. */
+.panel__scroll {
+  overflow-x: auto;
+}
+
+.panel__empty {
+  padding: var(--space-10) var(--space-4);
+  text-align: center;
+  color: var(--color-muted);
+}
+
+/* ── score by quarter ─────────────────────────────────────────────────── */
+
+.quarters {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.quarters th,
+.quarters td {
+  padding: var(--space-2) var(--space-3);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.quarters thead th {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.quarters tbody th {
+  text-align: left;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.quarters thead th:first-child,
+.quarters tbody th {
+  padding-left: 0;
+}
+
+.quarters__total {
+  font-weight: var(--weight-bold);
+}
+
+/* ── team stats ───────────────────────────────────────────────────────── */
+
+.team-stats__row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.team-stats__value {
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+}
+
+.team-stats__value--end {
+  text-align: right;
+}
+
+.team-stats__label {
+  text-align: center;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.team-stats__bar {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 2px;
+  height: 6px;
+}
+
+.team-stats__fill {
+  border-radius: var(--radius-pill);
+  min-width: 2px;
+}
+
+.team-stats__fill--away {
+  background-color: var(--color-secondary);
+}
+
+.team-stats__fill--home {
+  background-color: var(--color-accent);
+}
+
+/* ── top performers ───────────────────────────────────────────────────── */
+
+.performers__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.performers__row + .performers__row {
+  border-top: 1px solid var(--color-border);
+}
+
+.performers__who {
+  flex: 1;
+  min-width: 0;
+}
+
+.performers__name {
+  font-weight: var(--weight-semibold);
+}
+
+.performers__meta {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.performers__line {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}

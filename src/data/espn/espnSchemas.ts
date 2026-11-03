@@ -17,8 +17,10 @@ import { z } from 'zod';
 const hexColor = z.string().regex(/^[0-9a-fA-F]{6}$/);
 
 export const espnStatusSchema = z.object({
-  period: z.number().int().nonnegative(),
-  displayClock: z.string(),
+  // The scoreboard sends both; the summary header sends neither, carrying only
+  // `type`. The normalizer derives the period from the line scores instead.
+  period: z.number().int().nonnegative().optional(),
+  displayClock: z.string().optional(),
   type: z.object({
     // The one field we branch on. Everything else about an in-progress game's
     // status block is unobserved, so nothing else here is constrained.
@@ -42,8 +44,14 @@ export const espnTeamSchema = z.object({
   logo: z.string().optional(),
 });
 
+/**
+ * The same concept in two shapes: the scoreboard sends `{ value, period }`
+ * while the summary header sends `{ displayValue }` only. Read both through
+ * `lineScoreValue` rather than touching either field directly.
+ */
 export const espnLineScoreSchema = z.object({
-  value: z.number(),
+  value: z.number().optional(),
+  displayValue: z.string().optional(),
   period: z.number().int().positive().optional(),
 });
 
@@ -61,7 +69,9 @@ export const espnCompetitorSchema = z.object({
   team: espnTeamSchema,
   // Absent entirely on a scheduled game.
   linescores: z.array(espnLineScoreSchema).optional(),
+  // Plural on the scoreboard, singular on the summary header.
   records: z.array(espnRecordSchema).optional(),
+  record: z.array(espnRecordSchema).optional(),
 });
 
 export const espnCompetitionSchema = z.object({
@@ -128,3 +138,74 @@ export type EspnStandings = z.infer<typeof espnStandingsSchema>;
 export type EspnStandingsEntry = z.infer<typeof espnStandingsEntrySchema>;
 export type EspnTeams = z.infer<typeof espnTeamsSchema>;
 export type EspnTeam = z.infer<typeof espnTeamSchema>;
+
+/* ── summary ──────────────────────────────────────────────────────────────── */
+
+export const espnTeamStatSchema = z.object({
+  name: z.string(),
+  displayValue: z.string(),
+  label: z.string().optional(),
+  abbreviation: z.string().optional(),
+});
+
+export const espnBoxscoreTeamSchema = z.object({
+  team: espnTeamSchema,
+  homeAway: z.enum(['home', 'away']).optional(),
+  statistics: z.array(espnTeamStatSchema),
+});
+
+/**
+ * Player stats arrive as parallel arrays: `labels` names the columns and each
+ * athlete's `stats` holds the values in that order, all as strings.
+ */
+export const espnPlayerGroupSchema = z.object({
+  team: espnTeamSchema,
+  statistics: z.array(
+    z.object({
+      labels: z.array(z.string()),
+      athletes: z.array(
+        z.object({
+          athlete: z.object({
+            id: z.string(),
+            displayName: z.string(),
+            shortName: z.string().optional(),
+            position: z.object({ abbreviation: z.string().optional() }).optional(),
+          }),
+          stats: z.array(z.string()),
+          starter: z.boolean().optional(),
+          didNotPlay: z.boolean().optional(),
+        }),
+      ),
+    }),
+  ),
+});
+
+export const espnPlaySchema = z.object({
+  id: z.string(),
+  text: z.string().optional(),
+  scoringPlay: z.boolean().optional(),
+  awayScore: z.number(),
+  homeScore: z.number(),
+  period: z.object({ number: z.number().int() }),
+  clock: z.object({ displayValue: z.string() }),
+  // Absent on game-level events such as "End of Game".
+  team: z.object({ id: z.string() }).optional(),
+});
+
+export const espnSummarySchema = z.object({
+  header: z.object({
+    id: z.string(),
+    competitions: z.array(espnCompetitionSchema).min(1),
+  }),
+  boxscore: z
+    .object({
+      teams: z.array(espnBoxscoreTeamSchema).optional(),
+      players: z.array(espnPlayerGroupSchema).optional(),
+    })
+    .optional(),
+  plays: z.array(espnPlaySchema).optional(),
+});
+
+export type EspnSummary = z.infer<typeof espnSummarySchema>;
+export type EspnPlayerGroup = z.infer<typeof espnPlayerGroupSchema>;
+export type EspnBoxscoreTeam = z.infer<typeof espnBoxscoreTeamSchema>;

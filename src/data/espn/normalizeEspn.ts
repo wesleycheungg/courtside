@@ -48,7 +48,23 @@ export function parseScore(raw: string | undefined): number {
 
 /** The overall W-L record, ignoring the home/road/division splits. */
 export function overallRecord(competitor: EspnCompetitor): string | undefined {
-  return competitor.records?.find((record) => record.type === 'total')?.summary;
+  // `records` on the scoreboard, `record` on the summary header.
+  const all = competitor.records ?? competitor.record ?? [];
+  return all.find((record) => record.type === 'total')?.summary;
+}
+
+/**
+ * A period's points, from whichever field the endpoint happened to use: the
+ * scoreboard sends a numeric `value`, the summary header a `displayValue`
+ * string.
+ */
+export function lineScoreValue(line: {
+  value?: number | undefined;
+  displayValue?: string | undefined;
+}): number {
+  if (typeof line.value === 'number') return line.value;
+  const parsed = Number(line.displayValue);
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 /** Competitors are ordered home-first, so the side must be looked up, not indexed. */
@@ -93,6 +109,9 @@ export function normalizeEspnGame(event: EspnEvent): Game | null {
   if (!away || !home) return null;
 
   const { status } = competition;
+  // The summary header omits both, so fall back to what the line scores imply.
+  const period = status.period ?? away.linescores?.length ?? 0;
+  const displayClock = status.displayClock ?? '';
 
   return {
     id: event.id,
@@ -100,8 +119,8 @@ export function normalizeEspnGame(event: EspnEvent): Game | null {
     startsAt: new Date(event.date).toISOString(),
     state: normalizeEspnState(
       status.type.state,
-      status.period,
-      status.displayClock,
+      period,
+      displayClock,
       new Date(event.date).toISOString(),
     ),
     away: normalizeEspnTeam(away.team, overallRecord(away)),
