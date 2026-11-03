@@ -10,6 +10,7 @@ import type {
   ConferenceId,
   Game,
   GameState,
+  Period,
   Standing,
   TeamRef,
 } from '../types';
@@ -96,6 +97,30 @@ export function normalizeEspnState(
         clock: displayClock === '0.0' ? '' : displayClock,
       };
   }
+}
+
+/**
+ * Quarter-by-quarter scores, read off the away side's line scores and paired
+ * with the home side's by position.
+ *
+ * Shared by the summary normalizer and the Postgres cache, so the periods a
+ * SQL validation checks against a final score are the same ones the UI shows.
+ */
+export function normalizeEspnPeriods(competitors: EspnCompetitor[]): Period[] {
+  const homeLines = sideOf(competitors, 'home')?.linescores ?? [];
+
+  return (sideOf(competitors, 'away')?.linescores ?? []).map((line, index) => {
+    // The summary header omits `period`, so fall back to array position.
+    const number = line.period ?? index + 1;
+    const homeLine = homeLines[index];
+
+    return {
+      number,
+      label: periodLabel(number),
+      awayScore: lineScoreValue(line),
+      homeScore: homeLine ? lineScoreValue(homeLine) : 0,
+    };
+  });
 }
 
 export function normalizeEspnGame(event: EspnEvent): Game | null {
