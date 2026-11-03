@@ -3,6 +3,7 @@ import { Page } from '../../components/Page';
 import { TeamLogo } from '../../components/TeamLogo';
 import type { Conference, ConferenceId, Standing } from '../../data/types';
 import { formatGamesBehind, formatWinPercent, seedBand, seedBandLabel } from './seeding';
+import { StandingsSkeleton } from './StandingsSkeleton';
 import { useStandings } from './useStandings';
 import './LeaguesPage.css';
 
@@ -93,11 +94,7 @@ export function LeaguesPage() {
         ))}
       </div>
 
-      {isPending && (
-        <p className="panel__empty" role="status">
-          Loading standings…
-        </p>
-      )}
+      {isPending && <StandingsSkeleton />}
 
       {isError && (
         <p className="panel__empty" role="alert">

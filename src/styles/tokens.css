@@ -60,6 +60,11 @@
   --radius-lg: 14px;
   --radius-pill: 999px;
 
+  /* Loading placeholders — a block one step above the surface it sits on, with
+     a sheen tinted from the text colour so it reads as the same palette. */
+  --color-skeleton: #232935;
+  --color-skeleton-sheen: rgb(242 244 247 / 9%);
+
   /* Layout */
   --app-max-width: 480px;
   --bottom-nav-height: 64px;

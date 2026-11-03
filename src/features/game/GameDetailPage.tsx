@@ -1,6 +1,7 @@
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { Placeholder } from '../../components/Placeholder';
 import { BoxScoreTab } from './BoxScoreTab';
+import { GameDetailSkeleton } from './GameDetailSkeleton';
 import { GameHeader } from './GameHeader';
 import { PlaysTab } from './PlaysTab';
 import { SummaryTab } from './SummaryTab';
@@ -38,11 +39,7 @@ export function GameDetailPage() {
   }
 
   if (isPending) {
-    return (
-      <p className="panel__empty" role="status">
-        Loading game…
-      </p>
-    );
+    return <GameDetailSkeleton />;
   }
 
   if (isError) {
