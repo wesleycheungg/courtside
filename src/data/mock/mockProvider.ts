@@ -51,7 +51,7 @@ const players = playersFixture as Player[];
 const SIM_WIRE: WireGame = {
   gameId: SIM_GAME_ID,
   league: 'nba',
-  tipoffUtc: '23:00:00',
+  tipoffUtc: '23:15:00',
   statusCode: 'in',
   awayTeamId: 'nyk',
   homeTeamId: 'bos',

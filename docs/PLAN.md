@@ -67,11 +67,11 @@ Deliverables below are unchanged; only their order is.
   MockProvider produces; swapping providers changes no component code.
 - ☐ Real ESPN responses for a live, a final, and a scheduled game are captured as fixtures
   with the capture date recorded.
-- ☐ The feed shows a date strip; selecting a date loads that date's games and updates the URL.
-- ☐ Filters All and Live work; the Live chip shows an accurate count.
-- ☐ Games are grouped as live, then final, then scheduled, under a league header.
-- ☐ TanStack Query polls every 15s while a game is live and stops when none are.
-- ☐ Loading, empty (no games on this date), and error states each render deliberately.
+- ☑ The feed shows a date strip; selecting a date loads that date's games and updates the URL.
+- ☑ Filters All and Live work; the Live chip shows an accurate count.
+- ☑ Games are grouped as live, then final, then scheduled, under a league header.
+- ☑ TanStack Query polls every 15s while a game is live and stops when none are.
+- ☑ Loading, empty (no games on this date), and error states each render deliberately.
 
 ---
 

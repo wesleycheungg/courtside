@@ -10,3 +10,4 @@ blob-report/
 .vitest/
 .vercel
 *.log
+*.tsbuildinfo

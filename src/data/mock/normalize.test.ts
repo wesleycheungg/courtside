@@ -111,6 +111,14 @@ describe('toIsoInstant', () => {
   it('combines a calendar date with a UTC time of day', () => {
     expect(toIsoInstant('2026-11-02', '23:30:00')).toBe('2026-11-02T23:30:00.000Z');
   });
+
+  it('rolls forward for a game that tips after midnight UTC', () => {
+    expect(toIsoInstant('2026-11-02', '02:30:00', 1)).toBe('2026-11-03T02:30:00.000Z');
+  });
+
+  it('rolls across a month boundary', () => {
+    expect(toIsoInstant('2026-11-30', '01:00:00', 1)).toBe('2026-12-01T01:00:00.000Z');
+  });
 });
 
 describe('normalizeGame', () => {
@@ -120,7 +128,7 @@ describe('normalizeGame', () => {
     expect(game).toMatchObject({
       id: 'mock-final-gsw-okc',
       league: 'nba',
-      startsAt: '2026-11-02T00:00:00.000Z',
+      startsAt: '2026-11-02T23:00:00.000Z',
       state: { status: 'final', wentToOvertime: false },
       awayScore: 104,
       homeScore: 118,

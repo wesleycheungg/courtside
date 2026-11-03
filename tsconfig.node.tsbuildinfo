@@ -1,1 +1,0 @@
-{"root":["./vite.config.ts","./playwright.config.ts","./e2e/pages/apppage.ts","./e2e/tests/smoke.spec.ts"],"version":"5.9.3"}

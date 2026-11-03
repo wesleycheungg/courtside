@@ -89,3 +89,37 @@ run on every PR.
 
 M4 scope grows accordingly: it now backfills coverage for everything shipped in
 M2, M3, and M5 before adding axe, visual regression, and tagged suites.
+
+---
+
+## M2 part 1 — Games feed on mock data (2026-11-02)
+
+```
+Tests:    64 unit/component (+3 vs M1) · 12 e2e · total 76
+          No new feature tests — test-first is paused until M4.
+Local:    unit 1.9s · e2e 12.5s
+```
+
+Shipped: date strip, All/Live filter chips, league-grouped feed with live /
+final / scheduled ordering, loading, empty and error states, and 15s polling
+that stops once nothing is live. All against the MockProvider.
+
+Bugs caught while building:
+
+- **Scheduled games sorted wrongly, and showed the wrong local day.** Fixtures
+  combined the slate date with a UTC time of day, so a game tipping at 02:30
+  UTC — a normal 9:30pm ET game — landed on the previous local evening and
+  sorted ahead of earlier games. Spotted by eye in a screenshot, not by a test.
+  Fixed with an explicit `tipoffDayOffset` on the wire format; the three unit
+  tests added alongside the fix are the only new tests in this milestone.
+- **Winner/loser emphasis was inverted.** First pass dimmed every team that was
+  not winning, which greys out both sides of a live game. Only the losing side
+  of a _finished_ game should dim.
+
+Deliberately not built, to avoid non-functional chrome: the search and calendar
+icon buttons in the header, and the "On TV" / "Following" filter chips. All four
+appear in the design but have nothing behind them yet.
+
+Note: the MockProvider returns the same slate for every date, so the date strip
+changes the URL and refetches but shows the same games. Real per-date data
+arrives with the ESPN provider.

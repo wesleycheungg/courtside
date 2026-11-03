@@ -73,9 +73,14 @@ export function normalizeGameState(wire: WireGame, startsAt: string): GameState 
   }
 }
 
-/** Combines a YYYY-MM-DD date with a fixture's UTC time of day. */
-export function toIsoInstant(date: string, timeUtc: string): string {
-  return new Date(`${date}T${timeUtc}Z`).toISOString();
+/**
+ * Combines a YYYY-MM-DD date with a fixture's UTC time of day, optionally
+ * rolling forward a day for games that tip after midnight UTC.
+ */
+export function toIsoInstant(date: string, timeUtc: string, dayOffset = 0): string {
+  const instant = new Date(`${date}T${timeUtc}Z`);
+  instant.setUTCDate(instant.getUTCDate() + dayOffset);
+  return instant.toISOString();
 }
 
 export function normalizeGame(
@@ -91,7 +96,7 @@ export function normalizeGame(
     );
   }
 
-  const startsAt = toIsoInstant(date, wire.tipoffUtc);
+  const startsAt = toIsoInstant(date, wire.tipoffUtc, wire.tipoffDayOffset ?? 0);
   const periods = normalizePeriods(wire.linescores);
   const totals = totalsFromPeriods(periods);
 

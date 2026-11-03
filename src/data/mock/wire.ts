@@ -35,6 +35,12 @@ export interface WireGame {
   league: string;
   /** Time of day in UTC; combined with the requested date at read time. */
   tipoffUtc: string;
+  /**
+   * Days to add to the slate date before applying `tipoffUtc`. A US evening
+   * game tips after midnight UTC, so it belongs to the next UTC day while
+   * still being part of that evening's slate. Defaults to 0.
+   */
+  tipoffDayOffset?: number;
   statusCode: WireStatusCode;
   awayTeamId: string;
   homeTeamId: string;
