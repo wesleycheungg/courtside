@@ -1,0 +1,75 @@
+/**
+ * Design tokens — the single source of truth for color, type, spacing, and radii.
+ * Nothing else in src/ may hardcode a color value.
+ */
+
+:root {
+  /* Surfaces */
+  --color-bg: #0e1116;
+  --color-surface: #171b22;
+  --color-surface-raised: #1f242e;
+  --color-border: #262c36;
+
+  /* Text */
+  --color-text: #f2f4f7;
+  --color-muted: #9aa3b2;
+
+  /* Brand */
+  --color-accent: #ff7a1a;
+  --color-accent-contrast: #0e1116;
+  --color-secondary: #4c9aff;
+
+  /* Status — read off the designs. Live is deliberately distinct from accent
+     so "in progress" never reads as "selected". */
+  --color-live: #ff4d4f;
+  --color-win: #3ddc97;
+  --color-loss: #ff6b6b;
+
+  /* Type */
+  --font-display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --font-body: 'Inter Variable', 'Inter', system-ui, -apple-system, sans-serif;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-score: 2.75rem;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Spacing — 4px base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* Layout */
+  --app-max-width: 480px;
+  --bottom-nav-height: 64px;
+
+  /* Motion — respected only when the user hasn't asked for reduced motion. */
+  --transition-fast: 120ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-fast: 0ms;
+  }
+}
