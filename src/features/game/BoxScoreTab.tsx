@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import type { GameDetail, PlayerStatLine } from '../../data/types';
 import { abbreviateName, formatMinutes, formatPlusMinus } from './formatStats';
 import './BoxScoreTab.css';
@@ -28,7 +29,7 @@ function StatTable({ lines }: { lines: PlayerStatLine[] }) {
           {lines.map((line) => (
             <tr key={line.playerId}>
               <th scope="row" className="box-score__player">
-                {abbreviateName(line.name)}
+                <Link to={`/player/${line.playerId}`}>{abbreviateName(line.name)}</Link>
               </th>
               <td>{formatMinutes(line.minutes)}</td>
               <td className="box-score__points">{line.points}</td>

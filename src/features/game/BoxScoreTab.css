@@ -66,3 +66,12 @@
 .box-score abbr {
   text-decoration: none;
 }
+
+.box-score__player a {
+  /* Underline on hover only — 13 underlined names at once is noise. */
+  color: inherit;
+}
+
+.box-score__player a:hover {
+  text-decoration: underline;
+}

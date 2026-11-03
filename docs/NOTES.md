@@ -229,3 +229,51 @@ The Shots tab ships as an explicit empty state, which is its M3 criterion. Shot
 charts need per-shot coordinates and stay in the Later bucket — the summary
 response does carry a `shotChartAvailable` flag and `coordinate` on plays, so
 the data exists when we want it.
+
+---
+
+## M5 — Standings and Player (2026-11-03)
+
+```
+Tests:    101 unit/component · 12 e2e · total 113 (no new ones)
+Local:    unit 2.4s · e2e 10.6s
+```
+
+Standings with East/West tabs, seed markers and a legend; player page with
+season-average tiles, a recent-points chart, game log and shooting splits.
+Box-score rows link through to the player. Both screens work on mock and live.
+
+Two new ESPN endpoints, both on `site.web.api.espn.com` rather than the
+`site.api.espn.com` host everything else uses — worth knowing, it is a separate
+base URL in `api/_lib/espn.ts`:
+
+- `/athletes/{id}` — profile plus `statsSummary` carrying season averages and
+  their league ranks.
+- `/athletes/{id}/gamelog` — label-indexed like the box score.
+
+Shooting splits are summed from the game log, because the athlete endpoint
+gives percentages but not makes and attempts, and the design shows both. The
+summed FG% came out at 45.1%, matching ESPN's own `fieldGoalPct` for the same
+player — a useful independent check that the summing is right.
+
+### Deviation from the design
+
+The design's "Shooting by zone" panel (restricted area, paint, mid-range,
+above the break) needs per-shot coordinates, which neither endpoint carries.
+Shipped FG / 3PT / FT splits instead — real data, same panel shape. Zones go
+with the shot charts in the Later bucket; `shotChartAvailable` and per-play
+`coordinate` in the summary response are the way in when we want them.
+
+### Domain change
+
+`Player.seasonAverages` went from four fixed numeric fields to a `StatTile[]`,
+and `heightInches: number` to `height: string`. Providers expose different
+stats and format height differently, and the page only ever renders what it is
+handed. `shootingSplits` is new.
+
+### Bug found by eye
+
+Standings clipped the STRK column at 390px — cell padding and the team-name
+font were too generous. Tightened; the table now fits with zero inner scroll.
+Third milestone running where a layout bug was caught by looking rather than by
+a test.

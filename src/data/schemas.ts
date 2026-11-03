@@ -114,11 +114,17 @@ export const conferenceSchema = z.object({
   standings: z.array(standingSchema),
 });
 
-export const seasonAveragesSchema = z.object({
-  points: z.number().nonnegative(),
-  rebounds: z.number().nonnegative(),
-  assists: z.number().nonnegative(),
-  fieldGoalPercent: z.number().min(0).max(100),
+export const statTileSchema = z.object({
+  label: z.string().min(1),
+  value: z.string().min(1),
+  rank: z.number().int().positive().optional(),
+});
+
+export const shootingSplitSchema = z.object({
+  label: z.string().min(1),
+  made: z.number().int().nonnegative(),
+  attempted: z.number().int().nonnegative(),
+  percent: z.number().min(0).max(100),
 });
 
 export const gameLogEntrySchema = z.object({
@@ -141,10 +147,11 @@ export const playerSchema = z.object({
   teamColor: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   position: z.string().min(1),
   jerseyNumber: z.string(),
-  heightInches: z.number().int().positive(),
+  height: z.string(),
   age: z.number().int().positive(),
   seasonNumber: z.number().int().positive(),
-  seasonAverages: seasonAveragesSchema,
+  seasonAverages: z.array(statTileSchema),
+  shootingSplits: z.array(shootingSplitSchema),
   gameLog: z.array(gameLogEntrySchema),
 });
 

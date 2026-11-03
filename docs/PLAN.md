@@ -119,17 +119,18 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 
 ---
 
-## M5 — Standings and Player ☐
+## M5 — Standings and Player ☑
 
 **Acceptance criteria**
 
-- ☐ Standings has East and West tabs with team, W, L, PCT, GB, and streak columns.
-- ☐ Seeds 1–6 are marked as playoff and 7–10 as play-in, with a legend, and the marking is
+- ☑ Standings has East and West tabs with team, W, L, PCT, GB, and streak columns.
+- ☑ Seeds 1–6 are marked as playoff and 7–10 as play-in, with a legend, and the marking is
   conveyed by more than color alone.
-- ☐ Rows are ordered by the same rule the source uses, and GB is correct relative to the
+- ☑ Rows are ordered by the same rule the source uses, and GB is correct relative to the
   conference leader.
-- ☐ Player page shows the season-average tiles, recent-games chart, game log, and shooting
-  splits from the design.
+- ☑ Player page shows the season-average tiles, recent-games chart, game log, and shooting
+  splits. Splits are FG / 3PT / FT rather than the design's by-court-zone breakdown —
+  zones need per-shot coordinates and ship with the shot charts.
 - ☐ Navigating from a box score row to that player's page works.
 
 ---

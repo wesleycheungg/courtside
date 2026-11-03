@@ -123,11 +123,23 @@ export interface Conference {
   standings: Standing[];
 }
 
-export interface SeasonAverages {
-  points: number;
-  rebounds: number;
-  assists: number;
-  fieldGoalPercent: number;
+/**
+ * One season-average tile. A list rather than fixed fields because providers
+ * expose different stats, and the page just renders what it is given.
+ */
+export interface StatTile {
+  label: string;
+  value: string;
+  /** League rank for this stat, where the provider reports one. */
+  rank?: number;
+}
+
+export interface ShootingSplit {
+  label: string;
+  made: number;
+  attempted: number;
+  /** 0-100. */
+  percent: number;
 }
 
 export interface GameLogEntry {
@@ -150,9 +162,11 @@ export interface Player {
   teamColor: string;
   position: string;
   jerseyNumber: string;
-  heightInches: number;
+  /** As the source formats it, e.g. `6' 6"`. */
+  height: string;
   age: number;
   seasonNumber: number;
-  seasonAverages: SeasonAverages;
+  seasonAverages: StatTile[];
+  shootingSplits: ShootingSplit[];
   gameLog: GameLogEntry[];
 }
