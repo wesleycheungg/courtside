@@ -1,0 +1,9 @@
+.wordmark {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.wordmark__accent {
+  color: var(--color-accent);
+}
