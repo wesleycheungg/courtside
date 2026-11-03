@@ -344,3 +344,107 @@ None observed. One near-miss worth recording: running `vite preview` by hand on
 port 4173 while Playwright's `webServer` had `reuseExistingServer` on made axe
 scan a stale build and report seven phantom failures. Not test flake, but the
 same class of confusion — kill stray preview servers before trusting a run.
+
+---
+
+## M6 — Contract tests and cache (2026-11-03)
+
+```
+Tests:    317 unit/component (+67) · 18 live contract (scheduled) · 84 e2e · 18 visual
+Coverage: 86% statements, 73% branches overall
+Local:    unit 8.2s (was 3.2s) · contract 1.5s · e2e 54.7s · smoke ~10s
+```
+
+Two halves that only look related: a contract suite that watches ESPN for shape
+changes, and a Postgres cache that exists so the data can be asserted about in
+SQL.
+
+### The unit suite got 2.5× slower, on purpose
+
+3.2s to 8.2s. PGlite boots a real Postgres per test file, and the SQL assertions
+are worth that: they run the same `.sql` files that would run in psql against
+production, so the checks a reviewer reads are the checks that execute. The
+alternative — asserting the arithmetic in TypeScript against a mock client —
+would have tested a reimplementation of the query rather than the query.
+
+### The invariant changed how the cache writes
+
+Writing "score equals the sum of its quarters" as SQL rather than prose forced
+two cases that an upsert-per-row cache would have got wrong:
+
+1. **Stale period rows.** Upserting quarters leaves a row behind when a game is
+   corrected _downward_ — an overtime reversed, a mis-parsed fifth period. The
+   sum then exceeds the total and the invariant breaks, from a write that looked
+   successful. `saveGames` now deletes period rows outside the set it just
+   wrote, matched on period number rather than count, because the stale row is
+   not always the highest-numbered one.
+2. **Seed collisions in standings.** Seeds are unique per conference, so two
+   teams passing each other collide mid-update against the rows still holding
+   the old seeds. Standings are replaced per conference instead of upserted.
+
+Neither was a user-visible bug — the cache is new and nothing reads it yet. Both
+are the kind of thing that would have become one, silently, once M7's health
+page started reporting from these tables.
+
+### Vite rewrites `new URL(..., import.meta.url)`
+
+The snapshot writer resolved its output directory that way, and Vite rewrote the
+expression into a bundled asset reference, which for a file it cannot see at
+build time resolves to `undefined`. The symptom was a file named, literally,
+`contract/undefined` holding the teams snapshot — and the snapshot test passing
+anyway, because the write and the read agreed with each other. Both the snapshot
+loader and the validation loader now use `path.join(dirname(fileURLToPath(...)))`,
+with a comment in each saying why. The stray file is deleted.
+
+### What ESPN is actually doing
+
+First live run, 2026-11-03: all 18 checks pass, no field we read changed type,
+nothing we read stopped being sent. The quirks the normalizer is built on all
+still hold — `score` is a string, `competitors` is home-first, colours have no
+leading `#`. Those are asserted individually because each one is a silently
+wrong score rather than a parse error if it changes.
+
+Drift _was_ reported, as notes rather than failures: ESPN sends a few dozen
+fields beside ones we read on `athlete` and `gamelog` — `season.startDate`,
+`events{}.homeTeamScore`, team logos. The diff deliberately reports only direct
+children of paths the schema already models; listing every unmodelled key would
+bury the signal under several hundred lines. A rename still surfaces, as a
+`missing` and an `added` under the same parent, which is the case worth catching.
+
+### Deliberate design choices
+
+- **The snapshot is a flat `path -> type` map, not nested JSON.** One line per
+  field, so an added optional key is a one-line diff in a PR instead of a
+  reindented block. Both halves of the comparison — Zod schema and live payload
+  — emit the same type vocabulary, so they are directly comparable.
+- **The fingerprint is derived, not asserted.** It is a hash of the fields block,
+  checked against a recomputation, so a snapshot cannot be hand-edited into
+  agreeing with itself.
+- **The cache maps through the app's own normalizers.** `db/rows.ts` builds rows
+  from `normalizeEspnScoreboard` and a newly extracted `normalizeEspnPeriods`
+  rather than reading the wire format again. If it mapped ESPN independently the
+  SQL would be checking the cache's arithmetic, not the app's — and the only
+  invariant worth proving is about the number a user sees.
+- **The cache can never fail a request.** `cacheQuietly` swallows and logs, the
+  route does not await it, and `getSqlClient()` returns `null` with no
+  `DATABASE_URL` rather than throwing. A deploy with no database serves scores
+  exactly as it did before M6, which is also what keeps CI and a fresh clone
+  working with no service to stand up.
+- **Contract runs on its own workflow, daily at 13:00 UTC.** After even a
+  west-coast game has finished, so the slate it discovers is complete, and never
+  `cancel-in-progress` — each run is a datapoint about that day's payloads. It
+  walks back up to 10 days for a slate with games, so the offseason and dark
+  days do not read as contract failures.
+
+### Not done
+
+No Postgres instance is provisioned. The write-through path is covered against
+real Postgres in CI, but nothing has written a row to a hosted database yet —
+set `DATABASE_URL` in Vercel, run `npm run db:migrate`, and the proxy starts
+caching. Tracked in `docs/PLAN.md` under M6.
+
+### Flaky
+
+None observed. The live contract suite is the one place flake is expected
+eventually, which is exactly why it is off the PR path and set to `retry: 0` — a
+flake there is information about ESPN, not something to paper over.

@@ -138,19 +138,22 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 
 ---
 
-## M6 — Contract tests and cache ☐
+## M6 — Contract tests and cache ◐ (one item needs a database provisioned)
 
 **Acceptance criteria**
 
-- ☐ A contract suite validates live ESPN responses against the stored schemas and fails with
+- ☑ A contract suite validates live ESPN responses against the stored schemas and fails with
   the offending field path when ESPN changes shape.
-- ☐ Schema snapshots are committed and versioned; a diff is reviewable in a PR.
-- ☐ The contract suite runs on a schedule, separately from the PR suite, so upstream drift
+- ☑ Schema snapshots are committed and versioned; a diff is reviewable in a PR.
+- ☑ The contract suite runs on a schedule, separately from the PR suite, so upstream drift
   never breaks an unrelated PR.
-- ☐ A Postgres cache (Supabase or Neon) stores fetched games and standings.
-- ☐ SQL data-validation tests assert each final score equals the sum of its quarters, and
+- ◐ A Postgres cache (Supabase or Neon) stores fetched games and standings. The write-through
+  path, migration, and driver seam are done and covered against real Postgres (PGlite) in
+  CI. **No instance is provisioned yet** — set `DATABASE_URL` in Vercel and run
+  `npm run db:migrate` to finish it. Until then the proxy skips the write, by design.
+- ☑ SQL data-validation tests assert each final score equals the sum of its quarters, and
   that standings GB math is consistent with W/L.
-- ☐ A deliberately corrupted row makes those validation tests fail.
+- ☑ A deliberately corrupted row makes those validation tests fail.
 
 ---
 
