@@ -93,30 +93,35 @@ acceptance criteria in `docs/PLAN.md` are written, and new risks are added to §
 Filled in as features land. `Req` ties to an acceptance criterion in `docs/PLAN.md`;
 `Tests` names real test titles, not descriptions.
 
-| Req  | Requirement                                          | Risk   | Level     | Tests                                                    | Status |
-| ---- | ---------------------------------------------------- | ------ | --------- | -------------------------------------------------------- | ------ |
-| M1-1 | App loads and the Games screen renders               | —      | E2E       | `smoke: app loads with the Games screen`                 | ☐      |
-| M1-2 | Bottom nav navigates to all four routes              | R12    | E2E       | `smoke: bottom nav navigates to every section`           | ☐      |
-| M1-3 | Active nav tab is marked for assistive tech          | R8     | Component | `BottomNav: marks the active tab with aria-current`      | ☐      |
-| M1-4 | Fixtures normalize into domain types                 | R1     | Unit      | `normalize: maps a fixture game into the domain type`    | ☐      |
-| M1-5 | Status derives correctly for every game state        | R1     | Unit      | `normalize: derives status for scheduled / live / final` | ☐      |
-| M1-6 | Simulated live game advances with the clock          | R3     | Unit      | `live sim: returns the scripted score for a given clock` | ☐      |
-| M1-7 | Simulated game reports final past its timeline       | R3     | Unit      | `live sim: reports final once the timeline is exhausted` | ☐      |
-| M1-8 | Provider defaults to mock with no env set            | R6     | Unit      | `getProvider: defaults to the mock provider`             | ☐      |
-| M2-1 | Browser never calls ESPN directly                    | R2, R6 | E2E       | —                                                        | ☐      |
-| M2-2 | Proxy validates responses and logs the failing field | R2     | Unit      | —                                                        | ☐      |
-| M2-3 | Proxy caches for 10–15s                              | R6     | Unit      | —                                                        | ☐      |
-| M2-4 | Feed groups games as live / final / scheduled        | R1     | Component | —                                                        | ☐      |
-| M2-5 | Date strip loads the selected date's games           | R5     | E2E       | —                                                        | ☐      |
-| M2-6 | Live filter count is accurate                        | R1     | Component | —                                                        | ☐      |
-| M2-7 | Polling runs at 15s while live and stops after       | R3     | E2E       | —                                                        | ☐      |
-| M3-1 | Quarter scores sum to the displayed total            | R4     | Component | —                                                        | ☐      |
-| M3-2 | Tabs are reachable and survive a refresh             | —      | E2E       | —                                                        | ☐      |
-| M3-3 | Box score renders both teams' stat lines             | R1     | Component | —                                                        | ☐      |
-| M5-1 | Standings order and GB are correct                   | R7     | Unit      | —                                                        | ☐      |
-| M5-2 | Playoff and play-in markers are not color-only       | R8     | Component | —                                                        | ☐      |
-| M6-1 | Contract suite detects an upstream shape change      | R2     | Contract  | —                                                        | ☐      |
-| M6-2 | Final score equals the sum of quarters in the cache  | R4     | Data      | —                                                        | ☐      |
+| Req   | Requirement                                          | Risk   | Level     | Tests                                                                                                                              | Status |
+| ----- | ---------------------------------------------------- | ------ | --------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| M1-1  | App loads and the Games screen renders               | —      | E2E       | `app shell: loads with the Games screen`                                                                                           | ☑      |
+| M1-2  | Bottom nav navigates to all four routes              | R12    | E2E       | `app shell: bottom nav navigates to every section`; `app shell: every route is reachable directly`                                 | ☑      |
+| M1-3  | Active nav tab is marked for assistive tech          | R8     | Component | `BottomNav: marks the active tab with aria-current`; `BottomNav: marks exactly one tab as current at a time`                       | ☑      |
+| M1-4  | Fixtures normalize into domain types                 | R1     | Unit      | `normalizeGame: maps a finished fixture into the domain type`; `normalizeTeam: maps a wire team into the domain type`              | ☑      |
+| M1-5  | Status derives correctly for every game state        | R1     | Unit      | `normalizeGameState: derives scheduled / final / live`; `MockProvider.getGames: covers every status the UI has to render`          | ☑      |
+| M1-6  | Simulated live game advances with the clock          | R3     | Unit      | `simSnapshotAt: counts the period clock down`; `MockProvider.getGames: advances the simulated game from live to final`             | ☑      |
+| M1-7  | Simulated game reports final past its timeline       | R3     | Unit      | `simSnapshotAt: reports final once the timeline is exhausted`                                                                      | ☑      |
+| M1-8  | Provider defaults to mock with no env set            | R6     | E2E       | `app shell: makes no requests to ESPN`                                                                                             | ☑      |
+| M1-9  | Period scores sum to the displayed total             | R4     | Unit      | `MockProvider.getGame: quarter scores sum to the final score`; `simSnapshotAt: keeps period splits summing to the displayed score` | ☑      |
+| M1-10 | Standings rank and GB math are correct               | R7     | Unit      | `normalizeConference: ranks by win percentage`; `standings math: computes games behind`                                            | ☑      |
+| M1-11 | An unknown route renders a not-found screen          | R10    | E2E       | `app shell: an unknown route renders the not-found screen`                                                                         | ☑      |
+| M1-12 | Keyboard users can skip the nav                      | R8     | E2E       | `app shell: keyboard users reach a skip link before the content`                                                                   | ☑      |
+| M1-13 | Bad fixture data fails loudly, not silently          | R1     | Unit      | `normalizeGame: fails loudly on an unknown team`; `MockProvider.getGame: throws on an unknown game id`                             | ☑      |
+| M2-1  | Browser never calls ESPN directly                    | R2, R6 | E2E       | —                                                                                                                                  | ☐      |
+| M2-2  | Proxy validates responses and logs the failing field | R2     | Unit      | —                                                                                                                                  | ☐      |
+| M2-3  | Proxy caches for 10–15s                              | R6     | Unit      | —                                                                                                                                  | ☐      |
+| M2-4  | Feed groups games as live / final / scheduled        | R1     | Component | —                                                                                                                                  | ☐      |
+| M2-5  | Date strip loads the selected date's games           | R5     | E2E       | —                                                                                                                                  | ☐      |
+| M2-6  | Live filter count is accurate                        | R1     | Component | —                                                                                                                                  | ☐      |
+| M2-7  | Polling runs at 15s while live and stops after       | R3     | E2E       | —                                                                                                                                  | ☐      |
+| M3-1  | Quarter scores sum to the displayed total            | R4     | Component | —                                                                                                                                  | ☐      |
+| M3-2  | Tabs are reachable and survive a refresh             | —      | E2E       | —                                                                                                                                  | ☐      |
+| M3-3  | Box score renders both teams' stat lines             | R1     | Component | —                                                                                                                                  | ☐      |
+| M5-1  | Standings order and GB are correct                   | R7     | Unit      | —                                                                                                                                  | ☐      |
+| M5-2  | Playoff and play-in markers are not color-only       | R8     | Component | —                                                                                                                                  | ☐      |
+| M6-1  | Contract suite detects an upstream shape change      | R2     | Contract  | —                                                                                                                                  | ☐      |
+| M6-2  | Final score equals the sum of quarters in the cache  | R4     | Data      | —                                                                                                                                  | ☐      |
 
 ## 8. Environments
 

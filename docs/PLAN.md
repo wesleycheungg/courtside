@@ -8,33 +8,34 @@ Legend: ☐ not started · ◐ in progress · ☑ done
 
 ---
 
-## M1 — Foundation ◐
+## M1 — Foundation ◐ (deploy pending dashboard setup)
 
 Docs, scaffold, theme, app shell, mock data layer, first tests, CI, deploy.
 
 **Acceptance criteria**
 
-- ☐ `CLAUDE.md`, `docs/PLAN.md`, `docs/TEST_PLAN.md`, `docs/NOTES.md`, and `README.md`
+- ☑ `CLAUDE.md`, `docs/PLAN.md`, `docs/TEST_PLAN.md`, `docs/NOTES.md`, and `README.md`
   exist; the README carries the ESPN disclaimer.
-- ☐ `npm install && npm run dev` works from a clean clone with no network access to any
+- ☑ `npm install && npm run dev` works from a clean clone with no network access to any
   sports API and no environment variables set.
-- ☐ Design tokens are defined once in `src/styles/tokens.css`; no hardcoded color values
+- ☑ Design tokens are defined once in `src/styles/tokens.css`; no hardcoded color values
   exist anywhere else in `src/`.
-- ☐ Bottom nav shows Games, Leagues, Following, and News; tapping each navigates to its
+- ☑ Bottom nav shows Games, Leagues, Following, and News; tapping each navigates to its
   route; the active tab is styled with the accent color and carries `aria-current="page"`.
-- ☐ Direct navigation to every route works (no 404 on refresh or deep link).
-- ☐ `DataProvider` is defined in `src/data/provider.ts` with `getGames`, `getGame`,
+- ☑ Direct navigation to every route works (no 404 on refresh or deep link).
+- ☑ `DataProvider` is defined in `src/data/provider.ts` with `getGames`, `getGame`,
   `getStandings`, `getPlayer`, and `getPlayByPlay`.
-- ☐ `getProvider()` returns MockProvider unless `VITE_DATA_PROVIDER=espn`.
-- ☐ No type imported from outside `src/data/` describes a provider's wire format.
-- ☐ Mock fixtures cover scheduled, live, halftime, final, and overtime games.
-- ☐ The simulated live game's state is a pure function of an injected clock; passing a
+- ☑ `getProvider()` returns MockProvider unless `VITE_DATA_PROVIDER=espn`.
+- ☑ No type imported from outside `src/data/` describes a provider's wire format.
+- ☑ Mock fixtures cover scheduled, live, halftime, final, and overtime games.
+- ☑ The simulated live game's state is a pure function of an injected clock; passing a
   clock past the end of its timeline yields status `final`.
-- ☐ `?simOffset=<ms>` and `VITE_SIM_OFFSET` both shift that clock.
-- ☐ At least one Vitest unit test, one RTL component test, and one Playwright smoke test
+- ☑ `?simOffset=<ms>` shifts that clock and `?simTime=<epoch ms>` pins it outright;
+  `VITE_SIM_OFFSET` and `VITE_SIM_TIME` do the same at build time.
+- ☑ At least one Vitest unit test, one RTL component test, and one Playwright smoke test
   (via a Page Object) pass locally.
-- ☐ Playwright runs a desktop project and a 390×844 mobile project.
-- ☐ CI runs typecheck, lint, unit tests, and Playwright on every PR, and uploads the HTML
+- ☑ Playwright runs a desktop project and a 390×844 mobile project.
+- ☑ CI runs typecheck, lint, unit tests, and Playwright on every PR, and uploads the HTML
   report and traces as artifacts.
 - ☐ The app is deployed and reachable at a public URL; PRs get a preview URL.
 
