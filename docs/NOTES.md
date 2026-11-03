@@ -32,7 +32,7 @@ Tests:    unit 56 · component 5 · e2e 6 (x 2 projects = 12) · total 73
 Coverage: 97% statements on src/data/mock, 86% overall
           (overall is dragged down by placeholder screens with no logic yet)
 Local:    unit 1.8s · e2e 9.4s
-CI:       first run pending
+CI:       quality 16s · e2e 38s · both jobs green on PR #1
 ```
 
 Bugs caught by tests:
@@ -44,6 +44,10 @@ Bugs caught by tests:
 - **Redundant accessible text on the active nav tab.** A visually-hidden
   "(current section)" span duplicated what `aria-current` already conveys, and
   the accessible-name assertion failing is what surfaced it. The span came out.
+- **A stray `.vitest/json/output.json` was committed.** Left over from a one-off
+  JSON-reporter run and swept up by a `git add -A`. The `format:check` step
+  failed the first CI run on it — the pipeline catching something that passed
+  locally, which is the point of having the step.
 
 Notes:
 
