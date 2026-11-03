@@ -52,12 +52,26 @@ describe('MockProvider.getGames', () => {
     expect(overtime).toHaveLength(1);
   });
 
-  it('dates the slate to the day being asked for', async () => {
+  it('dates the slate to the evening of the day being asked for', async () => {
     const games = await providerAt(DURING_Q3).getGames('2027-01-15');
 
     for (const game of games) {
-      expect(game.startsAt.startsWith('2027-01-15')).toBe(true);
+      // Late games tip after midnight UTC, so they carry the next UTC date
+      // while still belonging to the 15th's slate.
+      const tipoff = new Date(game.startsAt).getTime();
+      expect(tipoff).toBeGreaterThanOrEqual(Date.parse('2027-01-15T22:00:00Z'));
+      expect(tipoff).toBeLessThanOrEqual(Date.parse('2027-01-16T04:00:00Z'));
     }
+  });
+
+  it('orders scheduled games by tip-off, including ones past midnight UTC', async () => {
+    const games = await providerAt(DURING_Q3).getGames(DATE);
+    const scheduled = games
+      .filter((game) => game.state.status === 'scheduled')
+      .map((game) => game.startsAt);
+
+    expect(scheduled.length).toBeGreaterThan(1);
+    expect([...scheduled].sort()).toEqual(scheduled);
   });
 
   it('advances the simulated game from live to final with the clock', async () => {

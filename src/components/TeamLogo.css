@@ -1,0 +1,26 @@
+.team-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.02em;
+  /* Several team colors are light; a hairline keeps the bubble readable
+     against the dark surface without changing the brand color. */
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%);
+}
+
+.team-logo--sm {
+  width: 28px;
+  height: 28px;
+  font-size: 0.625rem;
+}
+
+.team-logo--lg {
+  width: 64px;
+  height: 64px;
+  font-size: var(--text-lg);
+}

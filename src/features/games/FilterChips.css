@@ -1,0 +1,28 @@
+.filter-chips {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.filter-chips__chip {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.filter-chips__chip:hover {
+  border-color: var(--color-muted);
+}
+
+.filter-chips__chip--active {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+  font-weight: var(--weight-semibold);
+}
