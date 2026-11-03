@@ -7,6 +7,9 @@
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
     <meta name="theme-color" content="#0E1116" />
+    <!-- Without this the browser requests /favicon.ico, 404s, and logs a
+         console error that costs a Lighthouse best-practices point. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta
       name="description"
       content="Courtside — live NBA scores, game detail, standings, and player stats."
