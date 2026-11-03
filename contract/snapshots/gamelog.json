@@ -1,0 +1,27 @@
+{
+  "schema": "gamelog",
+  "snapshotVersion": 1,
+  "fingerprint": "7fc06b341c60",
+  "fields": {
+    "events": "record?",
+    "events{}": "object",
+    "events{}.atVs": "string?",
+    "events{}.gameDate": "string?",
+    "events{}.gameResult": "string?",
+    "events{}.id": "string?",
+    "events{}.opponent": "object?",
+    "events{}.opponent.abbreviation": "string?",
+    "events{}.score": "string?",
+    "labels": "array?",
+    "labels[]": "string",
+    "seasonTypes": "array?",
+    "seasonTypes[]": "object",
+    "seasonTypes[].categories": "array",
+    "seasonTypes[].categories[]": "object",
+    "seasonTypes[].categories[].events": "array",
+    "seasonTypes[].categories[].events[]": "object",
+    "seasonTypes[].categories[].events[].eventId": "string",
+    "seasonTypes[].categories[].events[].stats": "array",
+    "seasonTypes[].categories[].events[].stats[]": "string"
+  }
+}
