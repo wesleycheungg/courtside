@@ -41,7 +41,7 @@ Docs, scaffold, theme, app shell, mock data layer, first tests, CI, deploy.
 
 ---
 
-## M2 — Proxy, EspnProvider, Games feed ☐
+## M2 — Proxy, EspnProvider, Games feed ◐
 
 The first real data, behind a serverless proxy, rendered as the Games feed.
 
@@ -57,16 +57,17 @@ Deliverables below are unchanged; only their order is.
 
 **Acceptance criteria**
 
-- ☐ A Vercel function under `api/` proxies ESPN scoreboard, summary, and standings.
-- ☐ Responses are cached 10–15s; a second request inside that window does not hit ESPN.
-- ☐ Responses are validated with Zod; a validation failure logs the specific field path
+- ☑ A Vercel function under `api/` proxies ESPN scoreboard, summary, and standings.
+- ☑ Responses are cached 10–15s; a second request inside that window does not hit ESPN.
+- ☑ Responses are validated with Zod; a validation failure logs the specific field path
   that broke and returns a typed error rather than throwing raw.
-- ☐ The browser makes zero requests to any `espn.com` host — verifiable in the network tab
+- ☑ The browser makes zero requests to any `espn.com` host — verifiable in the network tab
   and asserted by an e2e test.
-- ☐ `EspnProvider` implements `DataProvider` and normalizes into the same domain types the
+- ☑ `EspnProvider` implements `DataProvider` and normalizes into the same domain types the
   MockProvider produces; swapping providers changes no component code.
-- ☐ Real ESPN responses for a live, a final, and a scheduled game are captured as fixtures
-  with the capture date recorded.
+- ◐ Real ESPN responses captured as fixtures with the capture date recorded. Final and
+  scheduled are done; **the live capture is still outstanding** — no NBA game was in
+  progress when these were taken. Run `npm run capture:espn` during a game to close it.
 - ☑ The feed shows a date strip; selecting a date loads that date's games and updates the URL.
 - ☑ Filters All and Live work; the Live chip shows an accurate count.
 - ☑ Games are grouped as live, then final, then scheduled, under a league header.

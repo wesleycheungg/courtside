@@ -10,6 +10,11 @@ export function hasLiveGame(games: Game[] | undefined): boolean {
   return games?.some((game) => game.state.status === 'live') ?? false;
 }
 
+/** Which provider is serving this session — drives the footer attribution. */
+export function useProviderName(): string {
+  return useMemo(() => getProvider().name, []);
+}
+
 /**
  * The slate for one calendar date.
  *

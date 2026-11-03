@@ -123,3 +123,54 @@ appear in the design but have nothing behind them yet.
 Note: the MockProvider returns the same slate for every date, so the date strip
 changes the URL and refetches but shows the same games. Real per-date data
 arrives with the ESPN provider.
+
+---
+
+## M2 part 2 — Proxy and EspnProvider (2026-11-02)
+
+```
+Tests:    101 unit/component (+37) · 12 e2e · total 113
+          26 of the new ones run the normalizer over real captured responses;
+          11 cover the proxy's cache, validation and failure paths.
+Local:    unit 2.4s · e2e 15.7s
+```
+
+Shipped: four edge routes under `api/` (scoreboard, summary, standings, teams)
+that fetch, validate with Zod, and cache; `EspnProvider` behind the existing
+`DataProvider` interface; real captured fixtures; and a Vite dev middleware so
+`npm run dev` serves the routes locally without `vercel dev`.
+
+### What checking the real API changed
+
+Every one of these would have been wrong if the shapes had been assumed:
+
+- `competitor.score` is a **string** (`"117"`), not a number.
+- `competitor.linescores` is **absent** on a scheduled game, not `[]`.
+- `competitors` is ordered **home first** — indexing `[0]` as away is wrong.
+- `team.color` has **no** leading `#`.
+- Standings entries carry **no team color at all**, so standings has to join
+  against the teams endpoint. This is why there is a fourth proxy route.
+- Standings entries arrive **unsorted** — the captured file leads with a 1-6
+  team at seed 13.
+- Standings stats are a **flat array keyed by name**, not fixed fields, so
+  every read has to tolerate an absent stat.
+
+### Open gap: no live fixture
+
+No NBA game — and no game in any other ESPN sport — was in progress when the
+fixtures were captured, so there is no recorded in-progress response. The live
+branch is written only against fields verified present in every capture
+(`status.period`, `status.displayClock`, `status.type.state`) and the schema
+deliberately does not constrain the unobserved strings. `npm run capture:espn`
+closes this during any game. Tracked as a partial criterion in `docs/PLAN.md`.
+
+### Verified by hand
+
+Ran the real route handlers against live ESPN: all four returned 200 and
+validated, the second scoreboard call served `x-courtside-cache: hit`, and a
+malformed date returned 400. Loaded the feed with `VITE_DATA_PROVIDER=espn` and
+confirmed 15 real finals render with correct winners, overtime labelling and
+records — with **zero** requests to any espn.com host from the browser.
+
+Bug found: the "Sample data for demo purposes" footer showed even on live data.
+Now switches to the ESPN attribution when the provider is live.
