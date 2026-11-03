@@ -15,6 +15,26 @@
       content="Courtside — live NBA scores, game detail, standings, and player stats."
     />
     <title>Courtside</title>
+
+    <!-- Link previews. Absolute URLs are required here: a crawler resolves
+         these without a document base, so a relative path silently yields no
+         image. Both must be re-pointed if the deployment domain changes. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Courtside" />
+    <meta property="og:title" content="Courtside — live NBA scores" />
+    <meta
+      property="og:description"
+      content="A FotMob-style NBA scores app: live scores, game detail, standings, and player stats, served through a validated ESPN proxy."
+    />
+    <meta property="og:url" content="https://courtside.vercel.app/" />
+    <meta property="og:image" content="https://courtside.vercel.app/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="The Courtside wordmark beside a phone showing a live NBA game feed."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>
     <div id="root"></div>

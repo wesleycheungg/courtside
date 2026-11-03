@@ -1,5 +1,7 @@
 # Courtside
 
+[![CI](https://github.com/wesleycheungg/courtside/actions/workflows/ci.yml/badge.svg)](https://github.com/wesleycheungg/courtside/actions/workflows/ci.yml)
+
 A FotMob-style NBA scores app — live scores, game detail, standings, and player stats.
 
 Built as a portfolio project to demonstrate SDET practice end to end: a risk-based test
@@ -117,6 +119,10 @@ npm run test:contract # live ESPN — scheduled, not on PRs
 npm run lighthouse    # mobile budgets, median of three runs
 ```
 
+The Playwright suites build and serve the production bundle themselves. Set
+`PLAYWRIGHT_BASE_URL=https://…` to point them at a deployment instead — useful as a
+post-deploy check, though specs written against the mock fixtures will fail against live data.
+
 | Level     | Tool               | What it covers                                             | Runs     |
 | --------- | ------------------ | ---------------------------------------------------------- | -------- |
 | Unit      | Vitest             | Normalization, status derivation, sim clock, date handling | Every PR |
@@ -133,16 +139,16 @@ they exercise the same code path production runs.
 
 ## Metrics
 
-Measured on the M7 branch, 2026-11-03 — not estimated. See `docs/NOTES.md` for the history.
+Measured on the M8 branch, 2026-11-03 — not estimated. See `docs/NOTES.md` for the history.
 
 | Metric                      | Value                                                                                          |
 | --------------------------- | ---------------------------------------------------------------------------------------------- |
-| Tests                       | 358 unit/component/proxy/data · 98 e2e · 18 visual · 18 contract                               |
-| Coverage                    | 87.5% statements, 75.5% branches                                                               |
-| Local run time              | unit 9.5s · e2e 30s · smoke 13s · visual 15s                                                   |
-| Lighthouse (mobile, median) | feed 96 · game detail 98 · standings 100                                                       |
+| Tests                       | 399 unit/component/proxy/data · 108 e2e · 18 visual · 18 contract                              |
+| Coverage                    | 88.8% statements, 76.9% branches                                                               |
+| Local run time              | unit 10.1s · e2e 28.6s · smoke 11.6s · visual 16.8s                                            |
+| Lighthouse (mobile, median) | feed 100 · game detail 98 · standings 100                                                      |
 | Accessibility               | 100 Lighthouse; zero serious or critical axe violations                                        |
-| Bundle                      | 150 KiB JS gzipped, 5 KiB CSS                                                                  |
+| Bundle                      | 508 kB raw / 152 kB gzip JS · 33 kB CSS                                                        |
 | Bugs caught by tests        | Logged per milestone in `docs/NOTES.md` — five from the M4 backfill, four of them user-visible |
 
 ## CI/CD
@@ -160,10 +166,14 @@ for every pull request.
 
 ### One-time setup for a fork
 
-1. Import the repo at [vercel.com/new](https://vercel.com/new) — the framework preset and
-   build command are detected automatically.
-2. In GitHub, enable branch protection on `main` and require the `quality` and `e2e` checks.
-3. Optionally set `DATABASE_URL` in Vercel and run `npm run db:migrate` to turn on the cache.
+1. Import the repo at [vercel.com/new](https://vercel.com/new) — `vercel.json` supplies the
+   framework preset, build command and output directory.
+2. Set `VITE_DATA_PROVIDER=espn` in the Vercel project's environment variables, then deploy.
+   Vite inlines this at build time, so a deploy without it serves mock fixtures — and nothing
+   on the page says so except the footer, which reads "Sample data for demo purposes" instead
+   of the ESPN attribution. Changing the variable later needs a redeploy to take effect.
+3. In GitHub, enable branch protection on `main` and require the `quality` and `e2e` checks.
+4. Optionally set `DATABASE_URL` in Vercel and run `npm run db:migrate` to turn on the cache.
 
 ## Stack
 
