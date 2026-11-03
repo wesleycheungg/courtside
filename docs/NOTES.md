@@ -63,3 +63,29 @@ Notes:
 - The Playwright mobile project runs iPhone 13 metrics on Chromium rather than
   WebKit. It exists to catch layout breakage at 390x844, and one engine keeps CI
   lean. Add a real WebKit project when cross-browser becomes a goal.
+
+---
+
+## Decision: test-first paused after M1 (2026-11-02)
+
+New features ship without tests until M4, to get the app standing up first. The
+73 existing tests stay and must keep passing; CI still runs on every PR but
+gates nothing, because branch protection is deliberately left off.
+
+Why this is a real cost, recorded now so M4 is scoped honestly:
+
+- The "bugs caught by tests" log above is the most useful artifact this project
+  produces, and it only grows while tests are being written alongside code.
+- Retrofitting component and e2e coverage onto finished UI is slower than
+  writing it as you go, and tends to produce tests shaped around the
+  implementation rather than the requirement.
+- The traceability table in `docs/TEST_PLAN.md` will carry unfilled rows for
+  every shipped M2/M3/M5 requirement until the catch-up lands.
+
+What protects us in the meantime: the data layer and the sim clock — the parts
+M2 and M3 build directly on top of — are the best-covered code in the repo at
+97% statements, so regressions there still fail fast. Typecheck and lint still
+run on every PR.
+
+M4 scope grows accordingly: it now backfills coverage for everything shipped in
+M2, M3, and M5 before adding axe, visual regression, and tagged suites.

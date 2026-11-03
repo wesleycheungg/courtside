@@ -45,6 +45,16 @@ Docs, scaffold, theme, app shell, mock data layer, first tests, CI, deploy.
 
 The first real data, behind a serverless proxy, rendered as the Games feed.
 
+**Build order (revised 2026-11-02).** The feed UI comes first, built entirely against
+the MockProvider — including the live game that already ticks. That puts a real screen
+in front of us with no API risk, and because the proxy and `EspnProvider` sit behind the
+same `DataProvider` interface, swapping in live data afterwards changes no component.
+Deliverables below are unchanged; only their order is.
+
+1. Date strip, filters, game cards, grouping — all on mock data.
+2. Serverless proxy, Zod validation, caching.
+3. `EspnProvider`, fixture capture, polling against real data.
+
 **Acceptance criteria**
 
 - ☐ A Vercel function under `api/` proxies ESPN scoreboard, summary, and standings.
@@ -85,8 +95,16 @@ The first real data, behind a serverless proxy, rendered as the Games feed.
 
 ## M4 — Quality pass ☐
 
+Test-first was paused after M1 (see `docs/NOTES.md`), so this milestone now carries the
+catch-up as well as the new quality tooling. It is the gate where CI starts blocking.
+
 **Acceptance criteria**
 
+- ☐ Coverage is backfilled for everything shipped in M2, M3, and M5: unit tests for new
+  logic, component tests per rendering state, e2e for each user journey.
+- ☐ Branch protection on `main` is enabled and requires the `quality` and `e2e` checks.
+- ☐ `CLAUDE.md` drops the paused-testing note and restores "every feature ships with
+  tests" as a standing rule.
 - ☐ axe scans run against Games, Game detail, Standings, and Player with zero serious or
   critical violations.
 - ☐ Keyboard-only navigation reaches every interactive element with a visible focus ring.
