@@ -102,11 +102,36 @@ export async function fetchEspn<T>({
       (issue) => `${issue.path.join('.') || '(root)'}: ${issue.message}`,
     );
     console.error(`[espn-proxy] schema validation failed for ${key}`, { issues });
+    lastRecord = { key, ok: false, at: now(), issues };
     throw new SchemaError(`Response from ESPN did not match the expected shape`, issues);
   }
 
+  lastRecord = { key, ok: true, at: now(), issues: [] };
   cache.set(key, { expiresAt: now() + ttlMs, payload: result.data });
   return { data: result.data, cached: false };
+}
+
+export interface ValidationRecord {
+  /** The cache key, which doubles as the label for the payload validated. */
+  key: string;
+  ok: boolean;
+  at: number;
+  /** Field paths that broke. Empty on a pass. */
+  issues: string[];
+}
+
+// Module scope, like the cache: this is what the latest validation on *this*
+// instance found. A cache hit does not re-validate — the payload was validated
+// on the way in — so this only moves on a fresh upstream fetch.
+let lastRecord: ValidationRecord | null = null;
+
+/** What the health route reports as "last schema validation result". */
+export function lastValidation(): ValidationRecord | null {
+  return lastRecord;
+}
+
+export function clearValidationLog(): void {
+  lastRecord = null;
 }
 
 export const espnUrls = {
