@@ -1,0 +1,242 @@
+[
+  {
+    "teamId": "atl",
+    "market": "Atlanta",
+    "nickname": "Hawks",
+    "abbrev": "ATL",
+    "colorHex": "E03A3E",
+    "conference": "east"
+  },
+  {
+    "teamId": "bos",
+    "market": "Boston",
+    "nickname": "Celtics",
+    "abbrev": "BOS",
+    "colorHex": "007A33",
+    "conference": "east"
+  },
+  {
+    "teamId": "bkn",
+    "market": "Brooklyn",
+    "nickname": "Nets",
+    "abbrev": "BKN",
+    "colorHex": "7A7A7A",
+    "conference": "east"
+  },
+  {
+    "teamId": "cha",
+    "market": "Charlotte",
+    "nickname": "Hornets",
+    "abbrev": "CHA",
+    "colorHex": "1D9099",
+    "conference": "east"
+  },
+  {
+    "teamId": "chi",
+    "market": "Chicago",
+    "nickname": "Bulls",
+    "abbrev": "CHI",
+    "colorHex": "CE1141",
+    "conference": "east"
+  },
+  {
+    "teamId": "cle",
+    "market": "Cleveland",
+    "nickname": "Cavaliers",
+    "abbrev": "CLE",
+    "colorHex": "860038",
+    "conference": "east"
+  },
+  {
+    "teamId": "det",
+    "market": "Detroit",
+    "nickname": "Pistons",
+    "abbrev": "DET",
+    "colorHex": "C8102E",
+    "conference": "east"
+  },
+  {
+    "teamId": "ind",
+    "market": "Indiana",
+    "nickname": "Pacers",
+    "abbrev": "IND",
+    "colorHex": "002D62",
+    "conference": "east"
+  },
+  {
+    "teamId": "mia",
+    "market": "Miami",
+    "nickname": "Heat",
+    "abbrev": "MIA",
+    "colorHex": "98002E",
+    "conference": "east"
+  },
+  {
+    "teamId": "mil",
+    "market": "Milwaukee",
+    "nickname": "Bucks",
+    "abbrev": "MIL",
+    "colorHex": "00471B",
+    "conference": "east"
+  },
+  {
+    "teamId": "nyk",
+    "market": "New York",
+    "nickname": "Knicks",
+    "abbrev": "NYK",
+    "colorHex": "1D5FB3",
+    "conference": "east"
+  },
+  {
+    "teamId": "orl",
+    "market": "Orlando",
+    "nickname": "Magic",
+    "abbrev": "ORL",
+    "colorHex": "0077C0",
+    "conference": "east"
+  },
+  {
+    "teamId": "phi",
+    "market": "Philadelphia",
+    "nickname": "76ers",
+    "abbrev": "PHI",
+    "colorHex": "006BB6",
+    "conference": "east"
+  },
+  {
+    "teamId": "tor",
+    "market": "Toronto",
+    "nickname": "Raptors",
+    "abbrev": "TOR",
+    "colorHex": "753BBD",
+    "conference": "east"
+  },
+  {
+    "teamId": "was",
+    "market": "Washington",
+    "nickname": "Wizards",
+    "abbrev": "WAS",
+    "colorHex": "002B5C",
+    "conference": "east"
+  },
+  {
+    "teamId": "dal",
+    "market": "Dallas",
+    "nickname": "Mavericks",
+    "abbrev": "DAL",
+    "colorHex": "00538C",
+    "conference": "west"
+  },
+  {
+    "teamId": "den",
+    "market": "Denver",
+    "nickname": "Nuggets",
+    "abbrev": "DEN",
+    "colorHex": "0E2240",
+    "conference": "west"
+  },
+  {
+    "teamId": "gsw",
+    "market": "Golden State",
+    "nickname": "Warriors",
+    "abbrev": "GSW",
+    "colorHex": "1D428A",
+    "conference": "west"
+  },
+  {
+    "teamId": "hou",
+    "market": "Houston",
+    "nickname": "Rockets",
+    "abbrev": "HOU",
+    "colorHex": "CE1141",
+    "conference": "west"
+  },
+  {
+    "teamId": "lac",
+    "market": "LA",
+    "nickname": "Clippers",
+    "abbrev": "LAC",
+    "colorHex": "C8102E",
+    "conference": "west"
+  },
+  {
+    "teamId": "lal",
+    "market": "Los Angeles",
+    "nickname": "Lakers",
+    "abbrev": "LAL",
+    "colorHex": "552583",
+    "conference": "west"
+  },
+  {
+    "teamId": "mem",
+    "market": "Memphis",
+    "nickname": "Grizzlies",
+    "abbrev": "MEM",
+    "colorHex": "5D76A9",
+    "conference": "west"
+  },
+  {
+    "teamId": "min",
+    "market": "Minnesota",
+    "nickname": "Timberwolves",
+    "abbrev": "MIN",
+    "colorHex": "236192",
+    "conference": "west"
+  },
+  {
+    "teamId": "nop",
+    "market": "New Orleans",
+    "nickname": "Pelicans",
+    "abbrev": "NOP",
+    "colorHex": "0C2340",
+    "conference": "west"
+  },
+  {
+    "teamId": "okc",
+    "market": "Oklahoma City",
+    "nickname": "Thunder",
+    "abbrev": "OKC",
+    "colorHex": "007AC1",
+    "conference": "west"
+  },
+  {
+    "teamId": "phx",
+    "market": "Phoenix",
+    "nickname": "Suns",
+    "abbrev": "PHX",
+    "colorHex": "E56020",
+    "conference": "west"
+  },
+  {
+    "teamId": "por",
+    "market": "Portland",
+    "nickname": "Trail Blazers",
+    "abbrev": "POR",
+    "colorHex": "E03A3E",
+    "conference": "west"
+  },
+  {
+    "teamId": "sac",
+    "market": "Sacramento",
+    "nickname": "Kings",
+    "abbrev": "SAC",
+    "colorHex": "5A2D81",
+    "conference": "west"
+  },
+  {
+    "teamId": "sas",
+    "market": "San Antonio",
+    "nickname": "Spurs",
+    "abbrev": "SAS",
+    "colorHex": "8A8D8F",
+    "conference": "west"
+  },
+  {
+    "teamId": "uta",
+    "market": "Utah",
+    "nickname": "Jazz",
+    "abbrev": "UTA",
+    "colorHex": "002B5C",
+    "conference": "west"
+  }
+]

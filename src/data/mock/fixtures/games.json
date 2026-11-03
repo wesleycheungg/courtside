@@ -1,0 +1,57 @@
+[
+  {
+    "gameId": "mock-final-gsw-okc",
+    "league": "nba",
+    "tipoffUtc": "00:00:00",
+    "statusCode": "post",
+    "awayTeamId": "gsw",
+    "homeTeamId": "okc",
+    "awayRecord": { "wins": 4, "losses": 2 },
+    "homeRecord": { "wins": 6, "losses": 1 },
+    "linescores": [
+      { "period": 1, "away": 24, "home": 31 },
+      { "period": 2, "away": 29, "home": 28 },
+      { "period": 3, "away": 26, "home": 30 },
+      { "period": 4, "away": 25, "home": 29 }
+    ]
+  },
+  {
+    "gameId": "mock-final-ot-den-lal",
+    "league": "nba",
+    "tipoffUtc": "02:30:00",
+    "statusCode": "post",
+    "awayTeamId": "den",
+    "homeTeamId": "lal",
+    "awayRecord": { "wins": 5, "losses": 1 },
+    "homeRecord": { "wins": 3, "losses": 4 },
+    "linescores": [
+      { "period": 1, "away": 28, "home": 26 },
+      { "period": 2, "away": 24, "home": 27 },
+      { "period": 3, "away": 30, "home": 29 },
+      { "period": 4, "away": 25, "home": 25 },
+      { "period": 5, "away": 14, "home": 11 }
+    ]
+  },
+  {
+    "gameId": "mock-sched-cle-mil",
+    "league": "nba",
+    "tipoffUtc": "23:30:00",
+    "statusCode": "pre",
+    "awayTeamId": "cle",
+    "homeTeamId": "mil",
+    "awayRecord": { "wins": 6, "losses": 0 },
+    "homeRecord": { "wins": 2, "losses": 5 },
+    "linescores": []
+  },
+  {
+    "gameId": "mock-sched-phx-sac",
+    "league": "nba",
+    "tipoffUtc": "02:00:00",
+    "statusCode": "pre",
+    "awayTeamId": "phx",
+    "homeTeamId": "sac",
+    "awayRecord": { "wins": 3, "losses": 3 },
+    "homeRecord": { "wins": 2, "losses": 4 },
+    "linescores": []
+  }
+]

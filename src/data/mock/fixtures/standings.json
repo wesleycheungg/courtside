@@ -1,0 +1,36 @@
+{
+  "east": [
+    { "teamId": "cle", "wins": 6, "losses": 0, "streak": "W6" },
+    { "teamId": "bos", "wins": 5, "losses": 2, "streak": "W2" },
+    { "teamId": "nyk", "wins": 4, "losses": 3, "streak": "L1" },
+    { "teamId": "orl", "wins": 4, "losses": 3, "streak": "W1" },
+    { "teamId": "ind", "wins": 4, "losses": 3, "streak": "L2" },
+    { "teamId": "mia", "wins": 4, "losses": 3, "streak": "W3" },
+    { "teamId": "det", "wins": 3, "losses": 3, "streak": "L1" },
+    { "teamId": "atl", "wins": 3, "losses": 4, "streak": "W1" },
+    { "teamId": "phi", "wins": 3, "losses": 4, "streak": "L3" },
+    { "teamId": "chi", "wins": 3, "losses": 4, "streak": "W2" },
+    { "teamId": "mil", "wins": 2, "losses": 5, "streak": "L4" },
+    { "teamId": "tor", "wins": 2, "losses": 5, "streak": "L1" },
+    { "teamId": "cha", "wins": 2, "losses": 5, "streak": "W1" },
+    { "teamId": "bkn", "wins": 1, "losses": 6, "streak": "L5" },
+    { "teamId": "was", "wins": 1, "losses": 6, "streak": "L2" }
+  ],
+  "west": [
+    { "teamId": "okc", "wins": 6, "losses": 1, "streak": "W4" },
+    { "teamId": "den", "wins": 5, "losses": 1, "streak": "W3" },
+    { "teamId": "hou", "wins": 5, "losses": 2, "streak": "W1" },
+    { "teamId": "gsw", "wins": 4, "losses": 2, "streak": "L1" },
+    { "teamId": "sas", "wins": 4, "losses": 2, "streak": "W2" },
+    { "teamId": "dal", "wins": 4, "losses": 3, "streak": "L1" },
+    { "teamId": "min", "wins": 4, "losses": 3, "streak": "W2" },
+    { "teamId": "phx", "wins": 3, "losses": 3, "streak": "W1" },
+    { "teamId": "lal", "wins": 3, "losses": 4, "streak": "L2" },
+    { "teamId": "lac", "wins": 3, "losses": 4, "streak": "W1" },
+    { "teamId": "mem", "wins": 3, "losses": 4, "streak": "L1" },
+    { "teamId": "sac", "wins": 2, "losses": 4, "streak": "L3" },
+    { "teamId": "nop", "wins": 2, "losses": 5, "streak": "L2" },
+    { "teamId": "por", "wins": 2, "losses": 5, "streak": "W1" },
+    { "teamId": "uta", "wins": 1, "losses": 6, "streak": "L4" }
+  ]
+}
