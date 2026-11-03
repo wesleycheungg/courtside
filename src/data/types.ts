@@ -77,6 +77,8 @@ export interface PlayerStatLine {
   assists: number;
   fieldGoalsMade: number;
   fieldGoalsAttempted: number;
+  /** Absent for a player who has not appeared yet. */
+  plusMinus?: number;
 }
 
 export interface BoxScore {
@@ -95,7 +97,8 @@ export interface PlayEvent {
   id: string;
   periodNumber: number;
   clock: string;
-  teamId: string;
+  /** Absent on game-level events like "End of Game". */
+  teamId?: string;
   description: string;
   isScoringPlay: boolean;
   awayScore: number;

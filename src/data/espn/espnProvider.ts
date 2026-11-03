@@ -11,6 +11,7 @@ import type { Conference, Game, GameDetail, PlayEvent, Player } from '../types';
 import {
   espnScoreboardSchema,
   espnStandingsSchema,
+  espnSummarySchema,
   espnTeamsSchema,
   type EspnTeam,
 } from './espnSchemas';
@@ -19,6 +20,7 @@ import {
   normalizeEspnStandings,
   teamsById,
 } from './normalizeEspn';
+import { normalizeEspnPlays, normalizeEspnSummary } from './normalizeSummary';
 import { parseOrThrow } from '../schemas';
 
 /** YYYY-MM-DD -> YYYYMMDD, which is what the scoreboard endpoint wants. */
@@ -91,16 +93,14 @@ export function createEspnProvider({
       return normalizeEspnStandings(standings, teams);
     },
 
-    // M3 builds the detail screen; the proxy route exists, but normalizing the
-    // boxscore and plays blocks waits until there is UI to validate against.
-    async getGame(): Promise<GameDetail> {
-      throw new Error('EspnProvider.getGame arrives with the game detail screen (M3).');
+    async getGame(id: string): Promise<GameDetail> {
+      const summary = await getJson(`${baseUrl}/summary?event=${id}`, espnSummarySchema);
+      return normalizeEspnSummary(summary);
     },
 
-    async getPlayByPlay(): Promise<PlayEvent[]> {
-      throw new Error(
-        'EspnProvider.getPlayByPlay arrives with the game detail screen (M3).',
-      );
+    async getPlayByPlay(id: string): Promise<PlayEvent[]> {
+      const summary = await getJson(`${baseUrl}/summary?event=${id}`, espnSummarySchema);
+      return normalizeEspnPlays(summary);
     },
 
     async getPlayer(): Promise<Player> {

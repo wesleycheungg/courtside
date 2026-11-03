@@ -76,20 +76,20 @@ Deliverables below are unchanged; only their order is.
 
 ---
 
-## M3 — Game detail ☐
+## M3 — Game detail ☑
 
 **Acceptance criteria**
 
-- ☐ Tabs Summary, Box score, Plays, and Shots are reachable; the active tab is reflected in
+- ☑ Tabs Summary, Box score, Plays, and Shots are reachable; the active tab is reflected in
   the URL and survives a refresh.
-- ☐ The header shows both teams, logos, records, score, and live period plus clock.
-- ☐ Score by quarter renders all played periods including overtime, and each team's quarter
+- ☑ The header shows both teams, logos, records, score, and live period plus clock.
+- ☑ Score by quarter renders all played periods including overtime, and each team's quarter
   values sum to its displayed total.
-- ☐ Team stat comparison renders paired bars for the stats in the design.
-- ☐ Box score lists both teams' players with per-player stat lines, scrollable on mobile.
-- ☐ Play-by-play is ordered newest first and labels scoring plays distinctly.
-- ☐ A live game's detail view updates on the same 15s poll.
-- ☐ Shots tab is present; if shot data is unavailable it shows an explicit empty state
+- ☑ Team stat comparison renders paired bars for the stats in the design.
+- ☑ Box score lists both teams' players with per-player stat lines, scrollable on mobile.
+- ☑ Play-by-play is ordered newest first and labels scoring plays distinctly.
+- ☑ A live game's detail view updates on the same 15s poll.
+- ☑ Shots tab is present; if shot data is unavailable it shows an explicit empty state
   rather than a blank panel.
 
 ---

@@ -72,6 +72,7 @@ export const playerStatLineSchema = z.object({
   assists: z.number().int().nonnegative(),
   fieldGoalsMade: z.number().int().nonnegative(),
   fieldGoalsAttempted: z.number().int().nonnegative(),
+  plusMinus: z.number().int().optional(),
 });
 
 export const boxScoreSchema = z.object({
@@ -90,7 +91,7 @@ export const playEventSchema = z.object({
   id: z.string().min(1),
   periodNumber: z.number().int().positive(),
   clock: z.string(),
-  teamId: z.string().min(1),
+  teamId: z.string().min(1).optional(),
   description: z.string().min(1),
   isScoringPlay: z.boolean(),
   awayScore: z.number().int().nonnegative(),

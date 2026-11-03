@@ -174,3 +174,58 @@ records — with **zero** requests to any espn.com host from the browser.
 
 Bug found: the "Sample data for demo purposes" footer showed even on live data.
 Now switches to the ESPN attribution when the provider is live.
+
+---
+
+## M3 — Game detail (2026-11-03)
+
+```
+Tests:    101 unit/component · 12 e2e · total 113 (no new ones)
+Local:    unit 2.4s · e2e 16.9s
+```
+
+Shipped: `/game/:id` with Summary, Box score, Plays and Shots tabs; the active
+tab lives in the URL and survives a refresh. Score by quarter, team stat
+comparison, box score with a team toggle, and newest-first play-by-play. Feed
+rows are now links. Works against both providers — the ESPN summary endpoint is
+normalized end to end.
+
+### Two shapes for the same field
+
+The summary endpoint does **not** send what the scoreboard sends, even for
+identical concepts. Caught by the Zod schema on first run rather than by an
+undefined reaching the UI:
+
+| Field      | Scoreboard                       | Summary header                                  |
+| ---------- | -------------------------------- | ----------------------------------------------- |
+| line score | `{ value: 30, period: 1 }`       | `{ displayValue: "30" }` — no number, no period |
+| records    | `records: [...]`                 | `record: [...]` — singular                      |
+| status     | `{ period, displayClock, type }` | `{ type }` only                                 |
+
+Resolved with a `lineScoreValue` helper, accepting both record keys, and making
+`period`/`displayClock` optional with the period derived from line-score count.
+This is the clearest argument so far for validating at the boundary: three
+silent `undefined`s became three readable parse errors with field paths.
+
+The box score is label-indexed — `labels` names the columns and each athlete's
+`stats` holds strings in that order — so nothing reads a fixed column position.
+
+### Bugs found by eye
+
+- **Team names clipped at 390px.** A three-digit score squeezed the team
+  columns. Score now uses `clamp()` and names wrap. Verified
+  `scrollWidth - clientWidth === 0` on the detail page.
+- **Full player names pushed the stat columns off screen.** The design uses
+  "J. Tatum"; now abbreviated at render.
+- **Minutes rendered as `30.2`.** Rounded for display.
+
+Both of the first two are component-level issues that a rendering test would
+have caught immediately — the second milestone running where visual bugs were
+found by looking rather than by a test. M4's backfill is the fix.
+
+### Scope note
+
+The Shots tab ships as an explicit empty state, which is its M3 criterion. Shot
+charts need per-shot coordinates and stay in the Later bucket — the summary
+response does carry a `shotChartAvailable` flag and `coordinate` on plays, so
+the data exists when we want it.

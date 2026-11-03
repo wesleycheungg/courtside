@@ -17,6 +17,7 @@ import {
   normalizeEspnScoreboard,
   normalizeEspnStandings,
   normalizeEspnState,
+  lineScoreValue,
   overallRecord,
   parseScore,
   sideOf,
@@ -142,7 +143,7 @@ describe('normalizeEspnScoreboard — finished games', () => {
       for (const side of ['away', 'home'] as const) {
         const competitor = sideOf(competition.competitors, side)!;
         const fromPeriods = (competitor.linescores ?? []).reduce(
-          (s, l) => s + l.value,
+          (s, l) => s + lineScoreValue(l),
           0,
         );
         const shown = side === 'away' ? game.awayScore : game.homeScore;

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { TeamLogo } from '../../components/TeamLogo';
 import type { Game, TeamRef } from '../../data/types';
 import { formatTipoff } from '../../lib/date';
@@ -84,7 +85,7 @@ export function GameRow({ game }: { game: Game }) {
   const showScores = game.state.status !== 'scheduled';
 
   return (
-    <article className="game-row" aria-label={summarize(game)}>
+    <Link to={`/game/${game.id}`} className="game-row" aria-label={summarize(game)}>
       <StatusCell game={game} />
       <div className="game-row__teams">
         <TeamLine
@@ -102,6 +103,6 @@ export function GameRow({ game }: { game: Game }) {
           dimmed={isDimmed(game, 'home')}
         />
       </div>
-    </article>
+    </Link>
   );
 }
