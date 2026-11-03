@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Page } from '../../components/Page';
 import { isDateKey, toDateKey } from '../../lib/date';
 import { DateStrip } from './DateStrip';
+import { FeedSkeleton } from './FeedSkeleton';
 import { FilterChips } from './FilterChips';
 import { LeagueSection } from './LeagueSection';
 import { applyFilter, countLive, groupByLeague, type FeedFilter } from './grouping';
@@ -88,11 +89,7 @@ interface FeedProps {
 
 function Feed({ isPending, isError, error, groups, filter }: FeedProps) {
   if (isPending) {
-    return (
-      <p className="games__state" role="status">
-        Loading games…
-      </p>
-    );
+    return <FeedSkeleton />;
   }
 
   if (isError) {

@@ -448,3 +448,121 @@ caching. Tracked in `docs/PLAN.md` under M6.
 None observed. The live contract suite is the one place flake is expected
 eventually, which is exactly why it is off the PR path and set to `retry: 0` — a
 flake there is information about ESPN, not something to paper over.
+
+---
+
+## M7 — Observability and polish (2026-11-03)
+
+```
+Tests:    358 vitest (+41: 267 src · 91 api/db/contract) · 98 e2e (+14) · 18 visual
+Coverage: 87.5% statements, 75.5% branches (was 86 / 73)
+Local:    unit 9.5s · e2e 29.6s · smoke 12.9s · visual 14.6s · lighthouse ~2m
+Lighthouse (mobile, median of 3): feed 96 · game detail 98 · standings 100
+          accessibility, best practices and SEO 100 on all three
+Bundle:   504 kB raw / 150 kB gzip JS · 31 kB CSS
+```
+
+A health endpoint, skeleton loaders, a Lighthouse budget in CI, and a README
+that finally shows the thing.
+
+### A health page instead of Sentry
+
+The criterion allowed either. The health route won because it answers the
+questions from inside the deployment, with nothing to sign up for in the
+setup instructions — a fork runs `npm install` and gets the same diagnostics.
+It reports three things, each measured where it can actually be measured:
+
+- **Upstream** — a real probe through the same `fetchEspn` the routes use,
+  under the same cache key. A check during a busy minute is served from the
+  twelve-second memory cache rather than adding load, and a cold check warms
+  the cache the next scoreboard request reads. Verified by hand against live
+  ESPN: first call 221 ms and `servedFromCache: false`, second call 0 ms and
+  `true`.
+- **Schema** — the proxy's own validation log, which now records the last Zod
+  result per instance. That is deliberately the live result, not the contract
+  suite's: the contract run says what ESPN sent at 13:00 UTC, the log says
+  what this instance parsed a moment ago.
+- **Cache age** — `max(fetched_at)` per table, which M6's `cacheAge` already
+  existed to answer.
+
+Three decisions worth recording:
+
+1. **It is not on `DataProvider`.** Routing it through the provider seam would
+   mean MockProvider inventing a health report, and the page would stop being a
+   diagnostic. It fetches `/api/health` directly and parses it with a Zod
+   schema that `api/health.ts` also imports, so the two sides cannot drift.
+2. **A `down` report is served with 503, body intact.** An uptime monitor sees
+   a failure without reading the body; the page still renders the report,
+   because "ESPN is unreachable" is more use than a generic error.
+3. **No database is not unhealthy.** `configured: false` reports as OK. A
+   configured database that cannot be reached is `degraded`. That asymmetry is
+   the whole point of M6's optional cache.
+
+The screen is not in the bottom nav — it is an operator's screen, not a tab a
+fan needs.
+
+### Measuring beat assuming, twice
+
+**Code splitting made it worse.** Lazy-loading every route except the feed cut
+the entry bundle from 504 kB to 357 kB, which looked like a win until the
+numbers came in: standings went from performance 100 and LCP 0.8 s to 97 and
+2.6 s, because a tap now waits for a chunk fetch before anything can render.
+The app is small enough that one bundle beats a waterfall. Reverted, and the
+measurement is why.
+
+**The first "failure" was the machine.** The first local Lighthouse run scored
+75 on standings with TBT at 1,410 ms. Nothing was wrong with the page — five
+stray dev and preview servers were still running from earlier in the session.
+Killing them took the same page to 100 with TBT at 10 ms. This is the second
+time this project has been fooled by a stray server (see M4's near-miss), so
+the gate now takes the **median of three runs** per screen, which is
+Lighthouse's own advice and what stops a busy CI runner from failing a PR.
+
+### Bugs Lighthouse found
+
+- **No favicon.** Every page load requested `/favicon.ico`, 404'd, and logged a
+  console error — a best-practices deduction on every screen, and a real 404 in
+  production. Added an SVG favicon and the `<link>` that stops the `.ico`
+  request.
+- **No robots.txt**, which capped SEO at 91.
+
+Both now score 100. Neither is dramatic; both are the kind of thing nobody
+notices by looking, which is the argument for having a budget at all.
+
+### Skeletons are built from the real classes
+
+Each screen's skeleton reuses the layout classes of the thing it stands in for
+— `league-section`, `game-row`, `panel` — rather than approximating them, so
+the placeholder occupies the box the content will by construction instead of by
+a developer keeping two files in sync. Measured CLS is 0.001 on the feed and 0
+elsewhere.
+
+The accessible shape matters more than the visual one: every skeleton block is
+`aria-hidden`, and the region carries one visually-hidden status with
+`aria-busy`. A screen reader hears "Loading games" once, exactly as it did when
+the loading state was a sentence — which is also why the existing component
+assertions still pass unchanged.
+
+One thing the skeletons cannot show in e2e: with the mock provider, data
+arrives in the same tick, so no test can catch the feed skeleton on screen. The
+health page can, because it really does fetch — its e2e holds the response open
+behind a gate the test releases, so the loading assertion needs no timer.
+
+### Not done
+
+- Branch protection still has to be set in GitHub, and the Lighthouse job is
+  deliberately not in the required checks: it runs and reports on every PR, but
+  a score is a measurement of a shared runner as much as of the page.
+- `/game/mock-final-gsw-okc` has LCP 2.3 s under mobile throttling against
+  0.8 s elsewhere, with a performance score of 98. Unthrottled the same element
+  paints at 152 ms, so this is font-and-throttling, not a layout problem. Worth
+  a look if the budget is ever raised.
+- `npm audit` now reports 16 moderate advisories, up from 12: Lighthouse pulls
+  in the same transitive `minimatch` the eslint tree already had. Dev-only,
+  zero high or critical.
+
+### Flaky
+
+None observed across the e2e, visual and smoke suites. The Lighthouse gate is
+the new candidate — median-of-three is the mitigation, and the first CI run
+will say whether it is enough.

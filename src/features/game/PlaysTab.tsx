@@ -1,4 +1,5 @@
 import type { GameDetail, PlayEvent } from '../../data/types';
+import { PlaysSkeleton } from './PlaysSkeleton';
 import { usePlayByPlay } from './useGameDetail';
 import './PlaysTab.css';
 
@@ -35,11 +36,7 @@ export function PlaysTab({ game, active }: { game: GameDetail; active: boolean }
   });
 
   if (isPending) {
-    return (
-      <p className="panel__empty" role="status">
-        Loading plays…
-      </p>
-    );
+    return <PlaysSkeleton />;
   }
 
   if (isError) {

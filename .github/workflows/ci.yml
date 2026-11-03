@@ -45,6 +45,41 @@ jobs:
           path: coverage/
           retention-days: 7
 
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Resolve Playwright version
+        id: pw
+        run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+      # Lighthouse drives Playwright's Chromium, so no system Chrome is needed
+      # and the browser is the same one the e2e job uses.
+      - name: Cache Playwright browsers
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.pw.outputs.version }}
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      # Median of three runs per screen: a single run on a shared runner
+      # measures the runner as much as the page.
+      - name: Lighthouse (mobile)
+        run: npm run lighthouse
+
   e2e:
     name: e2e
     runs-on: ubuntu-latest

@@ -1,0 +1,15 @@
+/* Columns come from .plays__row; these only set the bar heights. */
+
+.plays-skeleton__clock {
+  height: 1rem;
+}
+
+.plays-skeleton__text {
+  height: 1.25rem;
+}
+
+.plays-skeleton__score {
+  width: 3.5rem;
+  /* --text-lg at 1.15, which is what sets a real row's height. */
+  height: 1.3rem;
+}

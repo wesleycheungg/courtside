@@ -157,15 +157,17 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 
 ---
 
-## M7 — Observability and polish ☐
+## M7 — Observability and polish ☑
 
 **Acceptance criteria**
 
-- ☐ Errors report to Sentry, or a health page shows proxy status, cache age, and last schema
-  validation result.
-- ☐ Lighthouse mobile scores ≥ 90 for performance, accessibility, and best practices.
-- ☐ Skeleton loaders replace layout-shifting spinners on the main screens.
-- ☐ The README shows screenshots, the architecture, the test strategy, and live metrics.
+- ☑ `/health` shows proxy status, cache age, and the last schema validation result, from
+  `/api/health`. Sentry was not added: the health route answers the same questions from
+  inside the deployment, with no third-party account in the setup instructions.
+- ☑ Lighthouse mobile scores ≥ 90 for performance, accessibility, and best practices —
+  gated by `npm run lighthouse` on three screens, median of three runs.
+- ☑ Skeleton loaders replace layout-shifting spinners on the main screens.
+- ☑ The README shows screenshots, the architecture, the test strategy, and live metrics.
 
 ---
 
