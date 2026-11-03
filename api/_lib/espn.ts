@@ -10,6 +10,8 @@ import type { z } from 'zod';
 
 const ESPN_SITE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
 const ESPN_V2 = 'https://site.api.espn.com/apis/v2/sports/basketball/nba';
+// Athlete data lives on a different host to the rest.
+const ESPN_WEB = 'https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba';
 
 /** Scores go stale fast; this is the window the brief asked for. */
 export const CACHE_TTL_MS = 12_000;
@@ -112,6 +114,8 @@ export const espnUrls = {
   summary: (eventId: string) => `${ESPN_SITE}/summary?event=${eventId}`,
   standings: () => `${ESPN_V2}/standings`,
   teams: () => `${ESPN_SITE}/teams`,
+  athlete: (id: string) => `${ESPN_WEB}/athletes/${id}`,
+  athleteGameLog: (id: string) => `${ESPN_WEB}/athletes/${id}/gamelog`,
 };
 
 /** YYYYMMDD, which is what the scoreboard endpoint expects. */

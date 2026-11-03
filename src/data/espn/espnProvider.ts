@@ -8,13 +8,17 @@
 
 import type { DataProvider } from '../provider';
 import type { Conference, Game, GameDetail, PlayEvent, Player } from '../types';
+import { z } from 'zod';
 import {
+  espnAthleteSchema,
+  espnGameLogSchema,
   espnScoreboardSchema,
   espnStandingsSchema,
   espnSummarySchema,
   espnTeamsSchema,
   type EspnTeam,
 } from './espnSchemas';
+import { normalizeEspnAthlete } from './normalizeAthlete';
 import {
   normalizeEspnScoreboard,
   normalizeEspnStandings,
@@ -103,8 +107,12 @@ export function createEspnProvider({
       return normalizeEspnPlays(summary);
     },
 
-    async getPlayer(): Promise<Player> {
-      throw new Error('EspnProvider.getPlayer arrives with the player screen (M5).');
+    async getPlayer(id: string): Promise<Player> {
+      const { athlete, gamelog } = await getJson(
+        `${baseUrl}/player?id=${id}`,
+        z.object({ athlete: espnAthleteSchema, gamelog: espnGameLogSchema }),
+      );
+      return normalizeEspnAthlete(athlete, gamelog);
     },
   };
 }

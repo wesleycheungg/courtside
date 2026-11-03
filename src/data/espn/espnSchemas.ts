@@ -209,3 +209,65 @@ export const espnSummarySchema = z.object({
 export type EspnSummary = z.infer<typeof espnSummarySchema>;
 export type EspnPlayerGroup = z.infer<typeof espnPlayerGroupSchema>;
 export type EspnBoxscoreTeam = z.infer<typeof espnBoxscoreTeamSchema>;
+
+/* ── athlete ──────────────────────────────────────────────────────────────── */
+
+export const espnAthleteSchema = z.object({
+  athlete: z.object({
+    id: z.string(),
+    displayName: z.string(),
+    jersey: z.string().optional(),
+    displayHeight: z.string().optional(),
+    age: z.number().int().optional(),
+    debutYear: z.number().int().optional(),
+    position: z.object({ displayName: z.string().optional() }).optional(),
+    team: espnTeamSchema.partial({ abbreviation: true, displayName: true }).optional(),
+    statsSummary: z
+      .object({
+        statistics: z.array(
+          z.object({
+            name: z.string(),
+            displayName: z.string().optional(),
+            displayValue: z.string(),
+            rank: z.number().int().optional(),
+          }),
+        ),
+      })
+      .optional(),
+  }),
+  season: z.object({ year: z.number().int().optional() }).optional(),
+});
+
+/** Game log: `labels` names the columns, each event's `stats` holds strings. */
+export const espnGameLogSchema = z.object({
+  labels: z.array(z.string()).optional(),
+  seasonTypes: z
+    .array(
+      z.object({
+        categories: z.array(
+          z.object({
+            events: z.array(
+              z.object({ eventId: z.string(), stats: z.array(z.string()) }),
+            ),
+          }),
+        ),
+      }),
+    )
+    .optional(),
+  events: z
+    .record(
+      z.string(),
+      z.object({
+        id: z.string().optional(),
+        atVs: z.string().optional(),
+        score: z.string().optional(),
+        gameResult: z.string().optional(),
+        gameDate: z.string().optional(),
+        opponent: z.object({ abbreviation: z.string().optional() }).optional(),
+      }),
+    )
+    .optional(),
+});
+
+export type EspnAthlete = z.infer<typeof espnAthleteSchema>;
+export type EspnGameLog = z.infer<typeof espnGameLogSchema>;
