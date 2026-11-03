@@ -7,3 +7,26 @@
 .wordmark__accent {
   color: var(--color-accent);
 }
+
+.games__feed {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.games__state {
+  padding: var(--space-10) var(--space-4);
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.games__state--error {
+  color: var(--color-live);
+}
+
+.games__disclaimer {
+  margin-top: var(--space-6);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}

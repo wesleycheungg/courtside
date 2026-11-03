@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "lib": ["ES2023"],
+    // Playwright `page.evaluate` callbacks are browser code, so this
+    // project needs DOM types as well as Node's.
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
 
@@ -18,5 +20,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts", "playwright.config.ts", "eslint.config.js", "e2e"]
+  "include": [
+    "vite.config.ts",
+    "playwright.config.ts",
+    "eslint.config.js",
+    "e2e",
+    "vite-plugins"
+  ]
 }

@@ -9,6 +9,7 @@
 import type { Conference, Game, GameDetail, PlayEvent, Player } from './types';
 import { type Clock, resolveClock, systemClock } from './clock';
 import { createMockProvider } from './mock/mockProvider';
+import { createEspnProvider } from './espn/espnProvider';
 
 export interface DataProvider {
   readonly name: string;
@@ -37,9 +38,7 @@ export function getProvider(options: ProviderOptions = {}): DataProvider {
 
   switch (import.meta.env.VITE_DATA_PROVIDER) {
     case 'espn':
-      // Lands in M2 behind the serverless proxy. Until then, failing loudly beats
-      // silently serving mock data to something that asked for live data.
-      throw new Error('The ESPN provider is not implemented yet (M2).');
+      return createEspnProvider();
     default:
       return createMockProvider({ clock });
   }

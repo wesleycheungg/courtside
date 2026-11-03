@@ -1,0 +1,44 @@
+.plays__row {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+}
+
+.plays__row + .plays__row {
+  border-top: 1px solid var(--color-border);
+}
+
+.plays__clock {
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.plays__detail {
+  min-width: 0;
+}
+
+.plays__text {
+  /* Scoring plays are bolded rather than coloured, so the distinction
+     survives a greyscale print and a colour-vision difference. */
+  font-weight: var(--weight-regular);
+}
+
+.plays__text--scoring {
+  font-weight: var(--weight-bold);
+}
+
+.plays__team {
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.plays__score {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}

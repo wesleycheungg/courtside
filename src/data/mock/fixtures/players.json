@@ -7,15 +7,20 @@
     "teamColor": "#007A33",
     "position": "Forward",
     "jerseyNumber": "0",
-    "heightInches": 80,
+    "height": "6' 8\"",
     "age": 28,
     "seasonNumber": 10,
-    "seasonAverages": {
-      "points": 27.4,
-      "rebounds": 8.6,
-      "assists": 5.1,
-      "fieldGoalPercent": 46.2
-    },
+    "seasonAverages": [
+      { "label": "PTS", "value": "27.4", "rank": 6 },
+      { "label": "REB", "value": "8.6", "rank": 18 },
+      { "label": "AST", "value": "5.1", "rank": 31 },
+      { "label": "FG%", "value": "46.2", "rank": 58 }
+    ],
+    "shootingSplits": [
+      { "label": "Field goals", "made": 101, "attempted": 219, "percent": 46.1 },
+      { "label": "Three pointers", "made": 32, "attempted": 89, "percent": 36 },
+      { "label": "Free throws", "made": 45, "attempted": 52, "percent": 86.5 }
+    ],
     "gameLog": [
       {
         "gameId": "sim-live-nyk-bos",
@@ -71,6 +76,28 @@
         "assists": 7,
         "fieldGoalsMade": 7,
         "fieldGoalsAttempted": 17
+      },
+      {
+        "gameId": "mock-log-mia",
+        "opponentAbbreviation": "MIA",
+        "isHome": true,
+        "result": "W 108-101",
+        "points": 31,
+        "rebounds": 6,
+        "assists": 4,
+        "fieldGoalsMade": 11,
+        "fieldGoalsAttempted": 20
+      },
+      {
+        "gameId": "mock-log-phi",
+        "opponentAbbreviation": "PHI",
+        "isHome": false,
+        "result": "L 98-106",
+        "points": 24,
+        "rebounds": 11,
+        "assists": 3,
+        "fieldGoalsMade": 9,
+        "fieldGoalsAttempted": 23
       }
     ]
   },
@@ -82,15 +109,20 @@
     "teamColor": "#1D5FB3",
     "position": "Guard",
     "jerseyNumber": "11",
-    "heightInches": 73,
+    "height": "6' 2\"",
     "age": 29,
     "seasonNumber": 8,
-    "seasonAverages": {
-      "points": 26.1,
-      "rebounds": 3.2,
-      "assists": 7.4,
-      "fieldGoalPercent": 48.1
-    },
+    "seasonAverages": [
+      { "label": "PTS", "value": "26.1", "rank": 9 },
+      { "label": "REB", "value": "3.2", "rank": 142 },
+      { "label": "AST", "value": "7.4", "rank": 11 },
+      { "label": "FG%", "value": "48.1", "rank": 44 }
+    ],
+    "shootingSplits": [
+      { "label": "Field goals", "made": 94, "attempted": 196, "percent": 48 },
+      { "label": "Three pointers", "made": 28, "attempted": 74, "percent": 37.8 },
+      { "label": "Free throws", "made": 38, "attempted": 43, "percent": 88.4 }
+    ],
     "gameLog": [
       {
         "gameId": "sim-live-nyk-bos",
@@ -115,7 +147,7 @@
         "fieldGoalsAttempted": 18
       },
       {
-        "gameId": "mock-log-phi",
+        "gameId": "mock-log-phi2",
         "opponentAbbreviation": "PHI",
         "isHome": false,
         "result": "L 99-107",

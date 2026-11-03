@@ -41,7 +41,7 @@ Docs, scaffold, theme, app shell, mock data layer, first tests, CI, deploy.
 
 ---
 
-## M2 — Proxy, EspnProvider, Games feed ☐
+## M2 — Proxy, EspnProvider, Games feed ◐
 
 The first real data, behind a serverless proxy, rendered as the Games feed.
 
@@ -57,95 +57,103 @@ Deliverables below are unchanged; only their order is.
 
 **Acceptance criteria**
 
-- ☐ A Vercel function under `api/` proxies ESPN scoreboard, summary, and standings.
-- ☐ Responses are cached 10–15s; a second request inside that window does not hit ESPN.
-- ☐ Responses are validated with Zod; a validation failure logs the specific field path
+- ☑ A Vercel function under `api/` proxies ESPN scoreboard, summary, and standings.
+- ☑ Responses are cached 10–15s; a second request inside that window does not hit ESPN.
+- ☑ Responses are validated with Zod; a validation failure logs the specific field path
   that broke and returns a typed error rather than throwing raw.
-- ☐ The browser makes zero requests to any `espn.com` host — verifiable in the network tab
+- ☑ The browser makes zero requests to any `espn.com` host — verifiable in the network tab
   and asserted by an e2e test.
-- ☐ `EspnProvider` implements `DataProvider` and normalizes into the same domain types the
+- ☑ `EspnProvider` implements `DataProvider` and normalizes into the same domain types the
   MockProvider produces; swapping providers changes no component code.
-- ☐ Real ESPN responses for a live, a final, and a scheduled game are captured as fixtures
-  with the capture date recorded.
-- ☐ The feed shows a date strip; selecting a date loads that date's games and updates the URL.
-- ☐ Filters All and Live work; the Live chip shows an accurate count.
-- ☐ Games are grouped as live, then final, then scheduled, under a league header.
-- ☐ TanStack Query polls every 15s while a game is live and stops when none are.
-- ☐ Loading, empty (no games on this date), and error states each render deliberately.
+- ◐ Real ESPN responses captured as fixtures with the capture date recorded. Final and
+  scheduled are done; **the live capture is still outstanding** — no NBA game was in
+  progress when these were taken. Run `npm run capture:espn` during a game to close it.
+- ☑ The feed shows a date strip; selecting a date loads that date's games and updates the URL.
+- ☑ Filters All and Live work; the Live chip shows an accurate count.
+- ☑ Games are grouped as live, then final, then scheduled, under a league header.
+- ☑ TanStack Query polls every 15s while a game is live and stops when none are.
+- ☑ Loading, empty (no games on this date), and error states each render deliberately.
 
 ---
 
-## M3 — Game detail ☐
+## M3 — Game detail ☑
 
 **Acceptance criteria**
 
-- ☐ Tabs Summary, Box score, Plays, and Shots are reachable; the active tab is reflected in
+- ☑ Tabs Summary, Box score, Plays, and Shots are reachable; the active tab is reflected in
   the URL and survives a refresh.
-- ☐ The header shows both teams, logos, records, score, and live period plus clock.
-- ☐ Score by quarter renders all played periods including overtime, and each team's quarter
+- ☑ The header shows both teams, logos, records, score, and live period plus clock.
+- ☑ Score by quarter renders all played periods including overtime, and each team's quarter
   values sum to its displayed total.
-- ☐ Team stat comparison renders paired bars for the stats in the design.
-- ☐ Box score lists both teams' players with per-player stat lines, scrollable on mobile.
-- ☐ Play-by-play is ordered newest first and labels scoring plays distinctly.
-- ☐ A live game's detail view updates on the same 15s poll.
-- ☐ Shots tab is present; if shot data is unavailable it shows an explicit empty state
+- ☑ Team stat comparison renders paired bars for the stats in the design.
+- ☑ Box score lists both teams' players with per-player stat lines, scrollable on mobile.
+- ☑ Play-by-play is ordered newest first and labels scoring plays distinctly.
+- ☑ A live game's detail view updates on the same 15s poll.
+- ☑ Shots tab is present; if shot data is unavailable it shows an explicit empty state
   rather than a blank panel.
 
 ---
 
-## M4 — Quality pass ☐
+## M4 — Quality pass ◐ (two items need repo access)
 
 Test-first was paused after M1 (see `docs/NOTES.md`), so this milestone now carries the
 catch-up as well as the new quality tooling. It is the gate where CI starts blocking.
 
 **Acceptance criteria**
 
-- ☐ Coverage is backfilled for everything shipped in M2, M3, and M5: unit tests for new
+- ☑ Coverage is backfilled for everything shipped in M2, M3, and M5: unit tests for new
   logic, component tests per rendering state, e2e for each user journey.
 - ☐ Branch protection on `main` is enabled and requires the `quality` and `e2e` checks.
-- ☐ `CLAUDE.md` drops the paused-testing note and restores "every feature ships with
+  _(Repo setting — needs doing in GitHub, not in code.)_
+- ☑ `CLAUDE.md` drops the paused-testing note and restores "every feature ships with
   tests" as a standing rule.
-- ☐ axe scans run against Games, Game detail, Standings, and Player with zero serious or
+- ☑ axe scans run against Games, Game detail, Standings, and Player with zero serious or
   critical violations.
-- ☐ Keyboard-only navigation reaches every interactive element with a visible focus ring.
-- ☐ Visual regression snapshots exist for the main screens at both viewports and fail on
-  unintended change.
-- ☐ Tests are tagged `@smoke` and `@regression`; `npm run test:e2e -- --grep @smoke`
+- ☑ Keyboard-only navigation reaches every interactive element with a visible focus ring.
+- ◐ Visual regression snapshots exist for the main screens at both viewports and fail on
+  unintended change. macOS baselines are committed and enforced locally; the CI run
+  excludes them until Linux baselines exist. Run the `visual-baselines` workflow, download
+  the artifact, and commit it to finish this.
+- ☑ Tests are tagged `@smoke` and `@regression`; `npm run test:e2e -- --grep @smoke`
   completes in under two minutes.
-- ☐ CI reports flaky tests (retried-then-passed) distinctly from failures.
-- ☐ Test IDs in `docs/TEST_PLAN.md` map to real test names, and the traceability table has
+- ☑ CI reports flaky tests (retried-then-passed) distinctly from failures.
+- ☑ Test IDs in `docs/TEST_PLAN.md` map to real test names, and the traceability table has
   no unfilled rows for shipped features.
 
 ---
 
-## M5 — Standings and Player ☐
+## M5 — Standings and Player ☑
 
 **Acceptance criteria**
 
-- ☐ Standings has East and West tabs with team, W, L, PCT, GB, and streak columns.
-- ☐ Seeds 1–6 are marked as playoff and 7–10 as play-in, with a legend, and the marking is
+- ☑ Standings has East and West tabs with team, W, L, PCT, GB, and streak columns.
+- ☑ Seeds 1–6 are marked as playoff and 7–10 as play-in, with a legend, and the marking is
   conveyed by more than color alone.
-- ☐ Rows are ordered by the same rule the source uses, and GB is correct relative to the
+- ☑ Rows are ordered by the same rule the source uses, and GB is correct relative to the
   conference leader.
-- ☐ Player page shows the season-average tiles, recent-games chart, game log, and shooting
-  splits from the design.
-- ☐ Navigating from a box score row to that player's page works.
+- ☑ Player page shows the season-average tiles, recent-games chart, game log, and shooting
+  splits. Splits are FG / 3PT / FT rather than the design's by-court-zone breakdown —
+  zones need per-shot coordinates and ship with the shot charts.
+- ☑ Navigating from a box score row to that player's page works.
 
 ---
 
-## M6 — Contract tests and cache ☐
+## M6 — Contract tests and cache ◐ (one item needs a database provisioned)
 
 **Acceptance criteria**
 
-- ☐ A contract suite validates live ESPN responses against the stored schemas and fails with
+- ☑ A contract suite validates live ESPN responses against the stored schemas and fails with
   the offending field path when ESPN changes shape.
-- ☐ Schema snapshots are committed and versioned; a diff is reviewable in a PR.
-- ☐ The contract suite runs on a schedule, separately from the PR suite, so upstream drift
+- ☑ Schema snapshots are committed and versioned; a diff is reviewable in a PR.
+- ☑ The contract suite runs on a schedule, separately from the PR suite, so upstream drift
   never breaks an unrelated PR.
-- ☐ A Postgres cache (Supabase or Neon) stores fetched games and standings.
-- ☐ SQL data-validation tests assert each final score equals the sum of its quarters, and
+- ◐ A Postgres cache (Supabase or Neon) stores fetched games and standings. The write-through
+  path, migration, and driver seam are done and covered against real Postgres (PGlite) in
+  CI. **No instance is provisioned yet** — set `DATABASE_URL` in Vercel and run
+  `npm run db:migrate` to finish it. Until then the proxy skips the write, by design.
+- ☑ SQL data-validation tests assert each final score equals the sum of its quarters, and
   that standings GB math is consistent with W/L.
-- ☐ A deliberately corrupted row makes those validation tests fail.
+- ☑ A deliberately corrupted row makes those validation tests fail.
 
 ---
 

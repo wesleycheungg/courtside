@@ -1,0 +1,77 @@
+.box-score__switch {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.box-score__chip {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--color-border);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.box-score__chip--active {
+  background-color: var(--color-text);
+  border-color: var(--color-text);
+  color: var(--color-bg);
+}
+
+.box-score {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.box-score th,
+.box-score td {
+  padding: var(--space-3) var(--space-2);
+  text-align: right;
+}
+
+.box-score thead th {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.box-score tbody tr + tr th,
+.box-score tbody tr + tr td {
+  border-top: 1px solid var(--color-border);
+}
+
+.box-score__player {
+  text-align: left;
+  padding-left: 0;
+  font-weight: var(--weight-semibold);
+}
+
+.box-score thead th:first-child {
+  text-align: left;
+  padding-left: 0;
+}
+
+.box-score td:last-child,
+.box-score thead th:last-child {
+  padding-right: 0;
+}
+
+.box-score__points {
+  font-weight: var(--weight-bold);
+}
+
+.box-score abbr {
+  text-decoration: none;
+}
+
+.box-score__player a {
+  /* Underline on hover only — 13 underlined names at once is noise. */
+  color: inherit;
+}
+
+.box-score__player a:hover {
+  text-decoration: underline;
+}

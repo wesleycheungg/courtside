@@ -1,0 +1,30 @@
+{
+  "schema": "standings",
+  "snapshotVersion": 1,
+  "fingerprint": "1143eca96051",
+  "fields": {
+    "children": "array",
+    "children[]": "object",
+    "children[].abbreviation": "string?",
+    "children[].name": "string",
+    "children[].standings": "object",
+    "children[].standings.entries": "array",
+    "children[].standings.entries[]": "object",
+    "children[].standings.entries[].stats": "array",
+    "children[].standings.entries[].stats[]": "object",
+    "children[].standings.entries[].stats[].displayValue": "string?",
+    "children[].standings.entries[].stats[].name": "string",
+    "children[].standings.entries[].stats[].type": "string?",
+    "children[].standings.entries[].stats[].value": "number?",
+    "children[].standings.entries[].team": "object",
+    "children[].standings.entries[].team.abbreviation": "string",
+    "children[].standings.entries[].team.alternateColor": "string?",
+    "children[].standings.entries[].team.color": "string?",
+    "children[].standings.entries[].team.displayName": "string",
+    "children[].standings.entries[].team.id": "string",
+    "children[].standings.entries[].team.location": "string?",
+    "children[].standings.entries[].team.logo": "string?",
+    "children[].standings.entries[].team.name": "string?",
+    "children[].standings.entries[].team.shortDisplayName": "string?"
+  }
+}

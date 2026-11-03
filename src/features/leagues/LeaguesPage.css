@@ -1,0 +1,151 @@
+.conf-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  padding: var(--space-1);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.conf-switch__option {
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--color-muted);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  transition:
+    background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.conf-switch__option--active {
+  background-color: var(--color-surface-raised);
+  color: var(--color-text);
+  font-weight: var(--weight-semibold);
+}
+
+.standings {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.standings th,
+.standings td {
+  /* Tight horizontal padding so W/L/PCT/GB/STRK all fit at 390px. */
+  padding: var(--space-3) var(--space-1);
+  text-align: right;
+}
+
+.standings thead th {
+  color: var(--color-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.standings thead th:first-child {
+  text-align: left;
+}
+
+.standings td:last-child,
+.standings thead th:last-child {
+  padding-right: 0;
+}
+
+.standings__team {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: left;
+  padding-left: 0;
+  font-weight: var(--weight-semibold);
+}
+
+.standings tbody tr + tr th,
+.standings tbody tr + tr td {
+  border-top: 1px solid var(--color-border);
+}
+
+/* A thicker rule marks the postseason cutoffs, so the bands are visible
+   without relying on the seed badge colour. */
+.standings__row--playin:first-of-type th,
+.standings__row--playin:first-of-type td {
+  border-top-width: 2px;
+  border-top-color: var(--color-muted);
+}
+
+.standings__seed {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-muted);
+}
+
+.standings__seed--playoffs {
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.standings__seed--playin {
+  background-color: var(--color-secondary);
+  color: var(--color-accent-contrast);
+}
+
+.standings__name {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+}
+
+.standings__muted {
+  color: var(--color-muted);
+}
+
+.standings__win {
+  color: var(--color-win);
+  font-weight: var(--weight-semibold);
+}
+
+.standings__loss {
+  color: var(--color-loss);
+  font-weight: var(--weight-semibold);
+}
+
+.standings__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  justify-content: center;
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.standings__legend li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.standings__swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+.standings__swatch--playoffs {
+  background-color: var(--color-accent);
+}
+
+.standings__swatch--playin {
+  background-color: var(--color-secondary);
+}

@@ -77,8 +77,17 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright
+      # Fast gate: ~10s of core journeys, so an obvious break fails the run
+      # before the full suite spends a minute confirming it.
+      - name: Smoke suite
+        run: npm run test:smoke
+
+      - name: Full suite
         run: npm run test:e2e
+
+      - name: Flaky test report
+        if: always()
+        run: npm run report:flaky
 
       - name: Upload Playwright report
         if: always()
@@ -93,6 +102,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-results
-          path: test-results/
+          path: |
+            test-results/
+            playwright-results.json
           retention-days: 14
           if-no-files-found: ignore

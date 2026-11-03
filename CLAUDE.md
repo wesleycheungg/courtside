@@ -21,6 +21,8 @@ src/test/        setup, render helpers
 e2e/pages/       Playwright Page Objects
 e2e/tests/       Playwright specs
 api/             Vercel serverless functions (ESPN proxy, M2+)
+contract/        schema snapshots + the live ESPN contract suite (M6+)
+db/              Postgres cache, migrations, SQL data validations (M6+)
 docs/            PLAN.md, TEST_PLAN.md, NOTES.md, design/
 ```
 
@@ -36,6 +38,9 @@ npm run test:unit    vitest run
 npm run test:watch   vitest
 npm run test:e2e     playwright test
 npm run test:e2e:ui  playwright test --ui
+npm run test:contract   live ESPN contract suite (network; scheduled, not on PRs)
+npm run contract:snapshot  regenerate contract/snapshots/ from the Zod schemas
+npm run db:migrate   apply db/migrations/ to $DATABASE_URL
 ```
 
 ## Conventions
@@ -49,6 +54,15 @@ mock, so a fresh clone and CI run with no network.
 **The browser never calls ESPN directly.** Requests go through the Vercel function in
 `api/`, which fetches, caches, validates, and logs the field that broke on failure.
 
+**Contract and cache.** `contract/snapshots/` is generated, never hand-edited — change a
+schema in `src/data/espn/`, run `npm run contract:snapshot`, and let the diff be the
+review. The live suite is `*.contract.ts` and runs only on a schedule, so ESPN's drift
+never reds an unrelated PR. The Postgres cache is optional everywhere: with no
+`DATABASE_URL`, `getSqlClient()` returns `null` and the proxy skips the write. A cache
+failure must never turn a good response into an error. SQL data assertions live in
+`db/validations/` as `.sql` files that select violations, so "zero rows" is the assertion
+and the file runs unchanged in psql.
+
 **TypeScript.** Strict. No `any`, no non-null `!` assertions. Prefer discriminated
 unions over optional-field soup for things like game status.
 
@@ -61,12 +75,13 @@ accessible query can target the element. Page Objects for all e2e specs — no r
 selectors in a spec file. Tests must be deterministic: no `waitForTimeout`, no
 dependence on wall-clock time (inject the clock instead).
 
-> **Paused as of 2026-11-02.** New features ship without tests for now, to get the
-> app standing up first. The existing 73 tests stay and must keep passing. CI still
-> runs on every PR but gates nothing — branch protection is deliberately off. M4 is
-> the catch-up pass that backfills coverage and turns gating on. Do not delete tests
-> or weaken assertions to make a change pass; if one genuinely blocks a feature, skip
-> it with a note in `docs/NOTES.md`.
+**Every feature ships with tests.** Unit for logic, component for each
+rendering state, e2e for the journey. The pause that ran from M1 to M4 is over;
+see `docs/NOTES.md` for what it cost.
+
+**Test scripts.** `test:unit` (unit + component), `test:e2e` (full suite, minus
+visual), `test:smoke` (fast gate), `test:visual` / `test:visual:update`
+(snapshots — macOS baselines only, see the spec header).
 
 **Mock live game.** One fixture simulates a game advancing in real time. Its state is
 derived from an injected clock plus an offset, settable with `?simOffset=<ms>` or

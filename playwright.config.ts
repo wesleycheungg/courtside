@@ -10,7 +10,14 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI
-    ? [['html', { open: 'never' }], ['list'], ['github']]
+    ? [
+        ['html', { open: 'never' }],
+        ['list'],
+        ['github'],
+        // Machine-readable results, so scripts/flaky-report.mjs can separate
+        // retried-then-passed tests from genuine passes.
+        ['json', { outputFile: 'playwright-results.json' }],
+      ]
     : [['html', { open: 'never' }], ['list']],
   use: {
     baseURL,

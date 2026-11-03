@@ -1,0 +1,37 @@
+.league-section {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.league-section__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.league-section__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex: none;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-family: var(--font-display);
+  font-size: 0.625rem;
+  font-weight: var(--weight-bold);
+}
+
+.league-section__name {
+  font-size: var(--text-xl);
+}
+
+.league-section__games > li + li {
+  border-top: 1px solid var(--color-border);
+}
