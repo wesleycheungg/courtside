@@ -41,6 +41,7 @@ npm run test:e2e:ui  playwright test --ui
 npm run test:contract   live ESPN contract suite (network; scheduled, not on PRs)
 npm run contract:snapshot  regenerate contract/snapshots/ from the Zod schemas
 npm run db:migrate   apply db/migrations/ to $DATABASE_URL
+npm run lighthouse   mobile budgets on the built bundle (median of 3 runs)
 ```
 
 ## Conventions
@@ -62,6 +63,13 @@ never reds an unrelated PR. The Postgres cache is optional everywhere: with no
 failure must never turn a good response into an error. SQL data assertions live in
 `db/validations/` as `.sql` files that select violations, so "zero rows" is the assertion
 and the file runs unchanged in psql.
+
+**Observability.** `/api/health` probes the proxy, reads the last Zod validation result,
+and reports `max(fetched_at)` per cached table; `/health` renders it. It is not a
+`DataProvider` method — a mock health report would not be a diagnostic. A missing database
+reports as "not configured", never as unhealthy. Loading states use the `Skeleton`
+primitive: blocks are `aria-hidden` and the region carries one visually-hidden status with
+`aria-busy`, so the announcement stays a sentence.
 
 **TypeScript.** Strict. No `any`, no non-null `!` assertions. Prefer discriminated
 unions over optional-field soup for things like game status.
