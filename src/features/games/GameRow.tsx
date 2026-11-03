@@ -85,7 +85,12 @@ export function GameRow({ game }: { game: Game }) {
   const showScores = game.state.status !== 'scheduled';
 
   return (
-    <Link to={`/game/${game.id}`} className="game-row" aria-label={summarize(game)}>
+    <Link to={`/game/${game.id}`} className="game-row">
+      {/* Context for screen readers, placed inside the link so it joins the
+          visible text rather than replacing it. An aria-label here would fail
+          WCAG 2.5.3, which requires the accessible name to contain the
+          visible label. */}
+      <span className="visually-hidden">{summarize(game)}.</span>
       <StatusCell game={game} />
       <div className="game-row__teams">
         <TeamLine

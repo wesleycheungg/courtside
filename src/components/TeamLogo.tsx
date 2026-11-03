@@ -1,3 +1,4 @@
+import { badgeBackground } from '../lib/color';
 import './TeamLogo.css';
 
 interface TeamLogoProps {
@@ -15,7 +16,7 @@ export function TeamLogo({ abbreviation, color, size = 'sm' }: TeamLogoProps) {
   return (
     <span
       className={`team-logo team-logo--${size}`}
-      style={{ backgroundColor: color }}
+      style={{ backgroundColor: badgeBackground(color) }}
       aria-hidden="true"
     >
       {abbreviation}

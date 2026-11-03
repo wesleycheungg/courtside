@@ -61,12 +61,13 @@ accessible query can target the element. Page Objects for all e2e specs — no r
 selectors in a spec file. Tests must be deterministic: no `waitForTimeout`, no
 dependence on wall-clock time (inject the clock instead).
 
-> **Paused as of 2026-11-02.** New features ship without tests for now, to get the
-> app standing up first. The existing 73 tests stay and must keep passing. CI still
-> runs on every PR but gates nothing — branch protection is deliberately off. M4 is
-> the catch-up pass that backfills coverage and turns gating on. Do not delete tests
-> or weaken assertions to make a change pass; if one genuinely blocks a feature, skip
-> it with a note in `docs/NOTES.md`.
+**Every feature ships with tests.** Unit for logic, component for each
+rendering state, e2e for the journey. The pause that ran from M1 to M4 is over;
+see `docs/NOTES.md` for what it cost.
+
+**Test scripts.** `test:unit` (unit + component), `test:e2e` (full suite, minus
+visual), `test:smoke` (fast gate), `test:visual` / `test:visual:update`
+(snapshots — macOS baselines only, see the spec header).
 
 **Mock live game.** One fixture simulates a game advancing in real time. Its state is
 derived from an injected clock plus an offset, settable with `?simOffset=<ms>` or

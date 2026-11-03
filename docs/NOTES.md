@@ -277,3 +277,70 @@ Standings clipped the STRK column at 390px — cell padding and the team-name
 font were too generous. Tightened; the table now fits with zero inner scroll.
 Third milestone running where a layout bug was caught by looking rather than by
 a test.
+
+---
+
+## M4 — Quality pass (2026-11-03)
+
+```
+Tests:    250 unit/component (+149) · 84 e2e (+72) · 18 visual · total 352
+Coverage: 86% statements, 73% branches overall
+Local:    unit 3.2s · e2e 54.7s · smoke ~10s
+```
+
+The catch-up for the paused milestones, plus the quality tooling.
+
+### Bugs the backfill found
+
+Five, four of which were user-visible:
+
+1. **`?date=2026-13-45` silently loaded a different day.** `new Date(2026, 12, 45)`
+   rolls over to 2027-02-14 rather than failing, so the shape check passed and
+   the feed quietly showed the wrong date. Now validated by round-trip.
+2. **Team badges failed contrast on seven team colours.** White on Blazers red
+   is 4.33:1, and near-black on it is 4.36:1 — at 10px bold, mid-tone colours
+   fail _both_ ways, so choosing a text colour cannot fix it. The badge now
+   darkens the team colour just enough for white to clear 4.5:1.
+3. **Game rows and date buttons broke WCAG 2.5.3.** Both used `aria-label` to
+   replace their visible text; the rule requires the accessible name to
+   _contain_ it. Hidden text inside the control now appends instead.
+4. **`aria-label` on a `<p>`** — prohibited without a role. The scoreline used
+   one. Replaced with visually-hidden text.
+5. **Player header subtext at 85% white** failed AA on mid-tone team colours.
+
+Items 2 to 5 were all found by axe, none by eye across three milestones of
+looking at these screens. That is the argument for the tool.
+
+### Deliberate design choices
+
+- **Provider injection over module mocking.** Component tests pass a stub
+  through a `DataProviderScope` context rather than `vi.mock`-ing the data
+  layer, so they exercise the same code path production runs. The test plan
+  already claimed this; now it is true.
+- **Builders over fixtures.** `src/test/builders.ts` gives every domain object
+  a sane default so a test states only what it cares about. `build()` treats an
+  explicit `undefined` as "remove this field", which is how a test models a
+  team with no record under `exactOptionalPropertyTypes`.
+- **Smoke gate before the full suite.** ~10s of core journeys run first in CI,
+  so an obvious break fails before the full minute is spent confirming it. It
+  does re-run those tests, which is a deliberate trade.
+- **Flaky reporting.** `scripts/flaky-report.mjs` reads Playwright's JSON and
+  separates retried-then-passed from genuine passes, writing both to the CI
+  step summary. Playwright's own count blends them.
+
+### Visual snapshots: macOS only for now
+
+Baselines are platform-specific — macOS and Linux font rasterisation differ far
+beyond any sane tolerance. No Docker on this machine, so Linux baselines could
+not be generated locally. The committed baselines are macOS and enforced by
+`npm run test:visual`; the CI e2e run excludes them via `--grep-invert @visual`.
+
+The `visual-baselines` workflow generates Linux PNGs on demand — run it,
+download the artifact, commit it, and drop the grep-invert.
+
+### Flaky
+
+None observed. One near-miss worth recording: running `vite preview` by hand on
+port 4173 while Playwright's `webServer` had `reuseExistingServer` on made axe
+scan a stale build and report seven phantom failures. Not test flake, but the
+same class of confusion — kill stray preview servers before trusting a run.

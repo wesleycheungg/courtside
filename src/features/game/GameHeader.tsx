@@ -69,11 +69,16 @@ export function GameHeader({ game }: { game: GameDetail }) {
         <div className="game-header__score">
           {showScores ? (
             <p className="game-header__numbers">
-              <span>{game.awayScore}</span>
+              {/* aria-label is prohibited on a <p>, so the spoken form goes in
+                  hidden text and the digits are hidden from the tree. */}
+              <span className="visually-hidden">
+                {game.away.name} {game.awayScore}, {game.home.name} {game.homeScore}
+              </span>
+              <span aria-hidden="true">{game.awayScore}</span>
               <span className="game-header__dash" aria-hidden="true">
                 –
               </span>
-              <span>{game.homeScore}</span>
+              <span aria-hidden="true">{game.homeScore}</span>
             </p>
           ) : (
             <p className="game-header__numbers game-header__numbers--pending">vs</p>

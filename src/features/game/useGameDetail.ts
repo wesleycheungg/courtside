@@ -1,6 +1,5 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { getProvider } from '../../data/provider';
+import { useDataProvider } from '../../data/ProviderContext';
 import type { GameDetail, PlayEvent } from '../../data/types';
 import { LIVE_POLL_MS } from '../games/useGames';
 
@@ -10,7 +9,7 @@ function pollWhileLive(detail: GameDetail | undefined): number | false {
 }
 
 export function useGameDetail(id: string): UseQueryResult<GameDetail, Error> {
-  const provider = useMemo(() => getProvider(), []);
+  const provider = useDataProvider();
 
   return useQuery({
     queryKey: ['game', id],
@@ -23,7 +22,7 @@ export function usePlayByPlay(
   id: string,
   options: { enabled: boolean; isLive: boolean },
 ): UseQueryResult<PlayEvent[], Error> {
-  const provider = useMemo(() => getProvider(), []);
+  const provider = useDataProvider();
 
   return useQuery({
     queryKey: ['plays', id],

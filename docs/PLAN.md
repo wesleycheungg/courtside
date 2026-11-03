@@ -94,27 +94,30 @@ Deliverables below are unchanged; only their order is.
 
 ---
 
-## M4 — Quality pass ☐
+## M4 — Quality pass ◐ (two items need repo access)
 
 Test-first was paused after M1 (see `docs/NOTES.md`), so this milestone now carries the
 catch-up as well as the new quality tooling. It is the gate where CI starts blocking.
 
 **Acceptance criteria**
 
-- ☐ Coverage is backfilled for everything shipped in M2, M3, and M5: unit tests for new
+- ☑ Coverage is backfilled for everything shipped in M2, M3, and M5: unit tests for new
   logic, component tests per rendering state, e2e for each user journey.
 - ☐ Branch protection on `main` is enabled and requires the `quality` and `e2e` checks.
-- ☐ `CLAUDE.md` drops the paused-testing note and restores "every feature ships with
+  _(Repo setting — needs doing in GitHub, not in code.)_
+- ☑ `CLAUDE.md` drops the paused-testing note and restores "every feature ships with
   tests" as a standing rule.
-- ☐ axe scans run against Games, Game detail, Standings, and Player with zero serious or
+- ☑ axe scans run against Games, Game detail, Standings, and Player with zero serious or
   critical violations.
-- ☐ Keyboard-only navigation reaches every interactive element with a visible focus ring.
-- ☐ Visual regression snapshots exist for the main screens at both viewports and fail on
-  unintended change.
-- ☐ Tests are tagged `@smoke` and `@regression`; `npm run test:e2e -- --grep @smoke`
+- ☑ Keyboard-only navigation reaches every interactive element with a visible focus ring.
+- ◐ Visual regression snapshots exist for the main screens at both viewports and fail on
+  unintended change. macOS baselines are committed and enforced locally; the CI run
+  excludes them until Linux baselines exist. Run the `visual-baselines` workflow, download
+  the artifact, and commit it to finish this.
+- ☑ Tests are tagged `@smoke` and `@regression`; `npm run test:e2e -- --grep @smoke`
   completes in under two minutes.
-- ☐ CI reports flaky tests (retried-then-passed) distinctly from failures.
-- ☐ Test IDs in `docs/TEST_PLAN.md` map to real test names, and the traceability table has
+- ☑ CI reports flaky tests (retried-then-passed) distinctly from failures.
+- ☑ Test IDs in `docs/TEST_PLAN.md` map to real test names, and the traceability table has
   no unfilled rows for shipped features.
 
 ---
@@ -131,7 +134,7 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 - ☑ Player page shows the season-average tiles, recent-games chart, game log, and shooting
   splits. Splits are FG / 3PT / FT rather than the design's by-court-zone breakdown —
   zones need per-shot coordinates and ship with the shot charts.
-- ☐ Navigating from a box score row to that player's page works.
+- ☑ Navigating from a box score row to that player's page works.
 
 ---
 

@@ -39,8 +39,9 @@
 .player-header__team,
 .player-header__bio {
   font-size: var(--text-sm);
-  /* Slightly knocked back, but still well clear of 4.5:1 on team colours. */
-  color: rgb(255 255 255 / 85%);
+  /* Full-strength white: at 85% alpha this failed 4.5:1 on mid-tone team
+     colours such as Celtics green. */
+  color: #fff;
 }
 
 .player-page__body {

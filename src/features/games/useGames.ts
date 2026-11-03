@@ -1,6 +1,5 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { getProvider } from '../../data/provider';
+import { useDataProvider } from '../../data/ProviderContext';
 import type { Game } from '../../data/types';
 
 /** How often a live slate refetches. */
@@ -12,7 +11,7 @@ export function hasLiveGame(games: Game[] | undefined): boolean {
 
 /** Which provider is serving this session — drives the footer attribution. */
 export function useProviderName(): string {
-  return useMemo(() => getProvider().name, []);
+  return useDataProvider().name;
 }
 
 /**
@@ -22,9 +21,7 @@ export function useProviderName(): string {
  * finished games settles down instead of refetching forever.
  */
 export function useGames(date: string): UseQueryResult<Game[], Error> {
-  // The provider reads the sim clock off the URL, so build it once per render
-  // pass rather than per query.
-  const provider = useMemo(() => getProvider(), []);
+  const provider = useDataProvider();
 
   return useQuery({
     queryKey: ['games', date],
