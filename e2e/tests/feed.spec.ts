@@ -56,20 +56,78 @@ test.describe('games feed', () => {
     await expect(page.getByText('No games are live right now.')).toBeVisible();
   });
 
-  test('selecting a date updates the URL @regression', async ({ page }) => {
+  test('stepping a day updates the URL @regression', async ({ page }) => {
     const feed = new GamesFeedPage(page);
     await feed.goto(simTime.thirdQuarter);
 
-    await feed.dateButton(0).click();
+    await expect(feed.currentDate).toContainText('Today');
+    await feed.stepDay('Previous');
 
     await expect(page).toHaveURL(/date=\d{4}-\d{2}-\d{2}/);
+    await expect(feed.currentDate).toContainText('Yesterday');
     await expect(feed.leagueSection).toBeVisible();
+  });
+
+  test('stepping back and forward returns to today @regression', async ({ page }) => {
+    const feed = new GamesFeedPage(page);
+    await feed.goto(simTime.thirdQuarter);
+
+    await feed.stepDay('Next');
+    await expect(feed.currentDate).toContainText('Tomorrow');
+
+    await feed.stepDay('Previous');
+    await expect(feed.currentDate).toContainText('Today');
+  });
+
+  // These two pin ?date= to a fixed day rather than starting from today, so
+  // the month on show and the day they click are the same whatever the wall
+  // clock says when CI runs them.
+  test('picking a date from the calendar loads it @regression', async ({ page }) => {
+    const feed = new GamesFeedPage(page);
+    await page.goto('/?date=2026-11-20');
+    await feed.leagueSection.waitFor();
+
+    await feed.openCalendar();
+    await feed.calendarDay(15).click();
+
+    await expect(feed.calendar).toBeHidden();
+    await expect(page).toHaveURL(/date=2026-11-15/);
+    await expect(feed.leagueSection).toBeVisible();
+  });
+
+  test('pages the calendar a month at a time @regression', async ({ page }) => {
+    const feed = new GamesFeedPage(page);
+    await page.goto('/?date=2026-11-20');
+    await feed.leagueSection.waitFor();
+
+    await feed.openCalendar();
+    await expect(feed.monthHeading()).toHaveText(/November 2026/);
+
+    await feed.pageMonth('Next');
+    await expect(feed.monthHeading()).toHaveText(/December 2026/);
+
+    // Paging the view alone must not load a different day.
+    await expect(page).toHaveURL(/date=2026-11-20/);
+
+    await feed.pageMonth('Previous');
+    await expect(feed.monthHeading()).toHaveText(/November 2026/);
+  });
+
+  test('closes the calendar on Escape @regression', async ({ page }) => {
+    const feed = new GamesFeedPage(page);
+    await feed.goto(simTime.thirdQuarter);
+
+    await feed.openCalendar();
+    await page.keyboard.press('Escape');
+
+    await expect(feed.calendar).toBeHidden();
+    await expect(feed.currentDate).toBeFocused();
   });
 
   test('ignores a malformed date rather than breaking @regression', async ({ page }) => {
     await page.goto('/?date=2026-13-45');
 
-    // Falls back to today, so the strip still renders and games still load.
+    // Falls back to today, so the picker still renders and games still load.
     await expect(page.getByRole('heading', { name: 'NBA' })).toBeVisible();
     await expect(page.getByText('Today')).toBeVisible();
   });

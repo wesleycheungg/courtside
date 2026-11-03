@@ -71,6 +71,14 @@ reports as "not configured", never as unhealthy. Loading states use the `Skeleto
 primitive: blocks are `aria-hidden` and the region carries one visually-hidden status with
 `aria-busy`, so the announcement stays a sentence.
 
+**Date picker.** The feed's date control is `DatePicker` — day arrows either side of the
+current date, which opens `Calendar`. The month grid uses roving tabindex: exactly one
+day is tabbable and the arrow keys move it, so the popover can never cost a keyboard user
+42 tab presses. Focus and selection are separate — arrowing pages the month but fires no
+query; only Enter or a click loads a day. Escape and selecting hand focus back to the
+trigger; dismissing by clicking outside deliberately does not. Month arithmetic goes
+through `addMonths`, which clamps instead of letting `Date` roll a short month over.
+
 **TypeScript.** Strict. No `any`, no non-null `!` assertions. Prefer discriminated
 unions over optional-field soup for things like game status.
 

@@ -566,3 +566,103 @@ behind a gate the test releases, so the loading assertion needs no timer.
 None observed across the e2e, visual and smoke suites. The Lighthouse gate is
 the new candidate — median-of-three is the mitigation, and the first CI run
 will say whether it is enough.
+
+---
+
+## M8 — Date picker (2026-11-03)
+
+```
+Tests:    399 vitest (+41: 308 src · 91 api/db/contract) · 108 e2e (+10) · 18 visual
+Coverage: 88.8% statements, 76.9% branches (was 87.5 / 75.5)
+Local:    unit 10.1s · e2e 28.6s · smoke 11.6s · visual 16.8s
+Lighthouse (mobile, median of 3): feed 100 · game detail 98 · standings 100
+          accessibility, best practices and SEO 100 on all three
+Bundle:   508 kB raw / 152 kB gzip JS · 33 kB CSS
+```
+
+The five-day strip became a FotMob-style bar: prev/next arrows either side of
+the current date, which opens a month calendar.
+
+### What the strip was actually costing
+
+The strip spent the full width on five days and still could not reach a sixth.
+Any date further out than two days needed the URL typed by hand. The bar gives
+back the width, and the calendar reaches any date at all — so the control got
+smaller and more capable at the same time.
+
+### Month arithmetic is where this would have broken
+
+`setMonth` is not month arithmetic. January 31 plus one month is March 3,
+because February has no 31st and `Date` rolls the overflow forward. A calendar
+paging on that would skip February entirely from any 31-day month — a bug that
+only appears in four months of the year and only from the end of them.
+
+`addMonths` moves to the 1st first, then clamps the day to what the target
+month has. `addMonths: clamps rather than skipping a short month` pins all
+three cases, including the leap-year one, and there is a component test that
+pages from January 31 and asserts February is what appears.
+
+### One tab stop, not forty-two
+
+A month grid is up to 42 buttons. Left alone, every one is a tab stop, and a
+keyboard user who opened the calendar would need 42 presses to get back to the
+page. The grid uses roving tabindex instead: exactly one day is tabbable, the
+arrows move it, and an effect moves real DOM focus to follow.
+
+That is asserted directly (`keeps one tab stop in the grid, not one per day`)
+rather than left to the a11y scan, because axe has no opinion about it — it is
+a usability property, not a violation.
+
+Focus moving and selection changing are deliberately separate. Arrowing across
+the grid pages the month on show but fires no query; only Enter or a click
+loads a day. `does not load a new day just for arrowing around` is the guard —
+without it, holding ArrowRight would be a request per keystroke.
+
+### Focus goes back, except when it shouldn't
+
+Escape and selecting a day both hand focus to the trigger, so the tab order
+survives the popover. Dismissing by clicking outside does not: a mouse user who
+clicked somewhere else did not ask to be sent back to the picker, and yanking
+focus there would be the control arguing with them. Both halves are asserted.
+
+### A bug in the a11y test, not the app
+
+`every interactive element is reachable by keyboard` failed on the first run:
+15 focusable elements, 14 reached. The picker's two arrows are icon-only, so
+both had empty `textContent`, and the test's identity string collapsed them
+into one `Set` entry. Both were always reachable.
+
+The test now prefers `aria-label` over `textContent` when building that
+identity. Worth recording because the failure looked exactly like a real
+keyboard trap, and the fix was in the assertion — the kind of thing that gets
+"fixed" by loosening the threshold if nobody reads it closely.
+
+### Deliberate design choices
+
+- Weeks run Monday-first. FotMob's convention, and the app is NBA-only so far
+  rather than US-only by design; `monthGrid` is the one place it is decided.
+- Cells outside the month are blank, not the neighbouring month's greyed days.
+  A tap can then never land on a date the header is not naming.
+- Today is a ring, selected is a fill, so the day that is both stays legible.
+- Weekday headings show the narrow glyph and announce the long name. Seven
+  columns of "Mon" do not fit 390px, and a bare "T" read aloud is a coin flip.
+- The day buttons' accessible name is the full date alone, with the visible
+  number `aria-hidden`. WCAG 2.5.3 still holds — the name contains the visible
+  label — without a screen reader saying "4 Wednesday, 4 November 2026".
+
+### Not done
+
+- The e2e specs that exercise the calendar pin `?date=` to a fixed day rather
+  than starting from today, because the month on show and the day they click
+  have to be known in advance. The ones that only step a day still start from
+  today and assert on "Yesterday"/"Tomorrow", which holds on any date.
+- No visual baseline of the calendar open. The popover only exists after an
+  interaction, and the visual suite is path-driven; the a11y suite gained an
+  open-calendar scan, so the markup is covered even though the pixels are not.
+- The mock provider still returns the same slate for every date, so picking a
+  day proves the wiring, not the data.
+
+### Flaky
+
+None observed. The four games-feed visual baselines were regenerated for the
+new control and reviewed; no other screen moved.

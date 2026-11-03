@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GamesPage } from './GamesPage';
@@ -112,27 +112,56 @@ describe('GamesPage', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Loading games');
   });
 
-  it('marks the date in the URL as selected', async () => {
+  it('shows the date from the URL on the picker', async () => {
     renderWithProviders(<GamesPage />, {
       provider: provider(),
       route: '/?date=2026-11-04',
     });
 
-    const selected = await screen.findByRole('button', {
-      pressed: true,
-      name: /November 4/,
-    });
-    expect(selected).toBeInTheDocument();
+    // The trigger carries the full date in its accessible name whatever the
+    // visible wording works out to, so this holds on any day of the year.
+    expect(await screen.findByRole('button', { name: /November 4/ })).toBeInTheDocument();
   });
 
-  it('ignores a nonsense date rather than showing a broken strip', async () => {
+  it('ignores a nonsense date rather than showing a broken picker', async () => {
     renderWithProviders(<GamesPage />, {
       provider: provider(),
       route: '/?date=2026-13-45',
     });
 
-    // Falls back to today, which is the only button labelled "Today".
+    // Falls back to today, which is what the picker then names.
     expect(await screen.findByText('Today')).toBeInTheDocument();
+  });
+
+  it('asks the provider for the new day when the picker steps forward', async () => {
+    const user = userEvent.setup();
+    const getGames = vi.fn().mockResolvedValue(slate);
+    renderWithProviders(<GamesPage />, {
+      provider: stubProvider({ getGames }),
+      route: '/?date=2026-11-04',
+    });
+
+    await screen.findByRole('heading', { name: 'NBA' });
+    await user.click(screen.getByRole('button', { name: 'Next day' }));
+
+    await waitFor(() => expect(getGames).toHaveBeenCalledWith('2026-11-05'));
+  });
+
+  it('loads the day picked out of the calendar', async () => {
+    const user = userEvent.setup();
+    const getGames = vi.fn().mockResolvedValue(slate);
+    renderWithProviders(<GamesPage />, {
+      provider: stubProvider({ getGames }),
+      route: '/?date=2026-11-04',
+    });
+
+    await screen.findByRole('heading', { name: 'NBA' });
+    await user.click(screen.getByRole('button', { name: /November 4/ }));
+    await user.click(
+      screen.getByRole('button', { name: /November 17, 2026|17 November 2026/ }),
+    );
+
+    await waitFor(() => expect(getGames).toHaveBeenCalledWith('2026-11-17'));
   });
 
   it('credits mock data as sample data', async () => {
