@@ -20,11 +20,15 @@
     "test:smoke": "playwright test --grep @smoke",
     "test:visual": "playwright test e2e/tests/visual.spec.ts",
     "test:visual:update": "playwright test e2e/tests/visual.spec.ts --update-snapshots",
-    "report:flaky": "node scripts/flaky-report.mjs"
+    "report:flaky": "node scripts/flaky-report.mjs",
+    "test:contract": "vitest run --config vitest.contract.config.ts",
+    "contract:snapshot": "UPDATE_SCHEMA_SNAPSHOTS=1 vitest run contract/snapshots.test.ts",
+    "db:migrate": "node scripts/db-migrate.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
     "@fontsource/barlow-condensed": "^5.3.0",
+    "@neondatabase/serverless": "^1.2.0",
     "@tanstack/react-query": "^5.105.3",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
@@ -33,6 +37,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.14.0",
+    "@electric-sql/pglite": "^0.5.15",
     "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^7.0.1",
