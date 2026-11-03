@@ -1,0 +1,130 @@
+[
+  {
+    "id": "tatum",
+    "name": "Jayson Tatum",
+    "teamId": "bos",
+    "teamName": "Boston Celtics",
+    "teamColor": "#007A33",
+    "position": "Forward",
+    "jerseyNumber": "0",
+    "heightInches": 80,
+    "age": 28,
+    "seasonNumber": 10,
+    "seasonAverages": {
+      "points": 27.4,
+      "rebounds": 8.6,
+      "assists": 5.1,
+      "fieldGoalPercent": 46.2
+    },
+    "gameLog": [
+      {
+        "gameId": "sim-live-nyk-bos",
+        "opponentAbbreviation": "NYK",
+        "isHome": true,
+        "result": "Live · Q3",
+        "points": 28,
+        "rebounds": 9,
+        "assists": 5,
+        "fieldGoalsMade": 10,
+        "fieldGoalsAttempted": 19
+      },
+      {
+        "gameId": "mock-log-mil",
+        "opponentAbbreviation": "MIL",
+        "isHome": true,
+        "result": "W 121-108",
+        "points": 30,
+        "rebounds": 7,
+        "assists": 6,
+        "fieldGoalsMade": 11,
+        "fieldGoalsAttempted": 21
+      },
+      {
+        "gameId": "mock-log-cle",
+        "opponentAbbreviation": "CLE",
+        "isHome": false,
+        "result": "L 104-112",
+        "points": 22,
+        "rebounds": 10,
+        "assists": 4,
+        "fieldGoalsMade": 8,
+        "fieldGoalsAttempted": 20
+      },
+      {
+        "gameId": "mock-log-orl",
+        "opponentAbbreviation": "ORL",
+        "isHome": true,
+        "result": "W 115-99",
+        "points": 33,
+        "rebounds": 8,
+        "assists": 5,
+        "fieldGoalsMade": 12,
+        "fieldGoalsAttempted": 22
+      },
+      {
+        "gameId": "mock-log-chi",
+        "opponentAbbreviation": "CHI",
+        "isHome": false,
+        "result": "W 110-102",
+        "points": 19,
+        "rebounds": 9,
+        "assists": 7,
+        "fieldGoalsMade": 7,
+        "fieldGoalsAttempted": 17
+      }
+    ]
+  },
+  {
+    "id": "brunson",
+    "name": "Jalen Brunson",
+    "teamId": "nyk",
+    "teamName": "New York Knicks",
+    "teamColor": "#1D5FB3",
+    "position": "Guard",
+    "jerseyNumber": "11",
+    "heightInches": 73,
+    "age": 29,
+    "seasonNumber": 8,
+    "seasonAverages": {
+      "points": 26.1,
+      "rebounds": 3.2,
+      "assists": 7.4,
+      "fieldGoalPercent": 48.1
+    },
+    "gameLog": [
+      {
+        "gameId": "sim-live-nyk-bos",
+        "opponentAbbreviation": "BOS",
+        "isHome": false,
+        "result": "Live · Q3",
+        "points": 31,
+        "rebounds": 2,
+        "assists": 7,
+        "fieldGoalsMade": 11,
+        "fieldGoalsAttempted": 22
+      },
+      {
+        "gameId": "mock-log-det",
+        "opponentAbbreviation": "DET",
+        "isHome": true,
+        "result": "W 118-104",
+        "points": 24,
+        "rebounds": 4,
+        "assists": 9,
+        "fieldGoalsMade": 9,
+        "fieldGoalsAttempted": 18
+      },
+      {
+        "gameId": "mock-log-phi",
+        "opponentAbbreviation": "PHI",
+        "isHome": false,
+        "result": "L 99-107",
+        "points": 21,
+        "rebounds": 3,
+        "assists": 6,
+        "fieldGoalsMade": 8,
+        "fieldGoalsAttempted": 21
+      }
+    ]
+  }
+]

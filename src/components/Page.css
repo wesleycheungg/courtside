@@ -1,0 +1,23 @@
+.page {
+  padding: var(--space-5) var(--space-4) var(--space-8);
+}
+
+.page__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.page__title {
+  font-size: var(--text-3xl);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.page__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}

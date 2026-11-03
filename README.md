@@ -72,14 +72,14 @@ npm run test:e2e      # playwright — desktop and 390×844 mobile
 npm run test:e2e:ui   # playwright interactive mode
 ```
 
-| Level | Tool | What it covers |
-|-------|------|----------------|
-| Unit | Vitest | Normalization, status derivation, sim clock, date handling |
-| Component | Vitest + RTL | Per-state rendering and accessible output |
-| E2E | Playwright | User journeys, desktop + mobile, live → final |
-| Contract | Vitest | Real ESPN responses against stored schemas |
-| Visual | Playwright | Layout and theme snapshots |
-| A11y | axe-core | Serious and critical violations per screen |
+| Level     | Tool         | What it covers                                             |
+| --------- | ------------ | ---------------------------------------------------------- |
+| Unit      | Vitest       | Normalization, status derivation, sim clock, date handling |
+| Component | Vitest + RTL | Per-state rendering and accessible output                  |
+| E2E       | Playwright   | User journeys, desktop + mobile, live → final              |
+| Contract  | Vitest       | Real ESPN responses against stored schemas                 |
+| Visual    | Playwright   | Layout and theme snapshots                                 |
+| A11y      | axe-core     | Serious and critical violations per screen                 |
 
 ## CI/CD
 

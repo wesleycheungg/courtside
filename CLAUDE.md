@@ -56,17 +56,24 @@ unions over optional-field soup for things like game status.
 `src/styles/tokens.css` — no hardcoded hex anywhere else. Component styles live in a
 `.css` file next to the component.
 
-**Testing.** Every feature ships with tests. Query by role, label, or text; reach for
-`data-testid` only when no accessible query can target the element. Page Objects for
-all e2e specs — no raw selectors in a spec file. Tests must be deterministic: no
-`waitForTimeout`, no dependence on wall-clock time (inject the clock instead).
+**Testing.** Query by role, label, or text; reach for `data-testid` only when no
+accessible query can target the element. Page Objects for all e2e specs — no raw
+selectors in a spec file. Tests must be deterministic: no `waitForTimeout`, no
+dependence on wall-clock time (inject the clock instead).
+
+> **Paused as of 2026-11-02.** New features ship without tests for now, to get the
+> app standing up first. The existing 73 tests stay and must keep passing. CI still
+> runs on every PR but gates nothing — branch protection is deliberately off. M4 is
+> the catch-up pass that backfills coverage and turns gating on. Do not delete tests
+> or weaken assertions to make a change pass; if one genuinely blocks a feature, skip
+> it with a note in `docs/NOTES.md`.
 
 **Mock live game.** One fixture simulates a game advancing in real time. Its state is
 derived from an injected clock plus an offset, settable with `?simOffset=<ms>` or
 `VITE_SIM_OFFSET`, so tests jump to any point — live, halftime, final — instantly.
 
 **Git.** One feature branch and PR per milestone, small commits with clear messages.
-Run typecheck, lint, and all tests locally before claiming anything is done.
+Run typecheck, lint, and the existing tests locally before claiming anything is done.
 
 **Docs.** Update `docs/NOTES.md` at the end of each milestone with test counts, CI
 times, and any bug the tests caught. Keep acceptance criteria in `docs/PLAN.md` and

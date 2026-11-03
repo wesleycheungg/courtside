@@ -1,0 +1,504 @@
+{
+  "sim-live-nyk-bos": {
+    "teamStats": [
+      {
+        "label": "Field goal %",
+        "awayValue": "45.6%",
+        "homeValue": "48.5%",
+        "awayShare": 0.48
+      },
+      {
+        "label": "3-pointers",
+        "awayValue": "9/26",
+        "homeValue": "12/31",
+        "awayShare": 0.43
+      },
+      { "label": "Rebounds", "awayValue": "31", "homeValue": "35", "awayShare": 0.47 },
+      { "label": "Assists", "awayValue": "19", "homeValue": "22", "awayShare": 0.46 },
+      { "label": "Turnovers", "awayValue": "9", "homeValue": "11", "awayShare": 0.45 },
+      {
+        "label": "Points in paint",
+        "awayValue": "38",
+        "homeValue": "30",
+        "awayShare": 0.56
+      }
+    ],
+    "boxScore": {
+      "away": [
+        {
+          "playerId": "brunson",
+          "name": "Jalen Brunson",
+          "position": "G",
+          "minutes": 29.4,
+          "points": 31,
+          "rebounds": 2,
+          "assists": 7,
+          "fieldGoalsMade": 11,
+          "fieldGoalsAttempted": 22
+        },
+        {
+          "playerId": "nyk-anunoby",
+          "name": "OG Anunoby",
+          "position": "F",
+          "minutes": 28.1,
+          "points": 14,
+          "rebounds": 6,
+          "assists": 2,
+          "fieldGoalsMade": 6,
+          "fieldGoalsAttempted": 12
+        },
+        {
+          "playerId": "nyk-towns",
+          "name": "Karl-Anthony Towns",
+          "position": "C",
+          "minutes": 27.6,
+          "points": 18,
+          "rebounds": 11,
+          "assists": 3,
+          "fieldGoalsMade": 7,
+          "fieldGoalsAttempted": 15
+        },
+        {
+          "playerId": "nyk-bridges",
+          "name": "Mikal Bridges",
+          "position": "F",
+          "minutes": 26.9,
+          "points": 11,
+          "rebounds": 4,
+          "assists": 3,
+          "fieldGoalsMade": 4,
+          "fieldGoalsAttempted": 11
+        },
+        {
+          "playerId": "nyk-hart",
+          "name": "Josh Hart",
+          "position": "G",
+          "minutes": 22.3,
+          "points": 6,
+          "rebounds": 7,
+          "assists": 4,
+          "fieldGoalsMade": 3,
+          "fieldGoalsAttempted": 7
+        },
+        {
+          "playerId": "nyk-mcbride",
+          "name": "Miles McBride",
+          "position": "G",
+          "minutes": 12.8,
+          "points": 2,
+          "rebounds": 1,
+          "assists": 0,
+          "fieldGoalsMade": 1,
+          "fieldGoalsAttempted": 5
+        }
+      ],
+      "home": [
+        {
+          "playerId": "tatum",
+          "name": "Jayson Tatum",
+          "position": "F",
+          "minutes": 30.2,
+          "points": 28,
+          "rebounds": 9,
+          "assists": 5,
+          "fieldGoalsMade": 10,
+          "fieldGoalsAttempted": 19
+        },
+        {
+          "playerId": "bos-brown",
+          "name": "Jaylen Brown",
+          "position": "G",
+          "minutes": 28.7,
+          "points": 21,
+          "rebounds": 5,
+          "assists": 3,
+          "fieldGoalsMade": 8,
+          "fieldGoalsAttempted": 17
+        },
+        {
+          "playerId": "bos-white",
+          "name": "Derrick White",
+          "position": "G",
+          "minutes": 27.4,
+          "points": 15,
+          "rebounds": 3,
+          "assists": 6,
+          "fieldGoalsMade": 5,
+          "fieldGoalsAttempted": 11
+        },
+        {
+          "playerId": "bos-porzingis",
+          "name": "Kristaps Porzingis",
+          "position": "C",
+          "minutes": 24.1,
+          "points": 13,
+          "rebounds": 8,
+          "assists": 1,
+          "fieldGoalsMade": 5,
+          "fieldGoalsAttempted": 10
+        },
+        {
+          "playerId": "bos-holiday",
+          "name": "Jrue Holiday",
+          "position": "G",
+          "minutes": 23.8,
+          "points": 8,
+          "rebounds": 4,
+          "assists": 5,
+          "fieldGoalsMade": 3,
+          "fieldGoalsAttempted": 8
+        },
+        {
+          "playerId": "bos-pritchard",
+          "name": "Payton Pritchard",
+          "position": "G",
+          "minutes": 14.2,
+          "points": 2,
+          "rebounds": 2,
+          "assists": 2,
+          "fieldGoalsMade": 1,
+          "fieldGoalsAttempted": 6
+        }
+      ]
+    },
+    "topPerformerIds": ["tatum", "brunson"]
+  },
+  "mock-final-gsw-okc": {
+    "teamStats": [
+      {
+        "label": "Field goal %",
+        "awayValue": "43.1%",
+        "homeValue": "51.2%",
+        "awayShare": 0.46
+      },
+      {
+        "label": "3-pointers",
+        "awayValue": "14/41",
+        "homeValue": "16/38",
+        "awayShare": 0.47
+      },
+      { "label": "Rebounds", "awayValue": "40", "homeValue": "46", "awayShare": 0.47 },
+      { "label": "Assists", "awayValue": "26", "homeValue": "31", "awayShare": 0.46 },
+      { "label": "Turnovers", "awayValue": "15", "homeValue": "9", "awayShare": 0.63 },
+      {
+        "label": "Points in paint",
+        "awayValue": "36",
+        "homeValue": "54",
+        "awayShare": 0.4
+      }
+    ],
+    "boxScore": {
+      "away": [
+        {
+          "playerId": "gsw-curry",
+          "name": "Stephen Curry",
+          "position": "G",
+          "minutes": 34.2,
+          "points": 29,
+          "rebounds": 4,
+          "assists": 7,
+          "fieldGoalsMade": 10,
+          "fieldGoalsAttempted": 23
+        },
+        {
+          "playerId": "gsw-butler",
+          "name": "Jimmy Butler",
+          "position": "F",
+          "minutes": 33.5,
+          "points": 22,
+          "rebounds": 6,
+          "assists": 5,
+          "fieldGoalsMade": 8,
+          "fieldGoalsAttempted": 16
+        },
+        {
+          "playerId": "gsw-green",
+          "name": "Draymond Green",
+          "position": "F",
+          "minutes": 30.1,
+          "points": 8,
+          "rebounds": 9,
+          "assists": 8,
+          "fieldGoalsMade": 3,
+          "fieldGoalsAttempted": 7
+        },
+        {
+          "playerId": "gsw-kuminga",
+          "name": "Jonathan Kuminga",
+          "position": "F",
+          "minutes": 26.4,
+          "points": 17,
+          "rebounds": 5,
+          "assists": 2,
+          "fieldGoalsMade": 7,
+          "fieldGoalsAttempted": 14
+        },
+        {
+          "playerId": "gsw-hield",
+          "name": "Buddy Hield",
+          "position": "G",
+          "minutes": 24.8,
+          "points": 16,
+          "rebounds": 3,
+          "assists": 1,
+          "fieldGoalsMade": 6,
+          "fieldGoalsAttempted": 15
+        },
+        {
+          "playerId": "gsw-looney",
+          "name": "Kevon Looney",
+          "position": "C",
+          "minutes": 18.3,
+          "points": 4,
+          "rebounds": 8,
+          "assists": 2,
+          "fieldGoalsMade": 2,
+          "fieldGoalsAttempted": 4
+        }
+      ],
+      "home": [
+        {
+          "playerId": "okc-gilgeous",
+          "name": "Shai Gilgeous-Alexander",
+          "position": "G",
+          "minutes": 35.1,
+          "points": 38,
+          "rebounds": 5,
+          "assists": 8,
+          "fieldGoalsMade": 14,
+          "fieldGoalsAttempted": 24
+        },
+        {
+          "playerId": "okc-williams",
+          "name": "Jalen Williams",
+          "position": "F",
+          "minutes": 33.8,
+          "points": 24,
+          "rebounds": 6,
+          "assists": 4,
+          "fieldGoalsMade": 9,
+          "fieldGoalsAttempted": 17
+        },
+        {
+          "playerId": "okc-holmgren",
+          "name": "Chet Holmgren",
+          "position": "C",
+          "minutes": 31.2,
+          "points": 19,
+          "rebounds": 12,
+          "assists": 3,
+          "fieldGoalsMade": 7,
+          "fieldGoalsAttempted": 13
+        },
+        {
+          "playerId": "okc-dort",
+          "name": "Luguentz Dort",
+          "position": "G",
+          "minutes": 28.6,
+          "points": 12,
+          "rebounds": 4,
+          "assists": 2,
+          "fieldGoalsMade": 4,
+          "fieldGoalsAttempted": 9
+        },
+        {
+          "playerId": "okc-caruso",
+          "name": "Alex Caruso",
+          "position": "G",
+          "minutes": 22.4,
+          "points": 9,
+          "rebounds": 3,
+          "assists": 6,
+          "fieldGoalsMade": 3,
+          "fieldGoalsAttempted": 6
+        },
+        {
+          "playerId": "okc-wallace",
+          "name": "Cason Wallace",
+          "position": "G",
+          "minutes": 19.7,
+          "points": 16,
+          "rebounds": 2,
+          "assists": 4,
+          "fieldGoalsMade": 6,
+          "fieldGoalsAttempted": 10
+        }
+      ]
+    },
+    "topPerformerIds": ["okc-gilgeous", "gsw-curry"]
+  },
+  "mock-final-ot-den-lal": {
+    "teamStats": [
+      {
+        "label": "Field goal %",
+        "awayValue": "49.4%",
+        "homeValue": "47.0%",
+        "awayShare": 0.51
+      },
+      {
+        "label": "3-pointers",
+        "awayValue": "13/33",
+        "homeValue": "15/40",
+        "awayShare": 0.46
+      },
+      { "label": "Rebounds", "awayValue": "52", "homeValue": "44", "awayShare": 0.54 },
+      { "label": "Assists", "awayValue": "33", "homeValue": "27", "awayShare": 0.55 },
+      { "label": "Turnovers", "awayValue": "11", "homeValue": "14", "awayShare": 0.44 },
+      {
+        "label": "Points in paint",
+        "awayValue": "58",
+        "homeValue": "48",
+        "awayShare": 0.55
+      }
+    ],
+    "boxScore": {
+      "away": [
+        {
+          "playerId": "den-jokic",
+          "name": "Nikola Jokic",
+          "position": "C",
+          "minutes": 41.3,
+          "points": 34,
+          "rebounds": 16,
+          "assists": 12,
+          "fieldGoalsMade": 13,
+          "fieldGoalsAttempted": 22
+        },
+        {
+          "playerId": "den-murray",
+          "name": "Jamal Murray",
+          "position": "G",
+          "minutes": 39.7,
+          "points": 28,
+          "rebounds": 4,
+          "assists": 7,
+          "fieldGoalsMade": 11,
+          "fieldGoalsAttempted": 21
+        },
+        {
+          "playerId": "den-gordon",
+          "name": "Aaron Gordon",
+          "position": "F",
+          "minutes": 36.2,
+          "points": 18,
+          "rebounds": 9,
+          "assists": 3,
+          "fieldGoalsMade": 7,
+          "fieldGoalsAttempted": 13
+        },
+        {
+          "playerId": "den-porter",
+          "name": "Michael Porter Jr.",
+          "position": "F",
+          "minutes": 34.8,
+          "points": 21,
+          "rebounds": 8,
+          "assists": 2,
+          "fieldGoalsMade": 8,
+          "fieldGoalsAttempted": 16
+        },
+        {
+          "playerId": "den-braun",
+          "name": "Christian Braun",
+          "position": "G",
+          "minutes": 28.4,
+          "points": 13,
+          "rebounds": 5,
+          "assists": 4,
+          "fieldGoalsMade": 5,
+          "fieldGoalsAttempted": 9
+        },
+        {
+          "playerId": "den-watson",
+          "name": "Peyton Watson",
+          "position": "F",
+          "minutes": 17.1,
+          "points": 7,
+          "rebounds": 3,
+          "assists": 1,
+          "fieldGoalsMade": 3,
+          "fieldGoalsAttempted": 6
+        }
+      ],
+      "home": [
+        {
+          "playerId": "lal-doncic",
+          "name": "Luka Doncic",
+          "position": "G",
+          "minutes": 42.1,
+          "points": 37,
+          "rebounds": 11,
+          "assists": 9,
+          "fieldGoalsMade": 13,
+          "fieldGoalsAttempted": 26
+        },
+        {
+          "playerId": "lal-james",
+          "name": "LeBron James",
+          "position": "F",
+          "minutes": 40.5,
+          "points": 26,
+          "rebounds": 8,
+          "assists": 10,
+          "fieldGoalsMade": 10,
+          "fieldGoalsAttempted": 19
+        },
+        {
+          "playerId": "lal-reaves",
+          "name": "Austin Reaves",
+          "position": "G",
+          "minutes": 36.7,
+          "points": 19,
+          "rebounds": 4,
+          "assists": 5,
+          "fieldGoalsMade": 7,
+          "fieldGoalsAttempted": 15
+        },
+        {
+          "playerId": "lal-hachimura",
+          "name": "Rui Hachimura",
+          "position": "F",
+          "minutes": 30.2,
+          "points": 14,
+          "rebounds": 6,
+          "assists": 1,
+          "fieldGoalsMade": 6,
+          "fieldGoalsAttempted": 11
+        },
+        {
+          "playerId": "lal-vanderbilt",
+          "name": "Jarred Vanderbilt",
+          "position": "F",
+          "minutes": 24.6,
+          "points": 8,
+          "rebounds": 9,
+          "assists": 2,
+          "fieldGoalsMade": 3,
+          "fieldGoalsAttempted": 7
+        },
+        {
+          "playerId": "lal-knecht",
+          "name": "Dalton Knecht",
+          "position": "G",
+          "minutes": 20.9,
+          "points": 11,
+          "rebounds": 3,
+          "assists": 0,
+          "fieldGoalsMade": 4,
+          "fieldGoalsAttempted": 10
+        }
+      ]
+    },
+    "topPerformerIds": ["lal-doncic", "den-jokic"]
+  },
+  "mock-sched-cle-mil": {
+    "teamStats": [],
+    "boxScore": { "away": [], "home": [] },
+    "topPerformerIds": []
+  },
+  "mock-sched-phx-sac": {
+    "teamStats": [],
+    "boxScore": { "away": [], "home": [] },
+    "topPerformerIds": []
+  }
+}

@@ -1,0 +1,10 @@
+.app-shell {
+  min-height: 100dvh;
+}
+
+.app-shell__main {
+  margin: 0 auto;
+  max-width: var(--app-max-width);
+  /* Clear the fixed nav so the last card is never trapped underneath it. */
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+}

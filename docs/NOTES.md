@@ -25,6 +25,67 @@ Notes:
 
 ---
 
-## M1 — Foundation (in progress)
+## M1 — Foundation (2026-11-02)
 
-To be filled in when the milestone closes.
+```
+Tests:    unit 56 · component 5 · e2e 6 (x 2 projects = 12) · total 73
+Coverage: 97% statements on src/data/mock, 86% overall
+          (overall is dragged down by placeholder screens with no logic yet)
+Local:    unit 1.8s · e2e 9.4s
+CI:       quality 16s · e2e 38s · both jobs green on PR #1
+```
+
+Bugs caught by tests:
+
+- **Play-by-play ordering assertion was inverted.** The period clock counts
+  down, so a newest-first list has _ascending_ seconds remaining. The test as
+  first written would have passed on a wrongly-ordered feed. Caught at unit
+  level before any UI consumed it.
+- **Redundant accessible text on the active nav tab.** A visually-hidden
+  "(current section)" span duplicated what `aria-current` already conveys, and
+  the accessible-name assertion failing is what surfaced it. The span came out.
+- **A stray `.vitest/json/output.json` was committed.** Left over from a one-off
+  JSON-reporter run and swept up by a `git add -A`. The `format:check` step
+  failed the first CI run on it — the pipeline catching something that passed
+  locally, which is the point of having the step.
+
+Notes:
+
+- TypeScript is pinned to 5.9 and eslint to 9: typescript-eslint 8 does not yet
+  peer-support TypeScript 7 or eslint 10. Worth revisiting once it does.
+- `npm audit` reports 12 moderate advisories, all tracing to one transitive
+  `minimatch` DoS inside eslint's own tree. Dev-only, lint-time, and npm's
+  suggested fix is a downgrade of typescript-eslint, so they stay for now. Zero
+  high or critical.
+- The simulated live game needed an absolute `?simTime=` as well as the planned
+  relative `?simOffset=`. The game cycles hourly, so an offset alone cannot pin
+  a state from an unknown phase — e2e would have been non-deterministic.
+- The Playwright mobile project runs iPhone 13 metrics on Chromium rather than
+  WebKit. It exists to catch layout breakage at 390x844, and one engine keeps CI
+  lean. Add a real WebKit project when cross-browser becomes a goal.
+
+---
+
+## Decision: test-first paused after M1 (2026-11-02)
+
+New features ship without tests until M4, to get the app standing up first. The
+73 existing tests stay and must keep passing; CI still runs on every PR but
+gates nothing, because branch protection is deliberately left off.
+
+Why this is a real cost, recorded now so M4 is scoped honestly:
+
+- The "bugs caught by tests" log above is the most useful artifact this project
+  produces, and it only grows while tests are being written alongside code.
+- Retrofitting component and e2e coverage onto finished UI is slower than
+  writing it as you go, and tends to produce tests shaped around the
+  implementation rather than the requirement.
+- The traceability table in `docs/TEST_PLAN.md` will carry unfilled rows for
+  every shipped M2/M3/M5 requirement until the catch-up lands.
+
+What protects us in the meantime: the data layer and the sim clock — the parts
+M2 and M3 build directly on top of — are the best-covered code in the repo at
+97% statements, so regressions there still fail fast. Typecheck and lint still
+run on every PR.
+
+M4 scope grows accordingly: it now backfills coverage for everything shipped in
+M2, M3, and M5 before adding axe, visual regression, and tagged suites.
