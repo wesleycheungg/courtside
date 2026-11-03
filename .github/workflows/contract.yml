@@ -1,0 +1,52 @@
+name: Contract
+
+# The live ESPN contract suite, deliberately off the PR path. Upstream drift is
+# not an unrelated author's problem, and a flaky third party must not be able to
+# red a merge — so this runs on its own schedule and reports on its own.
+on:
+  schedule:
+    # 13:00 UTC — 08:00 ET, after even a west-coast game has finished, so the
+    # slate the suite discovers is a complete one.
+    - cron: '0 13 * * *'
+  workflow_dispatch:
+
+# Never cancel a scheduled run in favour of a newer one; each is a datapoint
+# about a given day's payloads.
+concurrency:
+  group: contract-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  contract:
+    name: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Fails on a changed JSON type or a response that no longer parses, naming
+      # the field path. Fields appearing beside ones we read are written to the
+      # job summary instead — informational, not a failure.
+      - name: Live ESPN contract suite
+        run: npm run test:contract
+
+      - name: Note a failure in the summary
+        if: failure()
+        run: |
+          {
+            echo '## Contract run failed'
+            echo
+            echo 'ESPN no longer sends what the committed schemas describe.'
+            echo 'The log names the offending field paths. To accept the change:'
+            echo
+            echo '1. Update the schemas in `src/data/espn/espnSchemas.ts`.'
+            echo '2. Run `npm run contract:snapshot` and review the snapshot diff.'
+            echo '3. Open a PR with both, so the shape change is reviewable.'
+          } >> "$GITHUB_STEP_SUMMARY"
