@@ -68,7 +68,9 @@ Deliverables below are unchanged; only their order is.
 - ◐ Real ESPN responses captured as fixtures with the capture date recorded. Final and
   scheduled are done; **the live capture is still outstanding** — no NBA game was in
   progress when these were taken. Run `npm run capture:espn` during a game to close it.
-- ☑ The feed shows a date strip; selecting a date loads that date's games and updates the URL.
+- ☑ The feed has a date picker — prev/next day arrows either side of the current date,
+  which opens a month calendar; selecting a date loads that date's games and updates the
+  URL. (Shipped in M2 as a five-day strip; replaced by the picker in M8.)
 - ☑ Filters All and Live work; the Live chip shows an accurate count.
 - ☑ Games are grouped as live, then final, then scheduled, under a league header.
 - ☑ TanStack Query polls every 15s while a game is live and stops when none are.
@@ -168,6 +170,21 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
   gated by `npm run lighthouse` on three screens, median of three runs.
 - ☑ Skeleton loaders replace layout-shifting spinners on the main screens.
 - ☑ The README shows screenshots, the architecture, the test strategy, and live metrics.
+
+---
+
+## M8 — Date picker ☑
+
+**Acceptance criteria**
+
+- ☑ The feed's date control is a bar: prev/next day arrows either side of the current
+  date, which reads "Today", "Yesterday" or "Tomorrow" where that is clearer than a date.
+- ☑ The current date opens a month calendar; picking a day loads it and closes the popover.
+- ☑ The calendar pages by month without loading a day, and never skips a short month.
+- ☑ Full keyboard support: arrows by day and week, Home/End by week, PageUp/PageDown by
+  month, Enter to select, Escape to dismiss, with focus handed back to the trigger.
+- ☑ The grid holds one tab stop, not one per day, so it cannot bury the rest of the page.
+- ☑ No serious or critical a11y violations with the calendar open.
 
 ---
 

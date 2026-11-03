@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Page } from '../../components/Page';
 import { isDateKey, toDateKey } from '../../lib/date';
-import { DateStrip } from './DateStrip';
+import { DatePicker } from './DatePicker';
 import { FeedSkeleton } from './FeedSkeleton';
 import { FilterChips } from './FilterChips';
 import { LeagueSection } from './LeagueSection';
@@ -50,7 +50,7 @@ export function GamesPage() {
 
   return (
     <Page title={<Wordmark />}>
-      <DateStrip
+      <DatePicker
         selected={selectedDate}
         today={today}
         onSelect={(date) => update('date', date === today ? null : date)}

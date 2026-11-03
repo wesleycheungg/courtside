@@ -1,5 +1,6 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+import { GamesFeedPage } from '../pages/GamesPage';
 import { simTime } from '../support/simClock';
 
 /**
@@ -66,6 +67,26 @@ for (const screen of SCREENS) {
   });
 }
 
+/**
+ * The calendar only exists once opened, so the path-driven scans above never
+ * see it. Its grid is the densest markup in the app and the easiest to get
+ * wrong, which makes it worth a scan of its own.
+ */
+test('the open calendar has no serious or critical a11y violations @regression', async ({
+  page,
+}, testInfo) => {
+  const feed = new GamesFeedPage(page);
+  await feed.goto(simTime.thirdQuarter);
+  await feed.openCalendar();
+
+  const blocking = await scan(page, {
+    attach: (name, body) =>
+      void testInfo.attach(name, { body, contentType: 'application/json' }),
+  });
+
+  expect(blocking, blocking.map((v) => `${v.id}: ${v.help}`).join('\n')).toEqual([]);
+});
+
 test('every interactive element is reachable by keyboard @regression', async ({
   page,
 }) => {
@@ -82,7 +103,15 @@ test('every interactive element is reachable by keyboard @regression', async ({
     const id = await page.evaluate(() => {
       const el = document.activeElement;
       if (!el || el === document.body) return null;
-      return `${el.tagName}:${el.getAttribute('href') ?? el.textContent?.slice(0, 20) ?? ''}`;
+      // aria-label comes before textContent: the date picker's arrows are
+      // icon-only, so without it they share an empty identity and two
+      // genuinely distinct tab stops collapse into one.
+      const name =
+        el.getAttribute('href') ??
+        el.getAttribute('aria-label') ??
+        el.textContent?.slice(0, 20) ??
+        '';
+      return `${el.tagName}:${name}`;
     });
     if (id) reached.add(id);
   }

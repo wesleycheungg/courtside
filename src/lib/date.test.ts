@@ -1,13 +1,16 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   addDays,
-  dateWindow,
+  addMonths,
   dayOfMonth,
   formatTipoff,
   fromDateKey,
   isDateKey,
+  monthGrid,
+  monthLabel,
+  relativeDateLabel,
   toDateKey,
-  weekdayLabel,
+  weekdayHeadings,
 } from './date';
 
 afterEach(() => {
@@ -73,32 +76,99 @@ describe('fromDateKey and addDays', () => {
   });
 });
 
-describe('dateWindow', () => {
-  it('centres five days on the given date', () => {
-    expect(dateWindow('2026-11-02')).toEqual([
-      '2026-10-31',
-      '2026-11-01',
-      '2026-11-02',
-      '2026-11-03',
-      '2026-11-04',
-    ]);
+describe('addMonths', () => {
+  it('keeps the day of the month', () => {
+    expect(addMonths('2026-11-15', 1)).toBe('2026-12-15');
+    expect(addMonths('2026-11-15', -1)).toBe('2026-10-15');
   });
 
-  it('honours a custom radius', () => {
-    expect(dateWindow('2026-11-02', 1)).toEqual([
-      '2026-11-01',
-      '2026-11-02',
-      '2026-11-03',
-    ]);
+  it('clamps rather than skipping a short month', () => {
+    // The bug this guards: setMonth on January 31 lands on March 3, so
+    // paging forward from a long month would step over February entirely.
+    expect(addMonths('2026-01-31', 1)).toBe('2026-02-28');
+    expect(addMonths('2026-03-31', -1)).toBe('2026-02-28');
+    expect(addMonths('2028-01-31', 1)).toBe('2028-02-29');
+  });
+
+  it('crosses a year boundary', () => {
+    expect(addMonths('2026-12-10', 1)).toBe('2027-01-10');
+    expect(addMonths('2026-01-10', -1)).toBe('2025-12-10');
+  });
+
+  it('is reversible across twelve months', () => {
+    expect(addMonths(addMonths('2026-06-15', 12), -12)).toBe('2026-06-15');
   });
 });
 
-describe('weekdayLabel and dayOfMonth', () => {
-  it('gives an upper-case short weekday', () => {
-    // 2026-10-31 is a Saturday.
-    expect(weekdayLabel('2026-10-31')).toMatch(/^[A-Z]{2,4}$/);
+describe('monthGrid', () => {
+  it('lays the month out in whole weeks', () => {
+    const weeks = monthGrid('2026-11-03');
+
+    expect(weeks.every((week) => week.length === 7)).toBe(true);
+    expect(weeks.flat().filter(Boolean)).toHaveLength(30);
   });
 
+  it('pads to the Monday-first weekday the month starts on', () => {
+    // 2026-11-01 was a Sunday, so it sits in the last column of week one.
+    const [first] = monthGrid('2026-11-03');
+
+    expect(first).toEqual([null, null, null, null, null, null, '2026-11-01']);
+  });
+
+  it('runs the days in order with no gaps inside the month', () => {
+    const days = monthGrid('2026-11-03').flat().filter(Boolean);
+
+    expect(days[0]).toBe('2026-11-01');
+    expect(days.at(-1)).toBe('2026-11-30');
+    expect(days).toEqual(Array.from({ length: 30 }, (_, i) => addDays('2026-11-01', i)));
+  });
+
+  it('handles a February that starts on a Monday and needs no padding', () => {
+    // 2027-02-01 was a Monday and the month is exactly four weeks.
+    const weeks = monthGrid('2027-02-10');
+
+    expect(weeks).toHaveLength(4);
+    expect(weeks.flat().every(Boolean)).toBe(true);
+  });
+
+  it('includes the leap day', () => {
+    expect(monthGrid('2028-02-01').flat()).toContain('2028-02-29');
+  });
+});
+
+describe('monthLabel and weekdayHeadings', () => {
+  it('names the month and year', () => {
+    expect(monthLabel('2026-11-03')).toMatch(/2026/);
+  });
+
+  it('gives seven headings starting on Monday', () => {
+    const headings = weekdayHeadings();
+
+    expect(headings).toHaveLength(7);
+    // Locale decides the wording, so assert the shape: a narrow glyph for the
+    // eye and a longer spelled-out name for a screen reader.
+    expect(headings[0]?.long.length).toBeGreaterThan(headings[0]?.narrow.length ?? 0);
+  });
+});
+
+describe('relativeDateLabel', () => {
+  const today = '2026-11-03';
+
+  it('names the three days around today in words', () => {
+    expect(relativeDateLabel(today, today)).toBe('Today');
+    expect(relativeDateLabel('2026-11-02', today)).toBe('Yesterday');
+    expect(relativeDateLabel('2026-11-04', today)).toBe('Tomorrow');
+  });
+
+  it('falls back to a dated label further out', () => {
+    const label = relativeDateLabel('2026-11-20', today);
+
+    expect(label).not.toMatch(/Today|Yesterday|Tomorrow/);
+    expect(label).toMatch(/20/);
+  });
+});
+
+describe('dayOfMonth', () => {
   it('gives the day number without padding', () => {
     expect(dayOfMonth('2026-11-02')).toBe('2');
     expect(dayOfMonth('2026-11-30')).toBe('30');
