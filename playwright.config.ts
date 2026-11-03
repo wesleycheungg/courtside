@@ -1,7 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 
 const PORT = 4173;
-const baseURL = `http://localhost:${PORT}`;
+
+// Point the suite at a deployment — `PLAYWRIGHT_BASE_URL=https://… npm run
+// test:smoke` — to check a real environment after a deploy. Specs that depend
+// on mock fixtures or the simulated clock will fail against live data; that is
+// the point of running them, not a reason to weaken them.
+const deployedURL = process.env.PLAYWRIGHT_BASE_URL;
+const baseURL = deployedURL ?? `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e/tests',
@@ -38,11 +44,15 @@ export default defineConfig({
       use: { ...devices['iPhone 13'], browserName: 'chromium' },
     },
   ],
-  // Build and serve the real production bundle so local and CI behave identically.
-  webServer: {
-    command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  // Build and serve the real production bundle so local and CI behave
+  // identically. Skipped when a deployment is the target — there is nothing to
+  // start, and building would only delay the run.
+  webServer: deployedURL
+    ? undefined
+    : {
+        command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
+        url: baseURL,
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+      },
 });
