@@ -22,13 +22,16 @@ export function DateStrip({ selected, today, onSelect }: DateStripProps) {
             type="button"
             className={`date-strip__day${isSelected ? ' date-strip__day--selected' : ''}`}
             aria-pressed={isSelected}
-            aria-label={fullDateLabel(date)}
             onClick={() => onSelect(date)}
           >
             <span className="date-strip__weekday">
               {isToday ? 'Today' : weekdayLabel(date)}
             </span>
             <span className="date-strip__date">{dayOfMonth(date)}</span>
+            {/* Appends the full date to the visible "SAT 31". An aria-label
+                would replace it, failing WCAG 2.5.3, which requires the
+                accessible name to contain the visible label. */}
+            <span className="visually-hidden">{fullDateLabel(date)}</span>
           </button>
         );
       })}

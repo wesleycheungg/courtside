@@ -1,10 +1,9 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { getProvider } from '../../data/provider';
+import { useDataProvider } from '../../data/ProviderContext';
 import type { Conference } from '../../data/types';
 
 export function useStandings(): UseQueryResult<Conference[], Error> {
-  const provider = useMemo(() => getProvider(), []);
+  const provider = useDataProvider();
 
   return useQuery({
     queryKey: ['standings'],

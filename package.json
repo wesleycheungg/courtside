@@ -14,9 +14,13 @@
     "test:unit": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --grep-invert @visual",
     "test:e2e:ui": "playwright test --ui",
-    "capture:espn": "node scripts/capture-espn.mjs"
+    "capture:espn": "node scripts/capture-espn.mjs",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:visual": "playwright test e2e/tests/visual.spec.ts",
+    "test:visual:update": "playwright test e2e/tests/visual.spec.ts --update-snapshots",
+    "report:flaky": "node scripts/flaky-report.mjs"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
@@ -28,6 +32,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "^9.39.5",
     "@playwright/test": "^1.57.0",
     "@testing-library/jest-dom": "^7.0.1",

@@ -1,10 +1,9 @@
 import { useQuery, type UseQueryResult } from '@tanstack/react-query';
-import { useMemo } from 'react';
-import { getProvider } from '../../data/provider';
+import { useDataProvider } from '../../data/ProviderContext';
 import type { Player } from '../../data/types';
 
 export function usePlayer(id: string): UseQueryResult<Player, Error> {
-  const provider = useMemo(() => getProvider(), []);
+  const provider = useDataProvider();
 
   return useQuery({
     queryKey: ['player', id],

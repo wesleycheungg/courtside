@@ -1,0 +1,32 @@
+name: Visual baselines
+
+# Visual snapshots are platform-specific. Run this once on demand to produce
+# Linux baselines, download the artifact, and commit it under
+# e2e/tests/visual.spec.ts-snapshots/. The main CI run excludes the visual
+# suite until those exist.
+on:
+  workflow_dispatch:
+
+jobs:
+  baselines:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      - name: Generate Linux snapshots
+        run: npm run test:visual:update
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: visual-baselines-linux
+          path: e2e/tests/visual.spec.ts-snapshots/
+          retention-days: 14

@@ -17,7 +17,13 @@ export function toDateKey(date: Date): string {
 }
 
 export function isDateKey(value: string): boolean {
-  return DATE_KEY.test(value) && !Number.isNaN(fromDateKey(value).getTime());
+  if (!DATE_KEY.test(value)) return false;
+
+  // `new Date(2026, 12, 45)` silently rolls over into 2027 rather than failing,
+  // so a shape check is not enough — the parsed date has to format back to the
+  // same key. Otherwise `?date=2026-13-45` would quietly load another day.
+  const parsed = fromDateKey(value);
+  return !Number.isNaN(parsed.getTime()) && toDateKey(parsed) === value;
 }
 
 /** Midnight local on the given calendar date. */

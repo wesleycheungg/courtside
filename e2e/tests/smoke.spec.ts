@@ -4,7 +4,7 @@ import { AppPage, type Section } from '../pages/AppPage';
 const SECTIONS: Section[] = ['Games', 'Leagues', 'Following', 'News'];
 
 test.describe('app shell', () => {
-  test('loads with the Games screen', async ({ page }) => {
+  test('loads with the Games screen @smoke', async ({ page }) => {
     const app = new AppPage(page);
     await app.goto();
 
@@ -13,7 +13,7 @@ test.describe('app shell', () => {
     await app.expectCurrentSection('Games');
   });
 
-  test('bottom nav navigates to every section', async ({ page }) => {
+  test('bottom nav navigates to every section @smoke', async ({ page }) => {
     const app = new AppPage(page);
     await app.goto();
 
@@ -26,7 +26,9 @@ test.describe('app shell', () => {
     }
   });
 
-  test('every route is reachable directly, not just by navigation', async ({ page }) => {
+  test('every route is reachable directly, not just by navigation @regression', async ({
+    page,
+  }) => {
     const app = new AppPage(page);
 
     for (const section of SECTIONS) {
@@ -37,7 +39,7 @@ test.describe('app shell', () => {
     }
   });
 
-  test('an unknown route renders the not-found screen', async ({ page }) => {
+  test('an unknown route renders the not-found screen @regression', async ({ page }) => {
     const app = new AppPage(page);
     await app.goto('/not-a-real-route');
 
@@ -45,7 +47,9 @@ test.describe('app shell', () => {
     await expect(app.nav).toBeVisible();
   });
 
-  test('keyboard users reach a skip link before the content', async ({ page }) => {
+  test('keyboard users reach a skip link before the content @regression', async ({
+    page,
+  }) => {
     const app = new AppPage(page);
     await app.goto();
 
@@ -53,7 +57,7 @@ test.describe('app shell', () => {
     await expect(app.skipLink).toBeFocused();
   });
 
-  test('makes no requests to ESPN — the mock provider needs no network', async ({
+  test('makes no requests to ESPN — the mock provider needs no network @smoke', async ({
     page,
   }) => {
     const external: string[] = [];
