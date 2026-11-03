@@ -38,9 +38,25 @@ export default tseslint.config(
     },
   },
   {
-    files: ['e2e/**/*.ts', '*.config.ts', 'eslint.config.js'],
+    files: ['e2e/**/*.ts', '*.config.ts', 'eslint.config.js', 'vite-plugins/**/*.ts'],
     languageOptions: {
       globals: globals.node,
+    },
+  },
+  {
+    // Node scripts, outside the TypeScript block above.
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      ecmaVersion: 2022,
+      sourceType: 'module',
+      globals: globals.node,
+    },
+  },
+  {
+    // Vercel edge functions: Web APIs plus console, not Node's runtime.
+    files: ['api/**/*.ts'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.worker },
     },
   },
   {

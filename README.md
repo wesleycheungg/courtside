@@ -50,8 +50,21 @@ npm install
 npm run dev
 ```
 
-Runs against mock data. To point at live data locally, set `VITE_DATA_PROVIDER=espn` in
-`.env.local` and run `vercel dev` so the `api/` functions are served.
+Runs against mock data, with no network calls.
+
+For live data, set `VITE_DATA_PROVIDER=espn` and run the same command — the dev server
+serves the `api/` proxy routes itself, so `vercel dev` is not needed:
+
+```bash
+VITE_DATA_PROVIDER=espn npm run dev
+```
+
+To re-capture ESPN responses as test fixtures:
+
+```bash
+npm run capture:espn              # today
+npm run capture:espn -- 20261104  # a specific date
+```
 
 ### Simulated live game
 

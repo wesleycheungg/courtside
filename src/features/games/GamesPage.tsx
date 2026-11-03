@@ -6,7 +6,7 @@ import { DateStrip } from './DateStrip';
 import { FilterChips } from './FilterChips';
 import { LeagueSection } from './LeagueSection';
 import { applyFilter, countLive, groupByLeague, type FeedFilter } from './grouping';
-import { useGames } from './useGames';
+import { useGames, useProviderName } from './useGames';
 import './GamesPage.css';
 
 /** The wordmark from the design: "COURT" in white, "SIDE" in accent. */
@@ -32,6 +32,7 @@ export function GamesPage() {
   const filter: FeedFilter = filterParam === 'live' ? 'live' : 'all';
 
   const { data: games, isPending, isError, error } = useGames(selectedDate);
+  const providerName = useProviderName();
 
   const groups = useMemo(
     () => (games ? groupByLeague(applyFilter(games, filter)) : []),
@@ -68,7 +69,11 @@ export function GamesPage() {
         filter={filter}
       />
 
-      <p className="games__disclaimer">Sample data for demo purposes</p>
+      <p className="games__disclaimer">
+        {providerName === 'espn'
+          ? 'Unofficial data from ESPN. Not affiliated with the NBA or ESPN.'
+          : 'Sample data for demo purposes'}
+      </p>
     </Page>
   );
 }
