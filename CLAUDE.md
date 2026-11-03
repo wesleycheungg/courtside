@@ -21,6 +21,8 @@ src/test/        setup, render helpers
 e2e/pages/       Playwright Page Objects
 e2e/tests/       Playwright specs
 api/             Vercel serverless functions (ESPN proxy, M2+)
+contract/        schema snapshots + the live ESPN contract suite (M6+)
+db/              Postgres cache, migrations, SQL data validations (M6+)
 docs/            PLAN.md, TEST_PLAN.md, NOTES.md, design/
 ```
 
@@ -36,6 +38,10 @@ npm run test:unit    vitest run
 npm run test:watch   vitest
 npm run test:e2e     playwright test
 npm run test:e2e:ui  playwright test --ui
+npm run test:contract   live ESPN contract suite (network; scheduled, not on PRs)
+npm run contract:snapshot  regenerate contract/snapshots/ from the Zod schemas
+npm run db:migrate   apply db/migrations/ to $DATABASE_URL
+npm run lighthouse   mobile budgets on the built bundle (median of 3 runs)
 ```
 
 ## Conventions
@@ -48,6 +54,30 @@ mock, so a fresh clone and CI run with no network.
 
 **The browser never calls ESPN directly.** Requests go through the Vercel function in
 `api/`, which fetches, caches, validates, and logs the field that broke on failure.
+
+**Contract and cache.** `contract/snapshots/` is generated, never hand-edited — change a
+schema in `src/data/espn/`, run `npm run contract:snapshot`, and let the diff be the
+review. The live suite is `*.contract.ts` and runs only on a schedule, so ESPN's drift
+never reds an unrelated PR. The Postgres cache is optional everywhere: with no
+`DATABASE_URL`, `getSqlClient()` returns `null` and the proxy skips the write. A cache
+failure must never turn a good response into an error. SQL data assertions live in
+`db/validations/` as `.sql` files that select violations, so "zero rows" is the assertion
+and the file runs unchanged in psql.
+
+**Observability.** `/api/health` probes the proxy, reads the last Zod validation result,
+and reports `max(fetched_at)` per cached table; `/health` renders it. It is not a
+`DataProvider` method — a mock health report would not be a diagnostic. A missing database
+reports as "not configured", never as unhealthy. Loading states use the `Skeleton`
+primitive: blocks are `aria-hidden` and the region carries one visually-hidden status with
+`aria-busy`, so the announcement stays a sentence.
+
+**Date picker.** The feed's date control is `DatePicker` — day arrows either side of the
+current date, which opens `Calendar`. The month grid uses roving tabindex: exactly one
+day is tabbable and the arrow keys move it, so the popover can never cost a keyboard user
+42 tab presses. Focus and selection are separate — arrowing pages the month but fires no
+query; only Enter or a click loads a day. Escape and selecting hand focus back to the
+trigger; dismissing by clicking outside deliberately does not. Month arithmetic goes
+through `addMonths`, which clamps instead of letting `Date` roll a short month over.
 
 **TypeScript.** Strict. No `any`, no non-null `!` assertions. Prefer discriminated
 unions over optional-field soup for things like game status.

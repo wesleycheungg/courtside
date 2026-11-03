@@ -1,0 +1,41 @@
+/**
+ * A standings row is a 28px team bubble inside cells padded by --space-3, so
+ * these rows are built to the same arithmetic. See LeaguesPage.css.
+ */
+
+.standings-skeleton__head {
+  height: 1.1rem;
+  margin-bottom: var(--space-2);
+}
+
+.standings-skeleton__row {
+  display: grid;
+  grid-template-columns: 24px 28px 1fr 8rem;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) 0;
+}
+
+.standings-skeleton__row + .standings-skeleton__row {
+  border-top: 1px solid var(--color-border);
+}
+
+.standings-skeleton__seed {
+  width: 24px;
+  height: 24px;
+}
+
+.standings-skeleton__logo {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+}
+
+.standings-skeleton__team {
+  max-width: 6rem;
+  height: 1.1rem;
+}
+
+.standings-skeleton__stat {
+  height: 1.1rem;
+}

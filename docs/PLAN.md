@@ -68,7 +68,9 @@ Deliverables below are unchanged; only their order is.
 - ◐ Real ESPN responses captured as fixtures with the capture date recorded. Final and
   scheduled are done; **the live capture is still outstanding** — no NBA game was in
   progress when these were taken. Run `npm run capture:espn` during a game to close it.
-- ☑ The feed shows a date strip; selecting a date loads that date's games and updates the URL.
+- ☑ The feed has a date picker — prev/next day arrows either side of the current date,
+  which opens a month calendar; selecting a date loads that date's games and updates the
+  URL. (Shipped in M2 as a five-day strip; replaced by the picker in M8.)
 - ☑ Filters All and Live work; the Live chip shows an accurate count.
 - ☑ Games are grouped as live, then final, then scheduled, under a league header.
 - ☑ TanStack Query polls every 15s while a game is live and stops when none are.
@@ -138,31 +140,51 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 
 ---
 
-## M6 — Contract tests and cache ☐
+## M6 — Contract tests and cache ◐ (one item needs a database provisioned)
 
 **Acceptance criteria**
 
-- ☐ A contract suite validates live ESPN responses against the stored schemas and fails with
+- ☑ A contract suite validates live ESPN responses against the stored schemas and fails with
   the offending field path when ESPN changes shape.
-- ☐ Schema snapshots are committed and versioned; a diff is reviewable in a PR.
-- ☐ The contract suite runs on a schedule, separately from the PR suite, so upstream drift
+- ☑ Schema snapshots are committed and versioned; a diff is reviewable in a PR.
+- ☑ The contract suite runs on a schedule, separately from the PR suite, so upstream drift
   never breaks an unrelated PR.
-- ☐ A Postgres cache (Supabase or Neon) stores fetched games and standings.
-- ☐ SQL data-validation tests assert each final score equals the sum of its quarters, and
+- ◐ A Postgres cache (Supabase or Neon) stores fetched games and standings. The write-through
+  path, migration, and driver seam are done and covered against real Postgres (PGlite) in
+  CI. **No instance is provisioned yet** — set `DATABASE_URL` in Vercel and run
+  `npm run db:migrate` to finish it. Until then the proxy skips the write, by design.
+- ☑ SQL data-validation tests assert each final score equals the sum of its quarters, and
   that standings GB math is consistent with W/L.
-- ☐ A deliberately corrupted row makes those validation tests fail.
+- ☑ A deliberately corrupted row makes those validation tests fail.
 
 ---
 
-## M7 — Observability and polish ☐
+## M7 — Observability and polish ☑
 
 **Acceptance criteria**
 
-- ☐ Errors report to Sentry, or a health page shows proxy status, cache age, and last schema
-  validation result.
-- ☐ Lighthouse mobile scores ≥ 90 for performance, accessibility, and best practices.
-- ☐ Skeleton loaders replace layout-shifting spinners on the main screens.
-- ☐ The README shows screenshots, the architecture, the test strategy, and live metrics.
+- ☑ `/health` shows proxy status, cache age, and the last schema validation result, from
+  `/api/health`. Sentry was not added: the health route answers the same questions from
+  inside the deployment, with no third-party account in the setup instructions.
+- ☑ Lighthouse mobile scores ≥ 90 for performance, accessibility, and best practices —
+  gated by `npm run lighthouse` on three screens, median of three runs.
+- ☑ Skeleton loaders replace layout-shifting spinners on the main screens.
+- ☑ The README shows screenshots, the architecture, the test strategy, and live metrics.
+
+---
+
+## M8 — Date picker ☑
+
+**Acceptance criteria**
+
+- ☑ The feed's date control is a bar: prev/next day arrows either side of the current
+  date, which reads "Today", "Yesterday" or "Tomorrow" where that is clearer than a date.
+- ☑ The current date opens a month calendar; picking a day loads it and closes the popover.
+- ☑ The calendar pages by month without loading a day, and never skips a short month.
+- ☑ Full keyboard support: arrows by day and week, Home/End by week, PageUp/PageDown by
+  month, Enter to select, Escape to dismiss, with focus handed back to the trigger.
+- ☑ The grid holds one tab stop, not one per day, so it cannot bury the rest of the page.
+- ☑ No serious or critical a11y violations with the calendar open.
 
 ---
 

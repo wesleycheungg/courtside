@@ -2,7 +2,8 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Page } from '../../components/Page';
 import { isDateKey, toDateKey } from '../../lib/date';
-import { DateStrip } from './DateStrip';
+import { DatePicker } from './DatePicker';
+import { FeedSkeleton } from './FeedSkeleton';
 import { FilterChips } from './FilterChips';
 import { LeagueSection } from './LeagueSection';
 import { applyFilter, countLive, groupByLeague, type FeedFilter } from './grouping';
@@ -49,7 +50,7 @@ export function GamesPage() {
 
   return (
     <Page title={<Wordmark />}>
-      <DateStrip
+      <DatePicker
         selected={selectedDate}
         today={today}
         onSelect={(date) => update('date', date === today ? null : date)}
@@ -88,11 +89,7 @@ interface FeedProps {
 
 function Feed({ isPending, isError, error, groups, filter }: FeedProps) {
   if (isPending) {
-    return (
-      <p className="games__state" role="status">
-        Loading games…
-      </p>
-    );
+    return <FeedSkeleton />;
   }
 
   if (isError) {

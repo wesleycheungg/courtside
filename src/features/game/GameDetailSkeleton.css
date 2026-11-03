@@ -1,0 +1,70 @@
+/* Sizes mirror GameHeader and the summary panels; see GameHeader.css. */
+
+.detail-skeleton__back {
+  width: 24px;
+  height: 24px;
+}
+
+.detail-skeleton__competition {
+  flex: 1;
+  max-width: 7rem;
+  height: 1.25rem;
+  /* Centred in the space left by the back button, like the real label. */
+  margin-inline: auto;
+}
+
+.detail-skeleton__logo {
+  /* .team-logo--lg */
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+}
+
+.detail-skeleton__team-name {
+  width: 5.5rem;
+  height: 1.3rem;
+}
+
+.detail-skeleton__team-meta {
+  width: 3rem;
+  height: 1.1rem;
+}
+
+.detail-skeleton__numbers {
+  /* Matches the clamp on .game-header__numbers so the scoreline keeps its height. */
+  width: 7rem;
+  height: clamp(2rem, 10vw, var(--text-score));
+}
+
+.detail-skeleton__status {
+  width: 4rem;
+  height: 1.1rem;
+}
+
+.detail-skeleton__tab {
+  height: 1.25rem;
+}
+
+.detail-skeleton__panel-title {
+  width: 9rem;
+  height: 1.3rem;
+  margin-bottom: var(--space-4);
+}
+
+.detail-skeleton__quarters {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.detail-skeleton__quarter {
+  height: 1.5rem;
+}
+
+.detail-skeleton__stat {
+  height: 2.25rem;
+  margin-bottom: var(--space-4);
+}
+
+.detail-skeleton__stat:last-child {
+  margin-bottom: 0;
+}

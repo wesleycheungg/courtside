@@ -15,8 +15,15 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: true,
-    // e2e/ is Playwright's; vitest must not try to run those specs.
-    include: ['src/**/*.{test,spec}.{ts,tsx}', 'api/**/*.{test,spec}.ts'],
+    // e2e/ is Playwright's; vitest must not try to run those specs. The live
+    // contract suite is `*.contract.ts` and runs from vitest.contract.config.ts
+    // on a schedule — only the offline snapshot check belongs on the PR path.
+    include: [
+      'src/**/*.{test,spec}.{ts,tsx}',
+      'api/**/*.{test,spec}.ts',
+      'contract/**/*.test.ts',
+      'db/**/*.test.ts',
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

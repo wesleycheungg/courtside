@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import type { GameLogEntry, Player } from '../../data/types';
+import { PlayerSkeleton } from './PlayerSkeleton';
 import { usePlayer } from './usePlayer';
 import './PlayerPage.css';
 
@@ -168,11 +169,7 @@ export function PlayerPage() {
   const { data: player, isPending, isError, error } = usePlayer(playerId);
 
   if (isPending) {
-    return (
-      <p className="panel__empty" role="status">
-        Loading player…
-      </p>
-    );
+    return <PlayerSkeleton />;
   }
 
   if (isError) {

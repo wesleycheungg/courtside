@@ -1,0 +1,23 @@
+{
+  "schema": "teams",
+  "snapshotVersion": 1,
+  "fingerprint": "722e20631e7a",
+  "fields": {
+    "sports": "array",
+    "sports[]": "object",
+    "sports[].leagues": "array",
+    "sports[].leagues[]": "object",
+    "sports[].leagues[].teams": "array",
+    "sports[].leagues[].teams[]": "object",
+    "sports[].leagues[].teams[].team": "object",
+    "sports[].leagues[].teams[].team.abbreviation": "string",
+    "sports[].leagues[].teams[].team.alternateColor": "string?",
+    "sports[].leagues[].teams[].team.color": "string?",
+    "sports[].leagues[].teams[].team.displayName": "string",
+    "sports[].leagues[].teams[].team.id": "string",
+    "sports[].leagues[].teams[].team.location": "string?",
+    "sports[].leagues[].teams[].team.logo": "string?",
+    "sports[].leagues[].teams[].team.name": "string?",
+    "sports[].leagues[].teams[].team.shortDisplayName": "string?"
+  }
+}

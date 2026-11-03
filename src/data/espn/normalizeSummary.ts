@@ -14,9 +14,8 @@ import type {
   PlayerStatLine,
   TeamStat,
 } from '../types';
-import { periodLabel } from '../mock/normalize';
 import type { EspnBoxscoreTeam, EspnPlayerGroup, EspnSummary } from './espnSchemas';
-import { lineScoreValue, normalizeEspnGame, sideOf } from './normalizeEspn';
+import { normalizeEspnGame, normalizeEspnPeriods, sideOf } from './normalizeEspn';
 
 /** Stats we surface in the comparison, in the order the design shows them. */
 const TEAM_STAT_LABELS: { name: string; label: string }[] = [
@@ -148,19 +147,7 @@ export function normalizeEspnSummary(summary: EspnSummary): GameDetail {
   const awayCompetitor = sideOf(competition.competitors, 'away');
   const homeCompetitor = sideOf(competition.competitors, 'home');
 
-  const homeLines = homeCompetitor?.linescores ?? [];
-  const periods: Period[] = (awayCompetitor?.linescores ?? []).map((line, index) => {
-    // The summary header omits `period`, so fall back to array position.
-    const number = line.period ?? index + 1;
-    const homeLine = homeLines[index];
-
-    return {
-      number,
-      label: periodLabel(number),
-      awayScore: lineScoreValue(line),
-      homeScore: homeLine ? lineScoreValue(homeLine) : 0,
-    };
-  });
+  const periods: Period[] = normalizeEspnPeriods(competition.competitors);
 
   const boxTeams = summary.boxscore?.teams ?? [];
   const awayBox = boxTeams.find((t) => t.homeAway === 'away');

@@ -1,0 +1,41 @@
+/**
+ * Sizes mirror the real feed: the badge is the league badge's 32px square, the
+ * score bar is as tall as a --text-2xl line box, and the logo is a sm team
+ * bubble. Those three are what set each row's height.
+ */
+
+.feed-skeleton__badge {
+  width: 32px;
+  height: 32px;
+  flex: none;
+}
+
+.feed-skeleton__league {
+  width: 3.5rem;
+  /* --text-xl at 1.15 line-height. */
+  height: 1.6rem;
+}
+
+.feed-skeleton__status {
+  width: 3.25rem;
+  height: 1rem;
+}
+
+.feed-skeleton__logo {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+}
+
+.feed-skeleton__name {
+  /* Not full width: a team name does not fill the column either. */
+  max-width: 9rem;
+  height: 1rem;
+}
+
+.feed-skeleton__score {
+  width: 2.5ch;
+  /* --text-2xl at 1.15, which is what makes a real row this tall. */
+  height: 2rem;
+  justify-self: end;
+}
