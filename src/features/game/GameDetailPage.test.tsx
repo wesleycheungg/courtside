@@ -140,7 +140,7 @@ describe('GameDetailPage — summary', () => {
 
   it('shows quarter values that add up to the displayed total', async () => {
     renderDetail();
-    await screen.findByText('Score by quarter');
+    await screen.findByText('Linescore');
 
     // 24+29+26+25 = 104 away, 31+28+30+29 = 118 home, as in the builder.
     const away = detail.periods.reduce((sum, p) => sum + p.awayScore, 0);

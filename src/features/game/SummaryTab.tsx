@@ -2,12 +2,12 @@ import type { GameDetail } from '../../data/types';
 import { TeamLogo } from '../../components/TeamLogo';
 import './SummaryTab.css';
 
-function ScoreByQuarter({ game }: { game: GameDetail }) {
+function Linescore({ game }: { game: GameDetail }) {
   if (game.periods.length === 0) return null;
 
   return (
     <section className="panel">
-      <h2 className="panel__title">Score by quarter</h2>
+      <h2 className="panel__title">Linescore</h2>
       <div className="panel__scroll">
         <table className="quarters">
           <thead>
@@ -122,7 +122,7 @@ export function SummaryTab({ game }: { game: GameDetail }) {
 
   return (
     <>
-      <ScoreByQuarter game={game} />
+      <Linescore game={game} />
       <TeamStats game={game} />
       <TopPerformers game={game} />
     </>

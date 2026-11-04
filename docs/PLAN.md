@@ -88,7 +88,7 @@ Deliverables below are unchanged; only their order is.
 - ☑ Tabs Summary, Box score, Plays, and Shots are reachable; the active tab is reflected in
   the URL and survives a refresh.
 - ☑ The header shows both teams, logos, records, score, and live period plus clock.
-- ☑ Score by quarter renders all played periods including overtime, and each team's quarter
+- ☑ The linescore renders all played periods including overtime, and each team's quarter
   values sum to its displayed total.
 - ☑ Team stat comparison renders paired bars for the stats in the design.
 - ☑ Box score lists both teams' players with per-player stat lines, scrollable on mobile.
