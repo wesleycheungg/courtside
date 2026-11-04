@@ -18,6 +18,7 @@
   --color-accent: #ff7a1a;
   --color-accent-contrast: #0e1116;
   --color-secondary: #4c9aff;
+  --color-on-team: #ffffff;
 
   /* Status — read off the designs. Live is deliberately distinct from accent
      so "in progress" never reads as "selected". */

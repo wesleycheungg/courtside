@@ -14,17 +14,20 @@ import type {
   PlayerStatLine,
   TeamStat,
 } from '../types';
+import { pickStatLeaders } from '../statLeaders';
 import type { EspnBoxscoreTeam, EspnPlayerGroup, EspnSummary } from './espnSchemas';
 import { normalizeEspnGame, normalizeEspnPeriods, sideOf } from './normalizeEspn';
 
 /** Stats we surface in the comparison, in the order the design shows them. */
 const TEAM_STAT_LABELS: { name: string; label: string }[] = [
-  { name: 'fieldGoalPct', label: 'Field goal %' },
-  { name: 'threePointFieldGoalsMade-threePointFieldGoalsAttempted', label: '3-pointers' },
+  { name: 'fieldGoalPct', label: 'Field Goal %' },
+  { name: 'threePointFieldGoalPct', label: '3-Point %' },
+  { name: 'freeThrowPct', label: 'Free Throw %' },
   { name: 'totalRebounds', label: 'Rebounds' },
   { name: 'assists', label: 'Assists' },
+  { name: 'steals', label: 'Steals' },
   { name: 'turnovers', label: 'Turnovers' },
-  { name: 'pointsInPaint', label: 'Points in paint' },
+  { name: 'pointsInPaint', label: 'Points in Paint' },
 ];
 
 /** "12-31" and "43" both need to become a number to size a bar. */
@@ -168,6 +171,7 @@ export function normalizeEspnSummary(summary: EspnSummary): GameDetail {
     teamStats: normalizeTeamStats(awayBox, homeBox),
     boxScore,
     topPerformers: pickTopPerformers(boxScore),
+    statLeaders: pickStatLeaders(boxScore),
   };
 }
 

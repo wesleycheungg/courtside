@@ -17,6 +17,7 @@ import type {
   PlayerStatLine,
   TeamStat,
 } from '../types';
+import { pickStatLeaders } from '../statLeaders';
 import type { DataProvider } from '../provider';
 import { normalizeConference, normalizeGame, periodLabel } from './normalize';
 import type { WireGame, WireStandings, WireTeam } from './wire';
@@ -98,6 +99,7 @@ function buildDetail(game: Game, clock: Clock): GameDetail {
     teamStats: fixture.teamStats,
     boxScore: fixture.boxScore,
     topPerformers,
+    statLeaders: pickStatLeaders(fixture.boxScore),
   };
 
   if (game.id === SIM_GAME_ID) {

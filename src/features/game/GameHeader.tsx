@@ -4,15 +4,12 @@ import type { GameDetail, TeamRef } from '../../data/types';
 import { formatTipoff } from '../../lib/date';
 import './GameHeader.css';
 
-function TeamColumn({ team, side }: { team: TeamRef; side: 'Away' | 'Home' }) {
+function TeamColumn({ team }: { team: TeamRef }) {
   return (
     <div className="game-header__team">
       <TeamLogo abbreviation={team.abbreviation} color={team.color} size="lg" />
       <p className="game-header__team-name">{team.name}</p>
-      <p className="game-header__team-meta">
-        {team.record ? `${team.record} · ` : ''}
-        {side}
-      </p>
+      <p className="game-header__team-meta">{team.record}</p>
     </div>
   );
 }
@@ -64,7 +61,7 @@ export function GameHeader({ game }: { game: GameDetail }) {
       </div>
 
       <div className="game-header__scoreline">
-        <TeamColumn team={game.away} side="Away" />
+        <TeamColumn team={game.away} />
 
         <div className="game-header__score">
           {showScores ? (
@@ -86,7 +83,7 @@ export function GameHeader({ game }: { game: GameDetail }) {
           <StatusLine game={game} />
         </div>
 
-        <TeamColumn team={game.home} side="Home" />
+        <TeamColumn team={game.home} />
       </div>
     </header>
   );

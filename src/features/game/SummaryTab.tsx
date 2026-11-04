@@ -1,5 +1,6 @@
-import type { GameDetail } from '../../data/types';
-import { TeamLogo } from '../../components/TeamLogo';
+import { Link } from 'react-router-dom';
+import type { GameDetail, StatLeader } from '../../data/types';
+import { badgeBackground, barColor } from '../../lib/color';
 import './SummaryTab.css';
 
 function Linescore({ game }: { game: GameDetail }) {
@@ -18,7 +19,7 @@ function Linescore({ game }: { game: GameDetail }) {
                   {period.label}
                 </th>
               ))}
-              <th scope="col">T</th>
+              <th scope="col">Total</th>
             </tr>
           </thead>
           <tbody>
@@ -45,9 +46,12 @@ function Linescore({ game }: { game: GameDetail }) {
 function TeamStats({ game }: { game: GameDetail }) {
   if (game.teamStats.length === 0) return null;
 
+  const awayFill = barColor(game.away.color);
+  const homeFill = barColor(game.home.color);
+
   return (
     <section className="panel">
-      <h2 className="panel__title">Team stats</h2>
+      <h2 className="panel__title">Team Stats</h2>
       <ul className="team-stats">
         {game.teamStats.map((stat) => (
           <li className="team-stats__row" key={stat.label}>
@@ -58,12 +62,15 @@ function TeamStats({ game }: { game: GameDetail }) {
             </span>
             <div className="team-stats__bar">
               <span
-                className="team-stats__fill team-stats__fill--away"
-                style={{ width: `${stat.awayShare * 100}%` }}
+                className="team-stats__fill"
+                style={{ width: `${stat.awayShare * 100}%`, backgroundColor: awayFill }}
               />
               <span
-                className="team-stats__fill team-stats__fill--home"
-                style={{ width: `${(1 - stat.awayShare) * 100}%` }}
+                className="team-stats__fill"
+                style={{
+                  width: `${(1 - stat.awayShare) * 100}%`,
+                  backgroundColor: homeFill,
+                }}
               />
             </div>
           </li>
@@ -73,39 +80,71 @@ function TeamStats({ game }: { game: GameDetail }) {
   );
 }
 
-function TopPerformers({ game }: { game: GameDetail }) {
-  if (game.topPerformers.length === 0) return null;
+const STAT_LABEL: Record<StatLeader['stat'], string> = {
+  points: 'Points',
+  rebounds: 'Rebounds',
+  assists: 'Assists',
+};
 
-  const teamOf = (playerId: string) =>
-    game.boxScore.home.some((line) => line.playerId === playerId) ? game.home : game.away;
+/** "Shai Gilgeous-Alexander" -> "SG". */
+function initials(name: string): string {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0))
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+/**
+ * Two leaders per stat, mirrored around the label. Every grid track is a fixed
+ * width or a 1fr, never `auto` — an auto track would size to its own row's
+ * label, so "Rebounds" and "Points" would push their rows' numbers to
+ * different places and the column would visibly stagger.
+ */
+function GameLeaders({ game }: { game: GameDetail }) {
+  if (game.statLeaders.length === 0) return null;
 
   return (
     <section className="panel">
-      <h2 className="panel__title">Top performers</h2>
-      <ul className="performers">
-        {game.topPerformers.map((line) => {
-          const team = teamOf(line.playerId);
-          return (
-            <li className="performers__row" key={line.playerId}>
-              <TeamLogo abbreviation={team.abbreviation} color={team.color} />
-              <div className="performers__who">
-                <p className="performers__name">{line.name}</p>
-                <p className="performers__meta">
-                  {team.abbreviation} · {line.position}
-                </p>
-              </div>
-              <p className="performers__line">
-                <span>{line.points}</span>
-                <span aria-hidden="true"> · </span>
-                <span>{line.rebounds}</span>
-                <span aria-hidden="true"> · </span>
-                <span>{line.assists}</span>
-                <span className="visually-hidden"> points, rebounds, assists</span>
-              </p>
-            </li>
-          );
-        })}
+      <h2 className="panel__title">Game Leaders</h2>
+      <ul className="leaders">
+        {game.statLeaders.map((leader) => (
+          <li className="leaders__row" key={leader.stat}>
+            <span className="leaders__stat">{STAT_LABEL[leader.stat]}</span>
+
+            <span
+              className="leaders__avatar leaders__avatar--away"
+              style={{ backgroundColor: badgeBackground(game.away.color) }}
+              aria-hidden="true"
+            >
+              {initials(leader.away.name)}
+            </span>
+            <span className="leaders__value leaders__value--away">
+              {leader.away[leader.stat]}
+            </span>
+            <span className="leaders__name leaders__name--away">{leader.away.name}</span>
+
+            <span
+              className="leaders__avatar leaders__avatar--home"
+              style={{ backgroundColor: badgeBackground(game.home.color) }}
+              aria-hidden="true"
+            >
+              {initials(leader.home.name)}
+            </span>
+            <span className="leaders__value leaders__value--home">
+              {leader.home[leader.stat]}
+            </span>
+            <span className="leaders__name leaders__name--home">{leader.home.name}</span>
+          </li>
+        ))}
       </ul>
+      <p className="leaders__footer">
+        <Link className="leaders__link" to="?tab=boxscore" replace>
+          Full Box Score
+        </Link>
+      </p>
     </section>
   );
 }
@@ -114,7 +153,7 @@ export function SummaryTab({ game }: { game: GameDetail }) {
   const empty =
     game.periods.length === 0 &&
     game.teamStats.length === 0 &&
-    game.topPerformers.length === 0;
+    game.statLeaders.length === 0;
 
   if (empty) {
     return <p className="panel__empty">Stats appear once the game tips off.</p>;
@@ -124,7 +163,7 @@ export function SummaryTab({ game }: { game: GameDetail }) {
     <>
       <Linescore game={game} />
       <TeamStats game={game} />
-      <TopPerformers game={game} />
+      <GameLeaders game={game} />
     </>
   );
 }
