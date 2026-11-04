@@ -15,6 +15,7 @@ import type {
   PlayEvent,
   Player,
   PlayerStatLine,
+  StatLeader,
   TeamStat,
 } from '../types';
 import type { DataProvider } from '../provider';
