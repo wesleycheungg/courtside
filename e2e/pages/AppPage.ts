@@ -1,11 +1,11 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-export type Section = 'Games' | 'Leagues' | 'Following' | 'News';
+export type Section = 'Games' | 'Standings' | 'Following' | 'News';
 
 /** Route each nav section lands on, used to assert navigation actually moved. */
 const ROUTES: Record<Section, string> = {
   Games: '/',
-  Leagues: '/leagues',
+  Standings: '/leagues',
   Following: '/following',
   News: '/news',
 };

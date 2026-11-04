@@ -77,7 +77,7 @@ export function LeaguesPage() {
   const conference = data?.find((c) => c.id === selected);
 
   return (
-    <Page title="Leagues">
+    <Page title="Standings">
       <div className="conf-switch" role="group" aria-label="Choose a conference">
         {(['east', 'west'] as const).map((id) => (
           <button

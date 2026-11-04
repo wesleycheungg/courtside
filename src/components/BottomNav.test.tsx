@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { BottomNav } from './BottomNav';
 import { renderWithProviders } from '../test/render';
 
-const SECTIONS = ['Games', 'Leagues', 'Following', 'News'];
+const SECTIONS = ['Games', 'Standings', 'Following', 'News'];
 
 describe('BottomNav', () => {
   it('renders a link for every section', () => {
@@ -20,7 +20,7 @@ describe('BottomNav', () => {
     renderWithProviders(<BottomNav />);
 
     expect(screen.getByRole('link', { name: /Games/ })).toHaveAttribute('href', '/');
-    expect(screen.getByRole('link', { name: /Leagues/ })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /Standings/ })).toHaveAttribute(
       'href',
       '/leagues',
     );
@@ -34,7 +34,7 @@ describe('BottomNav', () => {
   it('marks the active tab with aria-current', () => {
     renderWithProviders(<BottomNav />, { route: '/leagues' });
 
-    expect(screen.getByRole('link', { name: /Leagues/ })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /Standings/ })).toHaveAttribute(
       'aria-current',
       'page',
     );
