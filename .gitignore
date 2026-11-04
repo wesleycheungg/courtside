@@ -4,6 +4,10 @@ dist
 coverage
 .env.local
 .env*.local
+# `vercel link` writes an OIDC token into .env.local, so ignore the whole
+# family — but not the committed example, which documents what to set.
+.env*
+!.env.example
 playwright-report/
 test-results/
 blob-report/

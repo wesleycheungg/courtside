@@ -8,7 +8,7 @@ Legend: ☐ not started · ◐ in progress · ☑ done
 
 ---
 
-## M1 — Foundation ◐ (deploy pending dashboard setup)
+## M1 — Foundation ☑
 
 Docs, scaffold, theme, app shell, mock data layer, first tests, CI, deploy.
 
@@ -37,7 +37,10 @@ Docs, scaffold, theme, app shell, mock data layer, first tests, CI, deploy.
 - ☑ Playwright runs a desktop project and a 390×844 mobile project.
 - ☑ CI runs typecheck, lint, unit tests, and Playwright on every PR, and uploads the HTML
   report and traces as artifacts.
-- ☐ The app is deployed and reachable at a public URL; PRs get a preview URL.
+- ☑ The app is deployed and reachable at a public URL; PRs get a preview URL.
+  Production is <https://courtside-live.vercel.app>, serving live ESPN data. Preview
+  deployments carry Vercel Authentication, so their URLs open for the project owner and
+  prompt a login for anyone else.
 
 ---
 

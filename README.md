@@ -8,7 +8,9 @@ Built as a portfolio project to demonstrate SDET practice end to end: a risk-bas
 strategy, automation at every level from unit to contract, and CI that gates every pull
 request.
 
-**Live:** _pending first deploy_
+**Live:** [courtside-live.vercel.app](https://courtside-live.vercel.app) — real NBA data, through
+the proxy. [`/health`](https://courtside-live.vercel.app/health) reports whether ESPN is
+answering and whether the last payload matched the schema.
 
 | Games feed                                     | Game detail                                        | Standings                                    |
 | ---------------------------------------------- | -------------------------------------------------- | -------------------------------------------- |
