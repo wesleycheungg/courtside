@@ -666,3 +666,70 @@ keyboard trap, and the fix was in the assertion — the kind of thing that gets
 
 None observed. The four games-feed visual baselines were regenerated for the
 new control and reviewed; no other screen moved.
+
+---
+
+## Deploy — first production release (2026-11-03)
+
+```
+URL:      https://courtside-live.vercel.app  (live ESPN data)
+Build:    Vite 451ms · 496 kB raw / 149 kB gzip JS · 33 kB CSS
+Routes:   6 edge functions · upstream probe 43-52ms
+Verified: 0 requests to any espn.com host from the browser, across
+          feed, game detail, standings and health
+```
+
+M1's last acceptance criterion, open since the first commit.
+
+### The setting that decides whether a deploy is real
+
+`VITE_DATA_PROVIDER` is read through `import.meta.env`, so Vite inlines it at
+build time. Deploy without it and the site serves mock fixtures — a simulated
+game ticking off the visitor's clock — and the only thing that says so is the
+footer reading "Sample data for demo purposes" instead of the ESPN
+attribution. There is no runtime fallback and no warning. It was set to `espn`
+across production, preview and development before the first build, and the
+footer is now the fastest way to tell the two apart at a glance.
+
+### Trunk moved to `main`
+
+`main` already held everything through M8 — two merge commits ahead of
+`feat/m1-foundation`, identical trees — so the switch was a default-branch
+pointer change, not a rename. It had been quietly costing something: `ci.yml`
+triggers pushes on `branches: [main]`, so push-CI had never once run on the
+branch actually being developed. Only the PR trigger was ever firing.
+
+### What the deploy surfaced
+
+- **The edge cache works; the header looks like it doesn't.** Responses come
+  back `cache-control: public, max-age=0` with the `s-maxage=12,
+stale-while-revalidate=30` gone. Vercel consumes the CDN directives and
+  strips them from the browser-facing header — `x-vercel-cache: HIT` on the
+  repeat calls is the proof. `x-courtside-cache` still reads `miss` on those
+  hits, correctly: the CDN served them without invoking the function at all.
+- **Vercel typechecks `api/` a second time, with its own settings.** The build
+  log carries ~25 TS2835 and TS2339 errors — `moduleResolution: node16`
+  demanding `./espn.js` extensions, and `unknown` not narrowing in
+  `respond.ts`. None are fatal and the functions deploy and run, but the log
+  reads red. Vercel is not using `tsconfig.api.json`; `tsconfig.json` is a
+  solution file with `files: []`, so it falls back to defaults.
+- **The smoke suite needs two fixes before it can gate a deployment.** Run with
+  `PLAYWRIGHT_BASE_URL`, 14 of 22 fail — all of them fixture-coupled, but two
+  kinds. Most pin mock game IDs or the simulated clock. One is a harness bug:
+  the "makes no requests to ESPN" spec allowlists `localhost` and `127.0.0.1`
+  by hostname, so against a deployment the app's own font requests count as
+  external. The assertion it means to make — no `espn.com` host — holds.
+- **Node was floating.** `engines: { node: "22.x" }` landed in `package.json`,
+  but the Vercel project had been created with its own default of 26.x. Pinned
+  the project setting to match, so the deploy builds on the version CI tests.
+
+### Not done
+
+- Branch protection on `main` (also M4's open item). Push-CI now runs there, so
+  `quality` and `e2e` are selectable as required checks.
+- No `DATABASE_URL`. `/health` reports the cache as "not configured" at HTTP
+  200, as designed; M6's last item stays open.
+- Preview deployments sit behind Vercel Authentication, the platform default.
+  Fine for review, but a preview URL is not shareable as-is.
+- `/api/health` is unauthenticated, uncached (`no-store`) and probes ESPN on
+  every request. On a public URL that is an amplifier pointed at a third party.
