@@ -52,7 +52,9 @@ describe('Game Leaders', () => {
     renderWith(aGameDetail({ id: 'g1', state: finalState, statLeaders: [] }));
 
     await screen.findByRole('tab', { name: 'Summary' });
-    expect(screen.queryByRole('heading', { name: 'Game Leaders' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('heading', { name: 'Game Leaders' }),
+    ).not.toBeInTheDocument();
   });
 
   it('"Full Box Score" opens the box score tab', async () => {
