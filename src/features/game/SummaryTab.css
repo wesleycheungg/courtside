@@ -142,6 +142,29 @@
 
 /* ── game leaders ─────────────────────────────────────────────────────── */
 
+.game-leaders__header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.game-leaders__team {
+  font-weight: var(--weight-bold);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.game-leaders__vs {
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+  text-align: center;
+}
+
 .game-leaders {
   display: flex;
   flex-direction: column;
@@ -155,44 +178,55 @@
   gap: var(--space-4);
 }
 
-.game-leaders__leader {
+.game-leaders__player-card {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.game-leaders__player-card--home {
+  flex-direction: row-reverse;
+}
+
+.game-leaders__avatar {
+  display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  width: 100%;
-}
-
-.game-leaders__leader--away {
-  color: var(--color-secondary);
-}
-
-.game-leaders__leader--home {
-  color: var(--color-accent);
-}
-
-.game-leaders__value {
-  font-family: var(--font-display);
-  font-size: var(--text-3xl);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
   font-weight: var(--weight-bold);
-  font-variant-numeric: tabular-nums;
-  margin: 0;
-  width: 100%;
-  display: block;
-  text-align: center;
+  font-size: var(--text-sm);
+  color: white;
 }
 
-.game-leaders__player {
+.game-leaders__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  text-align: left;
+}
+
+.game-leaders__info--home {
+  text-align: right;
+}
+
+.game-leaders__name {
   font-size: var(--text-sm);
   color: var(--color-text);
-  margin: var(--space-1) 0 0 0;
-  width: 100%;
-  display: block;
-  text-align: center;
+  margin: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.game-leaders__stat-value {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
 }
 
 .game-leaders__stat-label {

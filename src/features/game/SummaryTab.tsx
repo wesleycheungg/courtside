@@ -88,26 +88,52 @@ function GameLeaders({ game }: { game: GameDetail }) {
     return 0;
   };
 
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map((word) => word[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   return (
     <section className="panel">
       <h2 className="panel__title">Game Leaders</h2>
+      <div className="game-leaders__header">
+        <div className="game-leaders__team">{game.away.abbreviation}</div>
+        <div className="game-leaders__vs">VS</div>
+        <div className="game-leaders__team">{game.home.abbreviation}</div>
+      </div>
       <div className="game-leaders">
         {game.statLeaders.map((leader) => (
           <div className="game-leaders__stat-row" key={leader.stat}>
-            <div className="game-leaders__leader game-leaders__leader--away">
-              <p className="game-leaders__value">{getStatValue(leader.away, leader.stat)}</p>
-              <p className="game-leaders__player">
-                {leader.away.name}
-              </p>
+            <div className="game-leaders__player-card game-leaders__player-card--away">
+              <div
+                className="game-leaders__avatar"
+                style={{ backgroundColor: game.away.color }}
+              >
+                {getInitials(leader.away.name)}
+              </div>
+              <div className="game-leaders__info">
+                <p className="game-leaders__name">{leader.away.name}</p>
+                <p className="game-leaders__stat-value">{getStatValue(leader.away, leader.stat)}</p>
+              </div>
             </div>
             <div className="game-leaders__stat-label">
               <p>{statLabel[leader.stat]}</p>
             </div>
-            <div className="game-leaders__leader game-leaders__leader--home">
-              <p className="game-leaders__value">{getStatValue(leader.home, leader.stat)}</p>
-              <p className="game-leaders__player">
-                {leader.home.name}
-              </p>
+            <div className="game-leaders__player-card game-leaders__player-card--home">
+              <div className="game-leaders__info game-leaders__info--home">
+                <p className="game-leaders__name">{leader.home.name}</p>
+                <p className="game-leaders__stat-value">{getStatValue(leader.home, leader.stat)}</p>
+              </div>
+              <div
+                className="game-leaders__avatar"
+                style={{ backgroundColor: game.home.color }}
+              >
+                {getInitials(leader.home.name)}
+              </div>
             </div>
           </div>
         ))}
