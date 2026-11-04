@@ -45,14 +45,16 @@
 }
 
 .quarters tbody th {
-  text-align: left;
   font-family: var(--font-display);
   font-size: var(--text-lg);
 }
 
+/* The team column holds labels, not numbers, so its header sits over the
+   abbreviations rather than centred above them. */
 .quarters thead th:first-child,
 .quarters tbody th {
   padding-left: 0;
+  text-align: left;
 }
 
 .quarters__total {
