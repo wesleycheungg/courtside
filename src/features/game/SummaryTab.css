@@ -178,13 +178,18 @@
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums;
   margin: 0;
+  width: 100%;
+  display: block;
+  text-align: center;
 }
 
 .game-leaders__player {
   font-size: var(--text-sm);
   color: var(--color-text);
   margin: var(--space-1) 0 0 0;
-  max-width: 100%;
+  width: 100%;
+  display: block;
+  text-align: center;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
