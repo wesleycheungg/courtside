@@ -27,12 +27,14 @@ export function GamesIcon({ className }: IconProps) {
   );
 }
 
-export function LeaguesIcon({ className }: IconProps) {
+/** Ranked bars on a baseline — a standings table, highest seed first. */
+export function StandingsIcon({ className }: IconProps) {
   return (
     <svg {...common} className={className}>
-      <path d="M7 4h10v5a5 5 0 0 1-10 0V4Z" />
-      <path d="M7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3" />
-      <path d="M12 14v4M9 20h6" />
+      <path d="M3.5 20h17" />
+      <rect x="4.75" y="7.5" width="3.5" height="12.5" />
+      <rect x="10.25" y="11" width="3.5" height="9" />
+      <rect x="15.75" y="14.5" width="3.5" height="5.5" />
     </svg>
   );
 }

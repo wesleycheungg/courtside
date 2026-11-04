@@ -20,7 +20,7 @@ Docs, scaffold, theme, app shell, mock data layer, first tests, CI, deploy.
   sports API and no environment variables set.
 - ☑ Design tokens are defined once in `src/styles/tokens.css`; no hardcoded color values
   exist anywhere else in `src/`.
-- ☑ Bottom nav shows Games, Leagues, Following, and News; tapping each navigates to its
+- ☑ Bottom nav shows Games, Standings, Following, and News; tapping each navigates to its
   route; the active tab is styled with the accent color and carries `aria-current="page"`.
 - ☑ Direct navigation to every route works (no 404 on refresh or deep link).
 - ☑ `DataProvider` is defined in `src/data/provider.ts` with `getGames`, `getGame`,

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { AppPage, type Section } from '../pages/AppPage';
 
-const SECTIONS: Section[] = ['Games', 'Leagues', 'Following', 'News'];
+const SECTIONS: Section[] = ['Games', 'Standings', 'Following', 'News'];
 
 test.describe('app shell', () => {
   test('loads with the Games screen @smoke', async ({ page }) => {
@@ -69,7 +69,7 @@ test.describe('app shell', () => {
 
     const app = new AppPage(page);
     await app.goto();
-    await app.openSection('Leagues');
+    await app.openSection('Standings');
 
     expect(external).toEqual([]);
   });

@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { FollowingIcon, GamesIcon, LeaguesIcon, NewsIcon } from './NavIcons';
+import { FollowingIcon, GamesIcon, NewsIcon, StandingsIcon } from './NavIcons';
 import './BottomNav.css';
 
 interface NavItem {
@@ -10,7 +10,7 @@ interface NavItem {
 
 const ITEMS: NavItem[] = [
   { to: '/', label: 'Games', Icon: GamesIcon },
-  { to: '/leagues', label: 'Leagues', Icon: LeaguesIcon },
+  { to: '/leagues', label: 'Standings', Icon: StandingsIcon },
   { to: '/following', label: 'Following', Icon: FollowingIcon },
   { to: '/news', label: 'News', Icon: NewsIcon },
 ];
