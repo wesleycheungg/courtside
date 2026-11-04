@@ -27,7 +27,7 @@ const TEAM_STAT_LABELS: { name: string; label: string }[] = [
   { name: 'assists', label: 'Assists' },
   { name: 'steals', label: 'Steals' },
   { name: 'turnovers', label: 'Turnovers' },
-  { name: 'pointsInPaint', label: 'Points in paint' },
+  { name: 'pointsInPaint', label: 'Points in Paint' },
 ];
 
 /** "12-31" and "43" both need to become a number to size a bar. */
