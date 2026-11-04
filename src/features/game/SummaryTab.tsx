@@ -1,4 +1,5 @@
-import type { GameDetail } from '../../data/types';
+import type { GameDetail, PlayerStatLine, StatLeader } from '../../data/types';
+import { badgeBackground } from '../../lib/color';
 import './SummaryTab.css';
 
 function Linescore({ game }: { game: GameDetail }) {
@@ -72,77 +73,81 @@ function TeamStats({ game }: { game: GameDetail }) {
   );
 }
 
+const STAT_LABEL: Record<StatLeader['stat'], string> = {
+  points: 'Points',
+  rebounds: 'Rebounds',
+  assists: 'Assists',
+};
+
+function statValue(line: PlayerStatLine, stat: StatLeader['stat']): number {
+  switch (stat) {
+    case 'points':
+      return line.points;
+    case 'rebounds':
+      return line.rebounds;
+    case 'assists':
+      return line.assists;
+  }
+}
+
+/** "Shai Gilgeous-Alexander" -> "SG". */
+function initials(name: string): string {
+  return name
+    .split(' ')
+    .map((part) => part.charAt(0))
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
+}
+
+/**
+ * Two leaders per stat, mirrored around the label. Every grid track is a fixed
+ * width or a 1fr, never `auto` — an auto track would size to its own row's
+ * label, so "Rebounds" and "Points" would push their rows' numbers to
+ * different places and the column would visibly stagger.
+ */
 function GameLeaders({ game }: { game: GameDetail }) {
   if (game.statLeaders.length === 0) return null;
-
-  const statLabel = {
-    points: 'Points',
-    rebounds: 'Rebounds',
-    assists: 'Assists',
-  };
-
-  const getStatValue = (line: typeof game.statLeaders[0]['away'], stat: typeof game.statLeaders[0]['stat']) => {
-    if (stat === 'points') return line.points;
-    if (stat === 'rebounds') return line.rebounds;
-    if (stat === 'assists') return line.assists;
-    return 0;
-  };
-
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map((word) => word[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  };
 
   return (
     <section className="panel">
       <h2 className="panel__title">Game Leaders</h2>
-      <div className="game-leaders__header">
-        <div className="game-leaders__team">{game.away.abbreviation}</div>
-        <div className="game-leaders__vs">VS</div>
-        <div className="game-leaders__team">{game.home.abbreviation}</div>
-      </div>
-      <div className="game-leaders">
+      <ul className="leaders">
         {game.statLeaders.map((leader) => (
-          <div className="game-leaders__stat-row" key={leader.stat}>
-            <div className="game-leaders__player-card game-leaders__player-card--away">
-              <div
-                className="game-leaders__avatar"
-                style={{ backgroundColor: game.away.color }}
-              >
-                {getInitials(leader.away.name)}
-              </div>
-              <div className="game-leaders__info">
-                <p className="game-leaders__name">{leader.away.name}</p>
-                <p className="game-leaders__stat-value">{getStatValue(leader.away, leader.stat)}</p>
-              </div>
-            </div>
-            <div className="game-leaders__stat-label">
-              <p>{statLabel[leader.stat]}</p>
-            </div>
-            <div className="game-leaders__player-card game-leaders__player-card--home">
-              <div className="game-leaders__info game-leaders__info--home">
-                <p className="game-leaders__name">{leader.home.name}</p>
-                <p className="game-leaders__stat-value">{getStatValue(leader.home, leader.stat)}</p>
-              </div>
-              <div
-                className="game-leaders__avatar"
-                style={{ backgroundColor: game.home.color }}
-              >
-                {getInitials(leader.home.name)}
-              </div>
-            </div>
-          </div>
+          <li className="leaders__row" key={leader.stat}>
+            <span className="leaders__stat">{STAT_LABEL[leader.stat]}</span>
+
+            <span
+              className="leaders__avatar leaders__avatar--away"
+              style={{ backgroundColor: badgeBackground(game.away.color) }}
+              aria-hidden="true"
+            >
+              {initials(leader.away.name)}
+            </span>
+            <span className="leaders__value leaders__value--away">
+              {statValue(leader.away, leader.stat)}
+            </span>
+            <span className="leaders__name leaders__name--away">{leader.away.name}</span>
+
+            <span
+              className="leaders__avatar leaders__avatar--home"
+              style={{ backgroundColor: badgeBackground(game.home.color) }}
+              aria-hidden="true"
+            >
+              {initials(leader.home.name)}
+            </span>
+            <span className="leaders__value leaders__value--home">
+              {statValue(leader.home, leader.stat)}
+            </span>
+            <span className="leaders__name leaders__name--home">{leader.home.name}</span>
+          </li>
         ))}
-      </div>
-      <div className="game-leaders__footer">
-        <a href="#box-score" className="game-leaders__link">
+      </ul>
+      <p className="leaders__footer">
+        <a className="leaders__link" href="#box-score">
           Full Box Score
         </a>
-      </div>
+      </p>
     </section>
   );
 }
