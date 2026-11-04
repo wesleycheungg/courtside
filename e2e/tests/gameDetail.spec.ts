@@ -12,7 +12,7 @@ test.describe('game detail', () => {
     await detail.goto(FINAL_GAME);
 
     await expect(detail.tab('Summary')).toHaveAttribute('aria-selected', 'true');
-    await expect(page.getByText('Score by quarter')).toBeVisible();
+    await expect(page.getByText('Linescore')).toBeVisible();
   });
 
   test('moves between all four tabs @smoke', async ({ page }) => {
