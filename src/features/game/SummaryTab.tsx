@@ -1,4 +1,5 @@
-import type { GameDetail, PlayerStatLine, StatLeader } from '../../data/types';
+import { Link } from 'react-router-dom';
+import type { GameDetail, StatLeader } from '../../data/types';
 import { badgeBackground, barColor } from '../../lib/color';
 import './SummaryTab.css';
 
@@ -85,21 +86,11 @@ const STAT_LABEL: Record<StatLeader['stat'], string> = {
   assists: 'Assists',
 };
 
-function statValue(line: PlayerStatLine, stat: StatLeader['stat']): number {
-  switch (stat) {
-    case 'points':
-      return line.points;
-    case 'rebounds':
-      return line.rebounds;
-    case 'assists':
-      return line.assists;
-  }
-}
-
 /** "Shai Gilgeous-Alexander" -> "SG". */
 function initials(name: string): string {
   return name
-    .split(' ')
+    .split(/\s+/)
+    .filter(Boolean)
     .map((part) => part.charAt(0))
     .join('')
     .slice(0, 2)
@@ -131,7 +122,7 @@ function GameLeaders({ game }: { game: GameDetail }) {
               {initials(leader.away.name)}
             </span>
             <span className="leaders__value leaders__value--away">
-              {statValue(leader.away, leader.stat)}
+              {leader.away[leader.stat]}
             </span>
             <span className="leaders__name leaders__name--away">{leader.away.name}</span>
 
@@ -143,16 +134,16 @@ function GameLeaders({ game }: { game: GameDetail }) {
               {initials(leader.home.name)}
             </span>
             <span className="leaders__value leaders__value--home">
-              {statValue(leader.home, leader.stat)}
+              {leader.home[leader.stat]}
             </span>
             <span className="leaders__name leaders__name--home">{leader.home.name}</span>
           </li>
         ))}
       </ul>
       <p className="leaders__footer">
-        <a className="leaders__link" href="#box-score">
+        <Link className="leaders__link" to="?tab=boxscore" replace>
           Full Box Score
-        </a>
+        </Link>
       </p>
     </section>
   );

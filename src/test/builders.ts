@@ -16,7 +16,6 @@ import type {
   Player,
   PlayerStatLine,
   Standing,
-  StatLeader,
   TeamRef,
 } from '../data/types';
 import type { DataProvider } from '../data/provider';
@@ -137,7 +136,7 @@ export function aGameDetail(overrides: Overrides<GameDetail> = {}): GameDetail {
         { stat: 'points', away: awayLeader, home: homeLeader },
         { stat: 'rebounds', away: awayLeader, home: homeLeader },
         { stat: 'assists', away: awayLeader, home: homeLeader },
-      ] as StatLeader[],
+      ],
     },
     overrides,
   );

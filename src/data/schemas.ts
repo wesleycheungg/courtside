@@ -80,11 +80,18 @@ export const boxScoreSchema = z.object({
   home: z.array(playerStatLineSchema),
 });
 
+export const statLeaderSchema = z.object({
+  stat: z.enum(['points', 'rebounds', 'assists']),
+  away: playerStatLineSchema,
+  home: playerStatLineSchema,
+});
+
 export const gameDetailSchema = gameSchema.extend({
   periods: z.array(periodSchema),
   teamStats: z.array(teamStatSchema),
   boxScore: boxScoreSchema,
   topPerformers: z.array(playerStatLineSchema),
+  statLeaders: z.array(statLeaderSchema),
 });
 
 export const playEventSchema = z.object({
