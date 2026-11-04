@@ -139,3 +139,78 @@
   font-weight: var(--weight-bold);
   font-variant-numeric: tabular-nums;
 }
+
+/* ── game leaders ─────────────────────────────────────────────────────── */
+
+.game-leaders {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.game-leaders__stat-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.game-leaders__leader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.game-leaders__leader--away {
+  color: var(--color-secondary);
+}
+
+.game-leaders__leader--home {
+  color: var(--color-accent);
+}
+
+.game-leaders__value {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+  margin: 0;
+}
+
+.game-leaders__player {
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  margin: var(--space-1) 0 0 0;
+}
+
+.game-leaders__stat-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-leaders__stat-label p {
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.game-leaders__footer {
+  margin-top: var(--space-4);
+  text-align: center;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.game-leaders__link {
+  color: var(--color-secondary);
+  text-decoration: underline;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.game-leaders__link:hover {
+  opacity: 0.8;
+}

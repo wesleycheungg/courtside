@@ -81,6 +81,12 @@ export interface PlayerStatLine {
   plusMinus?: number;
 }
 
+export interface StatLeader {
+  stat: 'points' | 'rebounds' | 'assists';
+  away: PlayerStatLine;
+  home: PlayerStatLine;
+}
+
 export interface BoxScore {
   away: PlayerStatLine[];
   home: PlayerStatLine[];
@@ -91,6 +97,7 @@ export interface GameDetail extends Game {
   teamStats: TeamStat[];
   boxScore: BoxScore;
   topPerformers: PlayerStatLine[];
+  statLeaders: StatLeader[];
 }
 
 export interface PlayEvent {

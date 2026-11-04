@@ -12,6 +12,7 @@ import type {
   Period,
   PlayEvent,
   PlayerStatLine,
+  StatLeader,
   TeamStat,
 } from '../types';
 import type { EspnBoxscoreTeam, EspnPlayerGroup, EspnSummary } from './espnSchemas';
@@ -19,10 +20,12 @@ import { normalizeEspnGame, normalizeEspnPeriods, sideOf } from './normalizeEspn
 
 /** Stats we surface in the comparison, in the order the design shows them. */
 const TEAM_STAT_LABELS: { name: string; label: string }[] = [
-  { name: 'fieldGoalPct', label: 'Field goal %' },
-  { name: 'threePointFieldGoalsMade-threePointFieldGoalsAttempted', label: '3-pointers' },
+  { name: 'fieldGoalPct', label: 'Field Goal %' },
+  { name: 'threePointFieldGoalPct', label: '3-Point %' },
+  { name: 'freeThrowPct', label: 'Free Throw %' },
   { name: 'totalRebounds', label: 'Rebounds' },
   { name: 'assists', label: 'Assists' },
+  { name: 'steals', label: 'Steals' },
   { name: 'turnovers', label: 'Turnovers' },
   { name: 'pointsInPaint', label: 'Points in paint' },
 ];
@@ -133,6 +136,26 @@ export function pickTopPerformers(box: BoxScore): PlayerStatLine[] {
   );
 }
 
+/** Leaders for points, rebounds, and assists from each side. */
+export function pickStatLeaders(box: BoxScore): StatLeader[] {
+  const leaderFor = (
+    lines: PlayerStatLine[],
+    stat: 'points' | 'rebounds' | 'assists',
+  ): PlayerStatLine | undefined => {
+    return [...lines].sort((a, b) => b[stat] - a[stat])[0];
+  };
+
+  const stats: ('points' | 'rebounds' | 'assists')[] = ['points', 'rebounds', 'assists'];
+
+  return stats
+    .map((stat) => {
+      const away = leaderFor(box.away, stat);
+      const home = leaderFor(box.home, stat);
+      return away && home ? { stat, away, home } : undefined;
+    })
+    .filter((leader): leader is StatLeader => leader !== undefined);
+}
+
 export function normalizeEspnSummary(summary: EspnSummary): GameDetail {
   const competition = summary.header.competitions[0];
   if (!competition) throw new Error(`Summary ${summary.header.id} has no competition`);
@@ -168,6 +191,7 @@ export function normalizeEspnSummary(summary: EspnSummary): GameDetail {
     teamStats: normalizeTeamStats(awayBox, homeBox),
     boxScore,
     topPerformers: pickTopPerformers(boxScore),
+    statLeaders: pickStatLeaders(boxScore),
   };
 }
 

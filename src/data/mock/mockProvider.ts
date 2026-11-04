@@ -92,12 +92,35 @@ function buildDetail(game: Game, clock: Clock): GameDetail {
     .map((id) => findStatLine(fixture, id))
     .filter((line): line is PlayerStatLine => line !== undefined);
 
+  const statLeaders = (
+    fixture.boxScore.away.length === 0 || fixture.boxScore.home.length === 0
+      ? []
+      : [
+          {
+            stat: 'points' as const,
+            away: fixture.boxScore.away.reduce((a, b) => (a.points > b.points ? a : b)),
+            home: fixture.boxScore.home.reduce((a, b) => (a.points > b.points ? a : b)),
+          },
+          {
+            stat: 'rebounds' as const,
+            away: fixture.boxScore.away.reduce((a, b) => (a.rebounds > b.rebounds ? a : b)),
+            home: fixture.boxScore.home.reduce((a, b) => (a.rebounds > b.rebounds ? a : b)),
+          },
+          {
+            stat: 'assists' as const,
+            away: fixture.boxScore.away.reduce((a, b) => (a.assists > b.assists ? a : b)),
+            home: fixture.boxScore.home.reduce((a, b) => (a.assists > b.assists ? a : b)),
+          },
+        ]
+  ) as StatLeader[];
+
   const base: GameDetail = {
     ...game,
     periods: [],
     teamStats: fixture.teamStats,
     boxScore: fixture.boxScore,
     topPerformers,
+    statLeaders,
   };
 
   if (game.id === SIM_GAME_ID) {

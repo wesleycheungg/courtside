@@ -16,6 +16,7 @@ import type {
   Player,
   PlayerStatLine,
   Standing,
+  StatLeader,
   TeamRef,
 } from '../data/types';
 import type { DataProvider } from '../data/provider';
@@ -115,6 +116,8 @@ export function aBoxScore(overrides: Overrides<BoxScore> = {}): BoxScore {
 export function aGameDetail(overrides: Overrides<GameDetail> = {}): GameDetail {
   const base = aGame();
   const boxScore = overrides.boxScore ?? aBoxScore();
+  const awayLeader = boxScore.away[0] ?? aStatLine();
+  const homeLeader = boxScore.home[0] ?? aStatLine();
 
   return build(
     {
@@ -129,7 +132,12 @@ export function aGameDetail(overrides: Overrides<GameDetail> = {}): GameDetail {
         { label: 'Rebounds', awayValue: '40', homeValue: '46', awayShare: 0.47 },
       ],
       boxScore,
-      topPerformers: [boxScore.home[0] ?? aStatLine()],
+      topPerformers: [homeLeader],
+      statLeaders: [
+        { stat: 'points', away: awayLeader, home: homeLeader },
+        { stat: 'rebounds', away: awayLeader, home: homeLeader },
+        { stat: 'assists', away: awayLeader, home: homeLeader },
+      ] as StatLeader[],
     },
     overrides,
   );

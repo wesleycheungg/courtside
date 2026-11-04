@@ -10,8 +10,7 @@ function TeamColumn({ team, side }: { team: TeamRef; side: 'Away' | 'Home' }) {
       <TeamLogo abbreviation={team.abbreviation} color={team.color} size="lg" />
       <p className="game-header__team-name">{team.name}</p>
       <p className="game-header__team-meta">
-        {team.record ? `${team.record} · ` : ''}
-        {side}
+        {team.record}
       </p>
     </div>
   );
