@@ -135,7 +135,9 @@ describe('GameDetailPage — summary', () => {
 
     const table = await screen.findByRole('table');
     expect(within(table).getByRole('columnheader', { name: 'Q1' })).toBeInTheDocument();
-    expect(within(table).getByRole('columnheader', { name: 'Total' })).toBeInTheDocument();
+    expect(
+      within(table).getByRole('columnheader', { name: 'Total' }),
+    ).toBeInTheDocument();
   });
 
   it('shows quarter values that add up to the displayed total', async () => {
