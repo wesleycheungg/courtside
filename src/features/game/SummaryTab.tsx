@@ -1,5 +1,5 @@
 import type { GameDetail, PlayerStatLine, StatLeader } from '../../data/types';
-import { badgeBackground } from '../../lib/color';
+import { badgeBackground, barColor } from '../../lib/color';
 import './SummaryTab.css';
 
 function Linescore({ game }: { game: GameDetail }) {
@@ -45,6 +45,9 @@ function Linescore({ game }: { game: GameDetail }) {
 function TeamStats({ game }: { game: GameDetail }) {
   if (game.teamStats.length === 0) return null;
 
+  const awayFill = barColor(game.away.color);
+  const homeFill = barColor(game.home.color);
+
   return (
     <section className="panel">
       <h2 className="panel__title">Team Stats</h2>
@@ -58,12 +61,15 @@ function TeamStats({ game }: { game: GameDetail }) {
             </span>
             <div className="team-stats__bar">
               <span
-                className="team-stats__fill team-stats__fill--away"
-                style={{ width: `${stat.awayShare * 100}%` }}
+                className="team-stats__fill"
+                style={{ width: `${stat.awayShare * 100}%`, backgroundColor: awayFill }}
               />
               <span
-                className="team-stats__fill team-stats__fill--home"
-                style={{ width: `${(1 - stat.awayShare) * 100}%` }}
+                className="team-stats__fill"
+                style={{
+                  width: `${(1 - stat.awayShare) * 100}%`,
+                  backgroundColor: homeFill,
+                }}
               />
             </div>
           </li>

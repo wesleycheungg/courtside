@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { badgeBackground, contrastRatio, relativeLuminance } from './color';
+import { badgeBackground, barColor, contrastRatio, relativeLuminance } from './color';
 
 describe('relativeLuminance', () => {
   it('spans black to white', () => {
@@ -57,5 +57,45 @@ describe('badgeBackground', () => {
 
   it('passes through a value that is not a hex colour', () => {
     expect(badgeBackground('rebeccapurple')).toBe('rebeccapurple');
+  });
+});
+
+describe('barColor', () => {
+  const surface = '#171b22';
+
+  /** The dark end of the league, where a raw bar vanishes into the panel. */
+  const darkTeamColors = [
+    '#000000', // Nets black, the worst case
+    '#0E2240', // Nuggets navy
+    '#002B5C', // Jazz navy
+    '#1D428A', // Warriors royal
+    '#860038', // Cavaliers wine
+  ];
+
+  it('always clears 3:1 against the surface', () => {
+    for (const color of [...darkTeamColors, '#007AC1', '#FDB927']) {
+      const adjusted = barColor(color);
+      expect(
+        contrastRatio(adjusted, surface),
+        `${color} -> ${adjusted}`,
+      ).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('leaves an already-visible colour alone', () => {
+    expect(barColor('#007AC1')).toBe('#007AC1');
+    expect(barColor('#FDB927')).toBe('#FDB927');
+  });
+
+  it('only ever lightens, so the team stays recognisable', () => {
+    for (const color of darkTeamColors) {
+      expect(relativeLuminance(barColor(color))).toBeGreaterThanOrEqual(
+        relativeLuminance(color) - 1e-9,
+      );
+    }
+  });
+
+  it('passes through a value that is not a hex colour', () => {
+    expect(barColor('rebeccapurple')).toBe('rebeccapurple');
   });
 });

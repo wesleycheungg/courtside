@@ -93,17 +93,10 @@
   height: 6px;
 }
 
+/* Colour is set per game from the two teams' own colours, via barColor(). */
 .team-stats__fill {
   border-radius: var(--radius-pill);
   min-width: 2px;
-}
-
-.team-stats__fill--away {
-  background-color: var(--color-secondary);
-}
-
-.team-stats__fill--home {
-  background-color: var(--color-accent);
 }
 
 /* ── game leaders ─────────────────────────────────────────────────────── */
