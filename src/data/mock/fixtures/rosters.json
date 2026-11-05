@@ -1,0 +1,402 @@
+{
+  "cle": [
+    {
+      "playerId": "cle-mitchell",
+      "firstName": "Donovan",
+      "lastName": "Mitchell",
+      "jersey": "45",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "28.4",
+        "avgRebounds": "4.6",
+        "avgAssists": "5.2",
+        "fieldGoalPct": "46.8"
+      }
+    },
+    {
+      "playerId": "cle-mobley",
+      "firstName": "Evan",
+      "lastName": "Mobley",
+      "jersey": "4",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "19.1",
+        "avgRebounds": "9.8",
+        "avgAssists": "3.4",
+        "fieldGoalPct": "55.2"
+      }
+    },
+    {
+      "playerId": "cle-garland",
+      "firstName": "Darius",
+      "lastName": "Garland",
+      "jersey": "10",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "20.6",
+        "avgRebounds": "2.9",
+        "avgAssists": "7.1",
+        "fieldGoalPct": "47.3"
+      }
+    },
+    {
+      "playerId": "cle-allen",
+      "firstName": "Jarrett",
+      "lastName": "Allen",
+      "jersey": "31",
+      "positionAbbrev": "C",
+      "stats": {
+        "avgPoints": "14.2",
+        "avgRebounds": "10.4",
+        "avgAssists": "1.8",
+        "fieldGoalPct": "63.1"
+      }
+    },
+    {
+      "playerId": "cle-strus",
+      "firstName": "Max",
+      "lastName": "Strus",
+      "jersey": "1",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "11.7",
+        "avgRebounds": "4.1",
+        "avgAssists": "3.6",
+        "fieldGoalPct": "42.0"
+      }
+    },
+    {
+      "playerId": "cle-hunter",
+      "firstName": "De'Andre",
+      "lastName": "Hunter",
+      "jersey": "12",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "13.9",
+        "avgRebounds": "3.7",
+        "avgAssists": "1.4",
+        "fieldGoalPct": "48.5"
+      }
+    },
+    {
+      "playerId": "cle-wade",
+      "firstName": "Dean",
+      "lastName": "Wade",
+      "jersey": "32",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "5.3",
+        "avgRebounds": "3.8",
+        "avgAssists": "1.1",
+        "fieldGoalPct": "44.6"
+      }
+    },
+    {
+      "playerId": "cle-tyson",
+      "firstName": "Jaylon",
+      "lastName": "Tyson",
+      "jersey": "24",
+      "positionAbbrev": "G"
+    }
+  ],
+  "mil": [
+    {
+      "playerId": "mil-antetokounmpo",
+      "firstName": "Giannis",
+      "lastName": "Antetokounmpo",
+      "jersey": "34",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "31.2",
+        "avgRebounds": "11.7",
+        "avgAssists": "6.3",
+        "fieldGoalPct": "60.4"
+      }
+    },
+    {
+      "playerId": "mil-lillard",
+      "firstName": "Damian",
+      "lastName": "Lillard",
+      "jersey": "0",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "24.8",
+        "avgRebounds": "4.2",
+        "avgAssists": "7.4",
+        "fieldGoalPct": "43.9"
+      }
+    },
+    {
+      "playerId": "mil-portis",
+      "firstName": "Bobby",
+      "lastName": "Portis",
+      "jersey": "9",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "13.6",
+        "avgRebounds": "7.2",
+        "avgAssists": "1.6",
+        "fieldGoalPct": "47.1"
+      }
+    },
+    {
+      "playerId": "mil-middleton",
+      "firstName": "Khris",
+      "lastName": "Middleton",
+      "jersey": "22",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "15.4",
+        "avgRebounds": "5.1",
+        "avgAssists": "5.3",
+        "fieldGoalPct": "49.2"
+      }
+    },
+    {
+      "playerId": "mil-lopez",
+      "firstName": "Brook",
+      "lastName": "Lopez",
+      "jersey": "11",
+      "positionAbbrev": "C",
+      "stats": {
+        "avgPoints": "12.5",
+        "avgRebounds": "5.0",
+        "avgAssists": "1.9",
+        "fieldGoalPct": "50.7"
+      }
+    },
+    {
+      "playerId": "mil-green",
+      "firstName": "AJ",
+      "lastName": "Green",
+      "jersey": "20",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "8.1",
+        "avgRebounds": "2.3",
+        "avgAssists": "1.2",
+        "fieldGoalPct": "41.8"
+      }
+    },
+    {
+      "playerId": "mil-trent",
+      "firstName": "Gary",
+      "lastName": "Trent Jr.",
+      "jersey": "5",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "9.8",
+        "avgRebounds": "2.1",
+        "avgAssists": "1.5",
+        "fieldGoalPct": "44.3"
+      }
+    },
+    {
+      "playerId": "mil-livingston",
+      "firstName": "Chris",
+      "lastName": "Livingston",
+      "jersey": "28",
+      "positionAbbrev": "F"
+    }
+  ],
+  "phx": [
+    {
+      "playerId": "phx-booker",
+      "firstName": "Devin",
+      "lastName": "Booker",
+      "jersey": "15",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "24.7",
+        "avgRebounds": "3.2",
+        "avgAssists": "4.7",
+        "fieldGoalPct": "48.5"
+      }
+    },
+    {
+      "playerId": "phx-green",
+      "firstName": "Jalen",
+      "lastName": "Green",
+      "jersey": "4",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "18.9",
+        "avgRebounds": "4.8",
+        "avgAssists": "3.1",
+        "fieldGoalPct": "42.6"
+      }
+    },
+    {
+      "playerId": "phx-bridges",
+      "firstName": "Miles",
+      "lastName": "Bridges",
+      "jersey": "22",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "15.3",
+        "avgRebounds": "6.4",
+        "avgAssists": "2.5",
+        "fieldGoalPct": "45.0"
+      }
+    },
+    {
+      "playerId": "phx-brooks",
+      "firstName": "Dillon",
+      "lastName": "Brooks",
+      "jersey": "3",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "14.1",
+        "avgRebounds": "3.3",
+        "avgAssists": "1.8",
+        "fieldGoalPct": "44.2"
+      }
+    },
+    {
+      "playerId": "phx-maluach",
+      "firstName": "Khaman",
+      "lastName": "Maluach",
+      "jersey": "10",
+      "positionAbbrev": "C",
+      "stats": {
+        "avgPoints": "6.2",
+        "avgRebounds": "4.4",
+        "avgAssists": "0.5",
+        "fieldGoalPct": "55.1"
+      }
+    },
+    {
+      "playerId": "phx-dunn",
+      "firstName": "Ryan",
+      "lastName": "Dunn",
+      "jersey": "0",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "7.4",
+        "avgRebounds": "3.9",
+        "avgAssists": "1.0",
+        "fieldGoalPct": "43.7"
+      }
+    },
+    {
+      "playerId": "phx-gillespie",
+      "firstName": "Collin",
+      "lastName": "Gillespie",
+      "jersey": "12",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "9.1",
+        "avgRebounds": "2.6",
+        "avgAssists": "5.4",
+        "fieldGoalPct": "46.3"
+      }
+    },
+    {
+      "playerId": "phx-peat",
+      "firstName": "Koa",
+      "lastName": "Peat",
+      "jersey": "18",
+      "positionAbbrev": "F"
+    }
+  ],
+  "sac": [
+    {
+      "playerId": "sac-sabonis",
+      "firstName": "Domantas",
+      "lastName": "Sabonis",
+      "jersey": "10",
+      "positionAbbrev": "C",
+      "stats": {
+        "avgPoints": "19.4",
+        "avgRebounds": "13.1",
+        "avgAssists": "6.0",
+        "fieldGoalPct": "59.3"
+      }
+    },
+    {
+      "playerId": "sac-lavine",
+      "firstName": "Zach",
+      "lastName": "LaVine",
+      "jersey": "8",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "22.1",
+        "avgRebounds": "4.3",
+        "avgAssists": "4.1",
+        "fieldGoalPct": "47.9"
+      }
+    },
+    {
+      "playerId": "sac-derozan",
+      "firstName": "DeMar",
+      "lastName": "DeRozan",
+      "jersey": "11",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "20.3",
+        "avgRebounds": "3.8",
+        "avgAssists": "4.4",
+        "fieldGoalPct": "47.1"
+      }
+    },
+    {
+      "playerId": "sac-murray",
+      "firstName": "Keegan",
+      "lastName": "Murray",
+      "jersey": "13",
+      "positionAbbrev": "F",
+      "stats": {
+        "avgPoints": "12.8",
+        "avgRebounds": "6.7",
+        "avgAssists": "1.7",
+        "fieldGoalPct": "44.5"
+      }
+    },
+    {
+      "playerId": "sac-ellis",
+      "firstName": "Keon",
+      "lastName": "Ellis",
+      "jersey": "23",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "8.6",
+        "avgRebounds": "3.2",
+        "avgAssists": "1.9",
+        "fieldGoalPct": "49.8"
+      }
+    },
+    {
+      "playerId": "sac-monk",
+      "firstName": "Malik",
+      "lastName": "Monk",
+      "jersey": "0",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "14.7",
+        "avgRebounds": "3.1",
+        "avgAssists": "5.6",
+        "fieldGoalPct": "43.2"
+      }
+    },
+    {
+      "playerId": "sac-carter",
+      "firstName": "Devin",
+      "lastName": "Carter",
+      "jersey": "22",
+      "positionAbbrev": "G",
+      "stats": {
+        "avgPoints": "6.9",
+        "avgRebounds": "3.4",
+        "avgAssists": "2.2",
+        "fieldGoalPct": "40.1"
+      }
+    },
+    {
+      "playerId": "sac-acuff",
+      "firstName": "Darius",
+      "lastName": "Acuff Jr.",
+      "jersey": "5",
+      "positionAbbrev": "G"
+    }
+  ]
+}
