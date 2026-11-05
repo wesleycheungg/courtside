@@ -85,16 +85,15 @@
   font-size: var(--text-sm);
 }
 
-.roster__jersey {
-  /* Left-aligned under its own header, unlike the stat columns. */
-  text-align: left;
-  padding-left: 0;
+/*
+ * Qualified with the element, so it beats `.box-score th, .box-score td`
+ * rather than quietly losing to it: the jersey sits under a left-aligned `#`
+ * header, unlike every stat column to its right.
+ */
+.box-score td.roster__jersey {
   width: 2.5rem;
+  padding-left: 0;
+  text-align: left;
   color: var(--color-muted);
   font-size: var(--text-sm);
-}
-
-/* Player is the second column here, so it keeps its gutter. */
-.roster .box-score__player {
-  padding-left: var(--space-2);
 }
