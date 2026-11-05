@@ -271,3 +271,54 @@ export const espnGameLogSchema = z.object({
 
 export type EspnAthlete = z.infer<typeof espnAthleteSchema>;
 export type EspnGameLog = z.infer<typeof espnGameLogSchema>;
+
+/* ── roster ───────────────────────────────────────────────────────────────── */
+
+/**
+ * A team roster with `?enable=stats`.
+ *
+ * This endpoint exists because a pre-game summary carries no roster and no
+ * player stats at all — its `boxscore` holds only `teams`. Four season
+ * averages arrive per athlete, spread across two categories: `general` holds
+ * REB, `offensive` holds PTS, AST and FG%.
+ *
+ * Shaped from the real payload, not from guesses. `jersey` is sometimes `null`
+ * rather than absent, `positionGroups[].position` arrives `null` and is
+ * therefore left out entirely, and an athlete with no games played has a
+ * `splits` object with no `categories` key — so every level of the statistics
+ * tree is optional.
+ */
+export const espnRosterStatSchema = z.object({
+  name: z.string(),
+  displayName: z.string().optional(),
+  abbreviation: z.string().optional(),
+  value: z.number().optional(),
+  displayValue: z.string().optional(),
+  rank: z.number().int().optional(),
+});
+
+export const espnRosterAthleteSchema = z.object({
+  id: z.string(),
+  displayName: z.string(),
+  jersey: z.string().nullish(),
+  position: z.object({ abbreviation: z.string().optional() }).nullish(),
+  statistics: z
+    .object({
+      splits: z
+        .object({
+          categories: z
+            .array(z.object({ name: z.string(), stats: z.array(espnRosterStatSchema) }))
+            .optional(),
+        })
+        .optional(),
+    })
+    .optional(),
+});
+
+export const espnRosterSchema = z.object({
+  season: z.object({ year: z.number().int().optional() }).optional(),
+  positionGroups: z.array(z.object({ athletes: z.array(espnRosterAthleteSchema) })),
+});
+
+export type EspnRoster = z.infer<typeof espnRosterSchema>;
+export type EspnRosterAthlete = z.infer<typeof espnRosterAthleteSchema>;
