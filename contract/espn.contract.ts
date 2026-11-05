@@ -450,3 +450,94 @@ describe('ESPN athlete', () => {
     TIMEOUT,
   );
 });
+
+/* ── roster ───────────────────────────────────────────────────────────────── */
+
+describe('ESPN team roster', () => {
+  /** The four averages the pre-game roster table is built from. */
+  const AVERAGE_NAMES = ['avgPoints', 'avgRebounds', 'avgAssists', 'fieldGoalPct'];
+
+  let roster: unknown;
+
+  beforeAll(async () => {
+    const parsed = contractSchemas.scoreboard.parse(slate.payload);
+    const teamId = parsed.events[0]?.competitions[0]?.competitors[0]?.team.id;
+    if (!teamId) return;
+
+    roster = await fetchJson(espnUrls.teamRoster(teamId));
+  }, TIMEOUT);
+
+  it(
+    'still matches the schema the proxy validates with',
+    async () => {
+      expectParses('roster', roster);
+      await expectNoTypeDrift('roster', roster);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'still carries the four season averages the roster table reads',
+    () => {
+      const parsed = contractSchemas.roster.parse(roster);
+      const athletes = parsed.positionGroups.flatMap((group) => group.athletes);
+
+      // Spread across `general` and `offensive`, so they are read by name
+      // rather than by category — this asserts the names have not moved.
+      const complete = athletes.filter((athlete) => {
+        const names = new Set(
+          (athlete.statistics?.splits?.categories ?? [])
+            .flatMap((category) => category.stats)
+            .map((stat) => stat.name),
+        );
+        return AVERAGE_NAMES.every((name) => names.has(name));
+      });
+
+      expect(athletes.length).toBeGreaterThan(0);
+      expect(complete.length).toBeGreaterThan(0);
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'still omits the categories entirely for a player with no games played',
+    () => {
+      const parsed = contractSchemas.roster.parse(roster);
+      const unplayed = parsed.positionGroups
+        .flatMap((group) => group.athletes)
+        .filter((athlete) => athlete.statistics?.splits?.categories === undefined);
+
+      // Reported, never failed: late in a season every athlete may have
+      // played, and that is not a contract break.
+      if (unplayed.length === 0) {
+        notes.push(
+          '_Every athlete on the sampled roster had season averages; the "no games played" branch was not exercised._',
+        );
+      }
+    },
+    TIMEOUT,
+  );
+
+  it(
+    'still finds no roster on a pre-game summary',
+    async () => {
+      const parsed = contractSchemas.scoreboard.parse(slate.payload);
+      const scheduled = parsed.events.find(
+        (event) => event.competitions[0]?.status.type.state === 'pre',
+      );
+      if (!scheduled) return;
+
+      const summary = await fetchJson(espnUrls.summary(scheduled.id));
+      const hasRoster = 'rosters' in (summary as Record<string, unknown>);
+
+      // The whole reason the roster endpoint exists. If this ever flips, the
+      // separate fetch can be dropped — so report it rather than fail.
+      if (hasRoster) {
+        notes.push(
+          '_A pre-game summary now carries a `rosters` key. The separate roster fetch may no longer be needed._',
+        );
+      }
+    },
+    TIMEOUT,
+  );
+});
