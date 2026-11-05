@@ -6,7 +6,14 @@
  * data rather than a separate code path.
  */
 
-import type { Conference, Game, GameDetail, PlayEvent, Player } from './types';
+import type {
+  Conference,
+  Game,
+  GameDetail,
+  PlayEvent,
+  Player,
+  RosterEntry,
+} from './types';
 import { type Clock, resolveClock, systemClock } from './clock';
 import { createMockProvider } from './mock/mockProvider';
 import { createEspnProvider } from './espn/espnProvider';
@@ -18,6 +25,14 @@ export interface DataProvider {
   getGame(id: string): Promise<GameDetail>;
   getStandings(): Promise<Conference[]>;
   getPlayer(id: string): Promise<Player>;
+  /**
+   * The roster and season averages for one team. Only the box score before
+   * tipoff asks for this, and only for the team on show.
+   *
+   * @param teamId the provider's own team id, as carried on `TeamRef.id` —
+   * `cle` under mock, `21` under ESPN. The two namespaces never mix.
+   */
+  getTeamRoster(teamId: string): Promise<RosterEntry[]>;
   getPlayByPlay(id: string): Promise<PlayEvent[]>;
 }
 

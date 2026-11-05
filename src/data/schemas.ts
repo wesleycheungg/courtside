@@ -127,6 +127,21 @@ export const statTileSchema = z.object({
   rank: z.number().int().positive().optional(),
 });
 
+export const seasonAveragesSchema = z.object({
+  points: z.number().nonnegative(),
+  rebounds: z.number().nonnegative(),
+  assists: z.number().nonnegative(),
+  fieldGoalPercent: z.number().min(0).max(100),
+});
+
+export const rosterEntrySchema = z.object({
+  playerId: z.string().min(1),
+  name: z.string().min(1),
+  position: z.string().min(1),
+  jerseyNumber: z.string(),
+  seasonAverages: seasonAveragesSchema.optional(),
+});
+
 export const shootingSplitSchema = z.object({
   label: z.string().min(1),
   made: z.number().int().nonnegative(),
