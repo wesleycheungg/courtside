@@ -48,6 +48,15 @@ export class GameDetailPage {
     return this.page.locator('.plays__row');
   }
 
+  /** The pre-game roster table, which replaces the box score before tip-off. */
+  rosterRows(): Locator {
+    return this.page.locator('table.roster tbody tr');
+  }
+
+  rosterRow(player: string): Locator {
+    return this.rosterRows().filter({ hasText: player });
+  }
+
   /** Each team's quarter values, so a test can check they sum to the total. */
   async quarterTotals(): Promise<{ label: string; cells: number[]; total: number }[]> {
     return this.page.locator('.quarters tbody tr').evaluateAll((rows) =>

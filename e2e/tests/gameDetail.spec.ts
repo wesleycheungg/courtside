@@ -5,6 +5,7 @@ import { simTime } from '../support/simClock';
 const SIM_GAME = 'sim-live-nyk-bos';
 const FINAL_GAME = 'mock-final-gsw-okc';
 const OT_GAME = 'mock-final-ot-den-lal';
+const SCHEDULED_GAME = 'mock-sched-cle-mil';
 
 test.describe('game detail', () => {
   test('opens on the summary tab @smoke', async ({ page }) => {
@@ -69,6 +70,36 @@ test.describe('game detail', () => {
     await detail.teamChip('GSW').click();
 
     await expect(page.getByRole('link', { name: 'S. Curry' })).toBeVisible();
+  });
+
+  test('a pre-game box score lists the roster with season averages @regression', async ({
+    page,
+  }) => {
+    const detail = new GameDetailPage(page);
+    await detail.goto(SCHEDULED_GAME, { tab: 'boxscore' });
+
+    // The home side, so the Bucks roster from the fixtures.
+    await expect(detail.rosterRows()).toHaveCount(8);
+    await expect(page.getByText('Season averages')).toBeVisible();
+    for (const column of ['PTS', 'REB', 'AST', 'FG%']) {
+      await expect(page.getByRole('columnheader', { name: column })).toBeVisible();
+    }
+
+    // Best scorer first, and the player with no games played dashed out last.
+    await expect(detail.rosterRows().first()).toContainText('G. Antetokounmpo');
+    await expect(detail.rosterRows().last()).toContainText('C. Livingston');
+    await expect(detail.rosterRow('C. Livingston')).toContainText('—');
+  });
+
+  test('the team chip switches rosters before tip-off @regression', async ({ page }) => {
+    const detail = new GameDetailPage(page);
+    await detail.goto(SCHEDULED_GAME, { tab: 'boxscore' });
+
+    await expect(page.getByRole('link', { name: 'D. Lillard' })).toBeVisible();
+    await detail.teamChip('CLE').click();
+
+    await expect(page.getByRole('link', { name: 'D. Mitchell' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'D. Lillard' })).toBeHidden();
   });
 
   test('a box score row opens that player @regression', async ({ page }) => {
