@@ -6,8 +6,23 @@
  * it is cheap to cover exhaustively with unit tests.
  */
 
-import type { Conference, Game, GameState, Period, Standing, TeamRef } from '../types';
-import type { WireGame, WireLineScore, WireStandings, WireTeam } from './wire';
+import type {
+  Conference,
+  Game,
+  GameState,
+  Period,
+  RosterEntry,
+  Standing,
+  TeamRef,
+} from '../types';
+import { sortRoster } from '../roster';
+import type {
+  WireGame,
+  WireLineScore,
+  WireRosterPlayer,
+  WireStandings,
+  WireTeam,
+} from './wire';
 
 export function normalizeTeam(
   wire: WireTeam,
@@ -110,6 +125,32 @@ export function normalizeGame(
     awayScore: totals.away,
     homeScore: totals.home,
   };
+}
+
+export function normalizeRosterPlayer(wire: WireRosterPlayer): RosterEntry {
+  return {
+    playerId: wire.playerId,
+    name: `${wire.firstName} ${wire.lastName}`,
+    position: wire.positionAbbrev,
+    jerseyNumber: wire.jersey,
+    // A player with no games yet has no average. Parsing an absent stat to 0
+    // would put a rookie alongside a genuine 0.0 scorer in the table and the
+    // sort order alike.
+    ...(wire.stats
+      ? {
+          seasonAverages: {
+            points: Number(wire.stats.avgPoints),
+            rebounds: Number(wire.stats.avgRebounds),
+            assists: Number(wire.stats.avgAssists),
+            fieldGoalPercent: Number(wire.stats.fieldGoalPct),
+          },
+        }
+      : {}),
+  };
+}
+
+export function normalizeRoster(players: WireRosterPlayer[]): RosterEntry[] {
+  return sortRoster(players.map(normalizeRosterPlayer));
 }
 
 /** Standard NBA games-behind: average of the win and loss gaps to the leader. */

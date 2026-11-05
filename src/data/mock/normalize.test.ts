@@ -5,13 +5,14 @@ import {
   normalizeGame,
   normalizeGameState,
   normalizePeriods,
+  normalizeRosterPlayer,
   normalizeTeam,
   periodLabel,
   toIsoInstant,
   totalsFromPeriods,
   winPercent,
 } from './normalize';
-import type { WireGame, WireTeam } from './wire';
+import type { WireGame, WireRosterPlayer, WireTeam } from './wire';
 import teamsFixture from './fixtures/teams.json';
 import gamesFixture from './fixtures/games.json';
 import standingsFixture from './fixtures/standings.json';
@@ -215,5 +216,54 @@ describe('normalizeConference', () => {
 
   it('produces conferences that satisfy the domain schema', () => {
     expect(() => parseOrThrow(conferenceSchema, east, 'east')).not.toThrow();
+  });
+});
+
+describe('normalizeRosterPlayer', () => {
+  const booker: WireRosterPlayer = {
+    playerId: 'phx-booker',
+    firstName: 'Devin',
+    lastName: 'Booker',
+    jersey: '15',
+    positionAbbrev: 'G',
+    stats: {
+      avgPoints: '24.7',
+      avgRebounds: '3.2',
+      avgAssists: '4.7',
+      fieldGoalPct: '48.5',
+    },
+  };
+
+  it('joins the split name the feed sends', () => {
+    expect(normalizeRosterPlayer(booker).name).toBe('Devin Booker');
+  });
+
+  it('carries the jersey and position through', () => {
+    expect(normalizeRosterPlayer(booker)).toMatchObject({
+      jerseyNumber: '15',
+      position: 'G',
+    });
+  });
+
+  it('parses the averages into numbers the table can sort on', () => {
+    expect(normalizeRosterPlayer(booker).seasonAverages).toEqual({
+      points: 24.7,
+      rebounds: 3.2,
+      assists: 4.7,
+      fieldGoalPercent: 48.5,
+    });
+  });
+
+  it('leaves a player with no stats without averages rather than on zeros', () => {
+    const rookie = normalizeRosterPlayer({
+      playerId: 'phx-peat',
+      firstName: 'Koa',
+      lastName: 'Peat',
+      jersey: '18',
+      positionAbbrev: 'F',
+    });
+
+    expect(rookie.seasonAverages).toBeUndefined();
+    expect('seasonAverages' in rookie).toBe(false);
   });
 });

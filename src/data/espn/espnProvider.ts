@@ -7,11 +7,19 @@
  */
 
 import type { DataProvider } from '../provider';
-import type { Conference, Game, GameDetail, PlayEvent, Player } from '../types';
+import type {
+  Conference,
+  Game,
+  GameDetail,
+  PlayEvent,
+  Player,
+  RosterEntry,
+} from '../types';
 import { z } from 'zod';
 import {
   espnAthleteSchema,
   espnGameLogSchema,
+  espnRosterSchema,
   espnScoreboardSchema,
   espnStandingsSchema,
   espnSummarySchema,
@@ -19,6 +27,7 @@ import {
   type EspnTeam,
 } from './espnSchemas';
 import { normalizeEspnAthlete } from './normalizeAthlete';
+import { normalizeEspnRoster } from './normalizeRoster';
 import {
   normalizeEspnScoreboard,
   normalizeEspnStandings,
@@ -105,6 +114,11 @@ export function createEspnProvider({
     async getPlayByPlay(id: string): Promise<PlayEvent[]> {
       const summary = await getJson(`${baseUrl}/summary?event=${id}`, espnSummarySchema);
       return normalizeEspnPlays(summary);
+    },
+
+    async getTeamRoster(teamId: string): Promise<RosterEntry[]> {
+      const roster = await getJson(`${baseUrl}/roster?team=${teamId}`, espnRosterSchema);
+      return normalizeEspnRoster(roster);
     },
 
     async getPlayer(id: string): Promise<Player> {

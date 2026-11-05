@@ -15,12 +15,18 @@ import type {
   PlayEvent,
   Player,
   PlayerStatLine,
+  RosterEntry,
   TeamStat,
 } from '../types';
 import { pickStatLeaders } from '../statLeaders';
 import type { DataProvider } from '../provider';
-import { normalizeConference, normalizeGame, periodLabel } from './normalize';
-import type { WireGame, WireStandings, WireTeam } from './wire';
+import {
+  normalizeConference,
+  normalizeGame,
+  normalizeRoster,
+  periodLabel,
+} from './normalize';
+import type { WireGame, WireRosters, WireStandings, WireTeam } from './wire';
 import {
   SIM_GAME_ID,
   applyDetailSnapshot,
@@ -34,6 +40,7 @@ import standingsFixture from './fixtures/standings.json';
 import detailsFixture from './fixtures/details.json';
 import playsFixture from './fixtures/plays.json';
 import playersFixture from './fixtures/players.json';
+import rostersFixture from './fixtures/rosters.json';
 
 interface DetailFixture {
   teamStats: TeamStat[];
@@ -47,6 +54,7 @@ const staticGames = gamesFixture as WireGame[];
 const details = detailsFixture as Record<string, DetailFixture>;
 const plays = playsFixture as Record<string, PlayEvent[]>;
 const players = playersFixture as Player[];
+const rosters = rostersFixture as WireRosters;
 
 /** The simulated game's static half; its score and state come from the clock. */
 const SIM_WIRE: WireGame = {
@@ -150,6 +158,15 @@ export function createMockProvider({ clock }: MockProviderOptions): DataProvider
       const player = players.find((candidate) => candidate.id === id);
       if (!player) throw new Error(`Unknown player: ${id}`);
       return player;
+    },
+
+    async getTeamRoster(teamId: string): Promise<RosterEntry[]> {
+      const wire = rosters[teamId];
+      // Loud, like getGame and getPlayer. Only a team that can appear in a
+      // `pre` game needs a roster, so a miss means a new scheduled fixture
+      // arrived without one — a gap in the fixtures, not an empty roster.
+      if (!wire) throw new Error(`No roster fixture for team ${teamId}`);
+      return normalizeRoster(wire);
     },
 
     async getPlayByPlay(id: string): Promise<PlayEvent[]> {

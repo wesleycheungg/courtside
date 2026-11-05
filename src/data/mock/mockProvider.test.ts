@@ -8,6 +8,7 @@ import {
   gameSchema,
   playerSchema,
   parseOrThrow,
+  rosterEntrySchema,
 } from '../schemas';
 
 const MINUTE = 60_000;
@@ -180,5 +181,44 @@ describe('MockProvider.getPlayer and getPlayByPlay', () => {
 
   it('returns an empty list for a game with no plays yet', async () => {
     expect(await providerAt(DURING_Q3).getPlayByPlay('mock-sched-cle-mil')).toEqual([]);
+  });
+});
+
+describe('MockProvider.getTeamRoster', () => {
+  /** Both sides of both scheduled fixtures — every team the UI can ask for. */
+  const SCHEDULED_TEAMS = ['cle', 'mil', 'phx', 'sac'];
+
+  it.each(SCHEDULED_TEAMS)(
+    'returns a roster for %s that satisfies the domain schema',
+    async (teamId) => {
+      const roster = await providerAt(DURING_Q3).getTeamRoster(teamId);
+
+      expect(roster.length).toBeGreaterThan(0);
+      for (const entry of roster) {
+        expect(() =>
+          parseOrThrow(rosterEntrySchema, entry, entry.playerId),
+        ).not.toThrow();
+      }
+    },
+  );
+
+  it('orders a roster by points per game, with the unplayed players last', async () => {
+    const roster = await providerAt(DURING_Q3).getTeamRoster('cle');
+
+    expect(roster[0]?.playerId).toBe('cle-mitchell');
+    expect(roster.at(-1)?.seasonAverages).toBeUndefined();
+  });
+
+  it('leaves a player with no games played without averages, not on zeros', async () => {
+    const roster = await providerAt(DURING_Q3).getTeamRoster('phx');
+    const rookie = roster.find((entry) => entry.playerId === 'phx-peat');
+
+    expect(rookie?.seasonAverages).toBeUndefined();
+  });
+
+  it('throws for a team with no roster fixture', async () => {
+    await expect(providerAt(DURING_Q3).getTeamRoster('gsw')).rejects.toThrow(
+      /no roster fixture/i,
+    );
   });
 });

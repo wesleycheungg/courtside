@@ -15,7 +15,12 @@ import { mkdir, writeFile } from 'node:fs/promises';
 
 const SITE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba';
 const V2 = 'https://site.api.espn.com/apis/v2/sports/basketball/nba';
+// Athlete and roster data live on a different host to the rest.
+const WEB = 'https://site.web.api.espn.com/apis/common/v3/sports/basketball/nba';
 const OUT = new URL('../src/data/espn/fixtures/', import.meta.url);
+
+/** Phoenix. Any team would do; one is captured so the roster shape is pinned. */
+const ROSTER_TEAM_ID = '21';
 
 const today = new Date().toISOString().slice(0, 10).replaceAll('-', '');
 const date = process.argv[2] ?? today;
@@ -56,6 +61,10 @@ const scoreboard = await capture(
 );
 await capture(`standings-${capturedOn}`, `${V2}/standings`);
 await capture(`teams-${capturedOn}`, `${SITE}/teams`);
+await capture(
+  `roster-${ROSTER_TEAM_ID}-${capturedOn}`,
+  `${WEB}/teams/${ROSTER_TEAM_ID}/roster?enable=stats`,
+);
 
 const live = scoreboard?.events?.filter(
   (e) => e.competitions[0].status.type.state === 'in',

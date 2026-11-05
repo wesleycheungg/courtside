@@ -10,6 +10,7 @@
 import {
   espnAthleteSchema,
   espnGameLogSchema,
+  espnRosterSchema,
   espnScoreboardSchema,
   espnStandingsSchema,
   espnSummarySchema,
@@ -19,6 +20,7 @@ import {
 export const contractSchemas = {
   athlete: espnAthleteSchema,
   gamelog: espnGameLogSchema,
+  roster: espnRosterSchema,
   scoreboard: espnScoreboardSchema,
   standings: espnStandingsSchema,
   summary: espnSummarySchema,

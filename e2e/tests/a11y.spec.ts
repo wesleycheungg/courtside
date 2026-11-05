@@ -42,6 +42,10 @@ const SCREENS = [
     path: `/game/sim-live-nyk-bos?simTime=${simTime.thirdQuarter}`,
   },
   { name: 'game detail — box score', path: '/game/mock-final-gsw-okc?tab=boxscore' },
+  {
+    name: 'game detail — pre-game roster',
+    path: '/game/mock-sched-cle-mil?tab=boxscore',
+  },
   { name: 'game detail — plays', path: '/game/mock-final-gsw-okc?tab=plays' },
   { name: 'game detail — shots', path: '/game/mock-final-gsw-okc?tab=shots' },
   { name: 'standings', path: '/leagues' },

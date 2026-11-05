@@ -191,6 +191,23 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 
 ---
 
+## M9 — Pre-game rosters ☑
+
+**Acceptance criteria**
+
+- ☑ Before tip-off the Box score tab lists every player on the selected team's roster
+  with their season averages, instead of "No box score yet."
+- ☑ The team chips choose which roster is shown; it is fetched lazily and only for the
+  side on show, so a finished game makes no roster request at all.
+- ☑ A player with no games played yet reads as a dash in every stat column, never a zero.
+- ☑ The roster reads best scorers first, and the order is deterministic on a tie.
+- ☑ Loading, failure, and empty each render deliberately; a roster failure does not take
+  the rest of the game page down with it.
+- ☑ The new ESPN endpoint is proxied, Zod-validated, cached, and under contract snapshot.
+- ☑ No serious or critical a11y violations on the pre-game roster.
+
+---
+
 ## Later
 
 Shot charts · win probability · following and alerts · other leagues (the data model and

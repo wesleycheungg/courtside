@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { GameDetail, PlayerStatLine } from '../../data/types';
 import { abbreviateName, formatMinutes, formatPlusMinus } from './formatStats';
+import { TeamRoster } from './TeamRoster';
 import './BoxScoreTab.css';
 
 function StatTable({ lines }: { lines: PlayerStatLine[] }) {
@@ -49,6 +50,9 @@ function StatTable({ lines }: { lines: PlayerStatLine[] }) {
 
 export function BoxScoreTab({ game }: { game: GameDetail }) {
   const [side, setSide] = useState<'away' | 'home'>('home');
+  // Before tip-off there is no box score to show, so the chips select a roster
+  // instead. A live game with an empty box still wants StatTable's own copy.
+  const isPregame = game.state.status === 'scheduled';
 
   return (
     <section className="panel">
@@ -66,7 +70,11 @@ export function BoxScoreTab({ game }: { game: GameDetail }) {
         ))}
       </div>
 
-      <StatTable lines={game.boxScore[side]} />
+      {isPregame ? (
+        <TeamRoster team={game[side]} />
+      ) : (
+        <StatTable lines={game.boxScore[side]} />
+      )}
     </section>
   );
 }

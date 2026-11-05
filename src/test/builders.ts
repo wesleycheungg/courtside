@@ -15,6 +15,7 @@ import type {
   PlayEvent,
   Player,
   PlayerStatLine,
+  RosterEntry,
   Standing,
   TeamRef,
 } from '../data/types';
@@ -184,6 +185,24 @@ export function aConference(overrides: Overrides<Conference> = {}): Conference {
   );
 }
 
+export function aRosterEntry(overrides: Overrides<RosterEntry> = {}): RosterEntry {
+  return build(
+    {
+      playerId: 'tatum',
+      name: 'Jayson Tatum',
+      position: 'F',
+      jerseyNumber: '0',
+      seasonAverages: {
+        points: 27.4,
+        rebounds: 8.6,
+        assists: 5.1,
+        fieldGoalPercent: 46.2,
+      },
+    },
+    overrides,
+  );
+}
+
 export function aPlayer(overrides: Overrides<Player> = {}): Player {
   return build(
     {
@@ -232,6 +251,7 @@ export function stubProvider(overrides: ProviderOverrides = {}): DataProvider {
     getGame: overrides.getGame ?? unimplemented('getGame'),
     getStandings: overrides.getStandings ?? unimplemented('getStandings'),
     getPlayer: overrides.getPlayer ?? unimplemented('getPlayer'),
+    getTeamRoster: overrides.getTeamRoster ?? unimplemented('getTeamRoster'),
     getPlayByPlay: overrides.getPlayByPlay ?? unimplemented('getPlayByPlay'),
   };
 }

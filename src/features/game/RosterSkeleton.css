@@ -1,0 +1,24 @@
+/* Mirrors the roster table's columns: a name, then four stats. */
+
+.roster-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.roster-skeleton__row {
+  display: grid;
+  grid-template-columns: 1fr repeat(4, 2.5rem);
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.roster-skeleton__name {
+  /* Shorter than the column, so the rows do not read as a solid block. */
+  width: 60%;
+  height: 1.25rem;
+}
+
+.roster-skeleton__stat {
+  height: 1.25rem;
+}

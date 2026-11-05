@@ -141,6 +141,30 @@ export interface StatTile {
   rank?: number;
 }
 
+/** A player's season averages. Percentages are 0-100, like ShootingSplit. */
+export interface SeasonAverages {
+  points: number;
+  rebounds: number;
+  assists: number;
+  fieldGoalPercent: number;
+}
+
+/**
+ * The pregame counterpart to PlayerStatLine: before tipoff there is no game to
+ * report, so the box score shows who is available and how they have played.
+ */
+export interface RosterEntry {
+  playerId: string;
+  /** Full name; the table abbreviates it, as the box score does. */
+  name: string;
+  /** Position abbreviation, e.g. `G`. */
+  position: string;
+  /** As the source formats it; empty where the source omits it. */
+  jerseyNumber: string;
+  /** Absent for a player who has not appeared this season. */
+  seasonAverages?: SeasonAverages;
+}
+
 export interface ShootingSplit {
   label: string;
   made: number;

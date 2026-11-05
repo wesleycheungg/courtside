@@ -75,3 +75,25 @@
 .box-score__player a:hover {
   text-decoration: underline;
 }
+
+/* ── pre-game roster ──────────────────────────────────────────────────────── */
+
+.roster__caption {
+  text-align: left;
+  padding-bottom: var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+/*
+ * Qualified with the element, so it beats `.box-score th, .box-score td`
+ * rather than quietly losing to it: the jersey sits under a left-aligned `#`
+ * header, unlike every stat column to its right.
+ */
+.box-score td.roster__jersey {
+  width: 2.5rem;
+  padding-left: 0;
+  text-align: left;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}

@@ -733,3 +733,83 @@ stale-while-revalidate=30` gone. Vercel consumes the CDN directives and
   Fine for review, but a preview URL is not shareable as-is.
 - `/api/health` is unauthenticated, uncached (`no-store`) and probes ESPN on
   every request. On a public URL that is an amplifier pointed at a third party.
+
+---
+
+## M9 — Pre-game rosters (2026-11-05)
+
+```
+Tests:    455 vitest (+56: 362 src · 93 api/db/contract) · 114 e2e (+6) · 18 visual
+          22 live contract (+4, scheduled)
+Coverage: 89.8% statements, 79.5% branches (was 88.8 / 76.9)
+Local:    unit 25.9s · e2e 79.3s
+```
+
+The Box score tab was a dead end before tip-off: two team chips and
+`No box score yet.` Now the chips choose a roster, and each row carries the
+player's season averages — jersey, name, position, PTS, REB, AST, FG%.
+
+Bugs caught by tests:
+
+- Nothing upstream, but the browser caught a CSS one the tests could not:
+  `.roster__jersey` was losing a specificity fight with
+  `.box-score th, .box-score td` (0,1,0 against 0,1,1), so jersey numbers sat
+  right-aligned under a left-aligned `#` header and the extra width clipped the
+  FG% column. Qualifying the selector with the element fixed both. Worth noting
+  that `.box-score__player`'s `text-align: left` and `padding-left: 0` have
+  been losing the same fight since M3 — the final-game table only looks
+  left-aligned because the name column is sized to its widest name.
+
+Flaky:
+
+- None observed.
+
+Notes:
+
+- **A pre-game summary carries no roster and no player stats.** Verified
+  against the live API while planning: `boxscore` holds only `teams`, there is
+  no `rosters` key, and `boxscore.players` is empty. So this needed a new
+  upstream endpoint — `teams/{id}/roster?enable=stats` on the web host, which
+  already hosts the athlete endpoints. The `leaders` block on a pre-game
+  summary was the near miss: it has season averages, but only for three
+  players per team.
+- **Rosters are not on `GameDetail`.** Bolting them onto the summary fetch
+  would have cost every finished game two upstream requests for data it can
+  never render. `getTeamRoster` is its own provider method, fetched from the
+  tab, gated on `status === 'scheduled'`, and keyed by team so flipping the
+  chips back is instant. A component test asserts a final game never calls it,
+  with the stub left unimplemented so a regression rejects loudly.
+- **Four averages, and only four.** PTS, REB, AST and FG% are everything the
+  endpoint exposes, spread across two categories — REB under `general`, the
+  rest under `offensive`. The normalizer flattens and reads by name.
+- **No averages beats zeroed averages.** Two of Phoenix's 17 athletes send
+  `statistics.splits` as an empty object. `seasonAverages` is left absent
+  rather than filled with zeros, because a rookie who has not played and a
+  player averaging 0.0 are different claims — they sort differently and they
+  render differently (a dash, not `0.0`).
+- **Shape facts pinned by the captured fixture**, not by assumption:
+  `athlete.id` is a string, `jersey` is sometimes `null` rather than absent,
+  and `positionGroups[].position` is always `null` so the schema leaves it out.
+- `jsonResponse` pins `s-maxage=12` for every route, so the roster's 5-minute
+  TTL only helps a warm instance. Inherited from `/api/teams` (24h) and
+  `/api/player` (60s), which have the same mismatch. Recorded, not fixed —
+  giving the shared helper a TTL parameter is its own change.
+- The proxy returns ESPN's raw roster, ~385 kB for 17 athletes. Normalizing
+  server-side would shrink it a lot but would put domain mapping outside
+  `src/data/`. Left as a trade-off to revisit if the payload starts to matter.
+- **First e2e spec to visit a scheduled game detail page at all.** Both
+  `mock-sched-*` fixtures had been reachable but unvisited since M3.
+- No new visual baseline. `@visual` is excluded from CI, baselines are macOS
+  only, and `test:visual:update` rewrites every file — not worth the churn on
+  this change. The existing `game-boxscore` baseline points at the final game
+  and was confirmed unmoved.
+
+### Not done
+
+- Mock roster fixtures exist only for `cle`, `mil`, `phx` and `sac` — the four
+  teams that can appear in a `pre` fixture. Any other team throws
+  `No roster fixture for team <id>`, deliberately. A new scheduled fixture
+  needs a roster added alongside it.
+- The roster links each name to `/player/<id>`, but mock `players.json` still
+  holds only `tatum` and `brunson`, so those links dead-end under the mock
+  provider. Pre-existing — the final-game box score has the same gap.

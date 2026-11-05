@@ -1,0 +1,31 @@
+{
+  "schema": "roster",
+  "snapshotVersion": 1,
+  "fingerprint": "6022db093f73",
+  "fields": {
+    "positionGroups": "array",
+    "positionGroups[]": "object",
+    "positionGroups[].athletes": "array",
+    "positionGroups[].athletes[]": "object",
+    "positionGroups[].athletes[].displayName": "string",
+    "positionGroups[].athletes[].id": "string",
+    "positionGroups[].athletes[].jersey": "string|null?",
+    "positionGroups[].athletes[].position": "object|null?",
+    "positionGroups[].athletes[].position.abbreviation": "string?",
+    "positionGroups[].athletes[].statistics": "object?",
+    "positionGroups[].athletes[].statistics.splits": "object?",
+    "positionGroups[].athletes[].statistics.splits.categories": "array?",
+    "positionGroups[].athletes[].statistics.splits.categories[]": "object",
+    "positionGroups[].athletes[].statistics.splits.categories[].name": "string",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats": "array",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats[]": "object",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats[].abbreviation": "string?",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats[].displayName": "string?",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats[].displayValue": "string?",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats[].name": "string",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats[].rank": "number?",
+    "positionGroups[].athletes[].statistics.splits.categories[].stats[].value": "number?",
+    "season": "object?",
+    "season.year": "number?"
+  }
+}

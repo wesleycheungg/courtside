@@ -18,6 +18,15 @@ export function formatMinutes(minutes: number): string {
   return String(Math.round(minutes));
 }
 
+/**
+ * A season average to one decimal place, or a dash for a player with no games
+ * yet. Rounding here rather than trusting the source's own display string
+ * keeps the column consistent across providers.
+ */
+export function formatAverage(value: number | undefined): string {
+  return value === undefined ? '—' : value.toFixed(1);
+}
+
 /** A real minus sign rather than a hyphen, matching the design. */
 export function formatPlusMinus(value: number | undefined): string {
   if (value === undefined) return '—';

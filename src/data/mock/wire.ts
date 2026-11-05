@@ -49,6 +49,31 @@ export interface WireGame {
   linescores: WireLineScore[];
 }
 
+/** Per-game averages, as a feed sends them: raw stat names, strings. */
+export interface WireRosterStats {
+  avgPoints: string;
+  avgRebounds: string;
+  avgAssists: string;
+  fieldGoalPct: string;
+}
+
+export interface WireRosterPlayer {
+  playerId: string;
+  firstName: string;
+  lastName: string;
+  jersey: string;
+  positionAbbrev: string;
+  /** Absent for a player who has not appeared this season — never zeroed. */
+  stats?: WireRosterStats;
+}
+
+/**
+ * Keyed by teamId. Only the teams that can appear in a `pre` game need an
+ * entry; the mock provider throws for anything else, so a new scheduled
+ * fixture without a roster fails loudly rather than rendering an empty table.
+ */
+export type WireRosters = Record<string, WireRosterPlayer[]>;
+
 export interface WireStandingRow {
   teamId: string;
   wins: number;

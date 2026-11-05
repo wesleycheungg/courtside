@@ -17,6 +17,8 @@ const ESPN_WEB = 'https://site.web.api.espn.com/apis/common/v3/sports/basketball
 export const CACHE_TTL_MS = 12_000;
 /** Team metadata changes about once a year. */
 export const TEAMS_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
+/** A roster's season averages only move when one of its games finishes. */
+export const ROSTER_CACHE_TTL_MS = 5 * 60 * 1000;
 
 interface CacheEntry {
   expiresAt: number;
@@ -139,6 +141,7 @@ export const espnUrls = {
   summary: (eventId: string) => `${ESPN_SITE}/summary?event=${eventId}`,
   standings: () => `${ESPN_V2}/standings`,
   teams: () => `${ESPN_SITE}/teams`,
+  teamRoster: (teamId: string) => `${ESPN_WEB}/teams/${teamId}/roster?enable=stats`,
   athlete: (id: string) => `${ESPN_WEB}/athletes/${id}`,
   athleteGameLog: (id: string) => `${ESPN_WEB}/athletes/${id}/gamelog`,
 };
