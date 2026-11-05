@@ -7,12 +7,16 @@ import { StandingsSkeleton } from './StandingsSkeleton';
 import { useStandings } from './useStandings';
 import './LeaguesPage.css';
 
-function StandingRow({ row }: { row: Standing }) {
+function StandingRow({ row, bandStart }: { row: Standing; bandStart: boolean }) {
   const band = seedBand(row.rank);
   const label = seedBandLabel(band);
 
   return (
-    <tr className={`standings__row standings__row--${band}`}>
+    <tr
+      className={`standings__row standings__row--${band}${
+        bandStart ? ' standings__row--band-start' : ''
+      }`}
+    >
       <th scope="row" className="standings__team">
         <span className={`standings__seed standings__seed--${band}`}>
           {row.rank}
@@ -52,9 +56,19 @@ function StandingsTable({ conference }: { conference: Conference }) {
           </tr>
         </thead>
         <tbody>
-          {conference.standings.map((row) => (
-            <StandingRow key={row.team.id} row={row} />
-          ))}
+          {conference.standings.map((row, i) => {
+            const previous = conference.standings[i - 1];
+            return (
+              <StandingRow
+                key={row.team.id}
+                row={row}
+                // The cutoff rule goes on the first row of each band.
+                bandStart={
+                  previous !== undefined && seedBand(row.rank) !== seedBand(previous.rank)
+                }
+              />
+            );
+          })}
         </tbody>
       </table>
     </div>

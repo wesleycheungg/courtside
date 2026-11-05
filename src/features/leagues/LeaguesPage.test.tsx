@@ -107,6 +107,19 @@ describe('LeaguesPage', () => {
     expect(rows[10]).not.toHaveTextContent('position');
   });
 
+  it('rules off the playoff and play-in cutoffs, and nowhere else', async () => {
+    renderWithProviders(<LeaguesPage />, { provider: provider() });
+    const table = await screen.findByRole('table');
+    const rows = within(table).getAllByRole('row').slice(1);
+
+    const ruled = rows
+      .map((row, i) => (row.classList.contains('standings__row--band-start') ? i + 1 : 0))
+      .filter(Boolean);
+
+    // Seeds 7 and 11 open a new band; every other row keeps the hairline.
+    expect(ruled).toEqual([7, 11]);
+  });
+
   it('explains the bands in a caption as well as a legend', async () => {
     renderWithProviders(<LeaguesPage />, { provider: provider() });
 
