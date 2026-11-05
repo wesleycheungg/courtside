@@ -70,10 +70,11 @@
   border-top: 1px solid var(--color-border);
 }
 
-/* A thicker rule marks the postseason cutoffs, so the bands are visible
-   without relying on the seed badge colour. */
-.standings__row--playin:first-of-type th,
-.standings__row--playin:first-of-type td {
+/* A thicker rule marks both postseason cutoffs — above seed 7 and above
+   seed 11 — so the bands are visible without relying on the badge colour.
+   Two classes beat `.standings tbody tr + tr th` on specificity. */
+.standings tbody tr.standings__row--band-start th,
+.standings tbody tr.standings__row--band-start td {
   border-top-width: 2px;
   border-top-color: var(--color-muted);
 }
