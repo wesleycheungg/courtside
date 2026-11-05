@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { abbreviateName, formatMinutes, formatPlusMinus } from './formatStats';
+import {
+  abbreviateName,
+  formatAverage,
+  formatMinutes,
+  formatPlusMinus,
+} from './formatStats';
 
 describe('abbreviateName', () => {
   it('shortens a first name to an initial', () => {
@@ -44,5 +49,21 @@ describe('formatPlusMinus', () => {
 
   it('dashes a player with no value', () => {
     expect(formatPlusMinus(undefined)).toBe('—');
+  });
+});
+
+describe('formatAverage', () => {
+  it('shows one decimal place', () => {
+    expect(formatAverage(24.666666)).toBe('24.7');
+    expect(formatAverage(48.51499)).toBe('48.5');
+  });
+
+  it('pads a whole number out to a decimal, so the column lines up', () => {
+    expect(formatAverage(5)).toBe('5.0');
+  });
+
+  it('keeps a genuine zero distinct from a player who has not played', () => {
+    expect(formatAverage(0)).toBe('0.0');
+    expect(formatAverage(undefined)).toBe('—');
   });
 });

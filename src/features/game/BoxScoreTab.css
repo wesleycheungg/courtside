@@ -75,3 +75,26 @@
 .box-score__player a:hover {
   text-decoration: underline;
 }
+
+/* ── pre-game roster ──────────────────────────────────────────────────────── */
+
+.roster__caption {
+  text-align: left;
+  padding-bottom: var(--space-3);
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+.roster__jersey {
+  /* Left-aligned under its own header, unlike the stat columns. */
+  text-align: left;
+  padding-left: 0;
+  width: 2.5rem;
+  color: var(--color-muted);
+  font-size: var(--text-sm);
+}
+
+/* Player is the second column here, so it keeps its gutter. */
+.roster .box-score__player {
+  padding-left: var(--space-2);
+}
