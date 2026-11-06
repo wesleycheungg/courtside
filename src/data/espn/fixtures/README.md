@@ -11,6 +11,12 @@ upstream can be diffed against a known-good payload.
 | `standings-2026-11-03.json`            | `v2/.../nba/standings`                | 2026-11-03 | Both conferences, 15 entries each, full stat arrays          |
 | `teams-2026-11-03.json`                | `nba/teams`                           | 2026-11-03 | All 30 teams with colors and logos                           |
 | `roster-21-2026-11-05.json`            | `v3/.../teams/21/roster?enable=stats` | 2026-11-05 | Phoenix: 17 athletes, 15 with season averages and 2 without  |
+| `summary-final-401909907.json`         | `nba/summary?event=401909907`         | 2026-11-03 | A finished game: linescores, team stats, player box score    |
+| `summary-pregame-401909289.json`       | `nba/summary?event=401909289`         | 2026-11-06 | PHI @ CLE before tip-off: `boxscore.teams` season averages   |
+
+The two summaries keep only the top-level keys `espnSummarySchema` models —
+`header`, `boxscore`, and `plays`. Whole keys are dropped (`odds`, `predictor`,
+`pickcenter`, …); nothing inside a kept key is edited.
 
 ## Missing: a live game
 
@@ -46,6 +52,15 @@ Things that are not obvious and that the normalizer has to handle:
 - A **pre-game summary carries no roster and no player stats**. Its `boxscore`
   holds only `teams` — there is no `rosters` key and `boxscore.players` is
   empty. That is why rosters come from a separate endpoint, on the web host.
+- `boxscore.teams[].statistics` **means different things before and after tip-off**.
+  After, it is that game's stats (`totalRebounds`, `assists`, `pointsInPaint`, …).
+  Before, it is the team's **season averages** (`avgPoints`, `avgPointsAgainst`,
+  `avgRebounds`, …) plus `streak` and `Last Ten Games`. The two sets overlap
+  only on `fieldGoalPct` and `threePointFieldGoalPct`, so reading a pre-game
+  summary with the played-game names yields exactly two rows and no error.
+  Which set to expect is decided by the game's state, never by sniffing names.
+- One pre-game stat name, **`Last Ten Games`, has spaces in it** — it is not
+  camelCase like every other name in the array.
 - A roster athlete's four season averages are **split across categories**: REB
   under `general`, PTS/AST/FG% under `offensive`. Read them by name, never by
   position.

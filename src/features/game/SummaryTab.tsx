@@ -43,16 +43,39 @@ function Linescore({ game }: { game: GameDetail }) {
   );
 }
 
+/**
+ * Played stats once the game tips off, season averages before it — the same
+ * paired-bar panel either way, because the shape of the comparison does not
+ * change, only what is being compared.
+ */
 function TeamStats({ game }: { game: GameDetail }) {
-  if (game.teamStats.length === 0) return null;
+  if (game.teamStats.length === 0 && game.teamForm.length === 0) return null;
 
+  const pregame = game.state.status === 'scheduled';
   const awayFill = barColor(game.away.color);
   const homeFill = barColor(game.home.color);
+  const lastForm = game.teamForm.length - 1;
 
   return (
     <section className="panel">
-      <h2 className="panel__title">Team Stats</h2>
+      <h2 className="panel__title">{pregame ? 'Season Averages' : 'Team Stats'}</h2>
       <ul className="team-stats">
+        {game.teamForm.map((line, index) => (
+          <li
+            className={
+              index === lastForm
+                ? 'team-stats__row team-stats__row--form team-stats__row--form-last'
+                : 'team-stats__row team-stats__row--form'
+            }
+            key={line.label}
+          >
+            <span className="team-stats__value">{line.awayValue}</span>
+            <span className="team-stats__label">{line.label}</span>
+            <span className="team-stats__value team-stats__value--end">
+              {line.homeValue}
+            </span>
+          </li>
+        ))}
         {game.teamStats.map((stat) => (
           <li className="team-stats__row" key={stat.label}>
             <span className="team-stats__value">{stat.awayValue}</span>
@@ -153,6 +176,7 @@ export function SummaryTab({ game }: { game: GameDetail }) {
   const empty =
     game.periods.length === 0 &&
     game.teamStats.length === 0 &&
+    game.teamForm.length === 0 &&
     game.statLeaders.length === 0;
 
   if (empty) {

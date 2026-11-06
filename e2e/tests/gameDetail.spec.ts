@@ -62,6 +62,32 @@ test.describe('game detail', () => {
     }
   });
 
+  test('a pre-game summary compares season averages @regression', async ({ page }) => {
+    const detail = new GameDetailPage(page);
+    await detail.goto(SCHEDULED_GAME);
+
+    await expect(detail.teamStatsHeading()).toHaveText('Season Averages');
+
+    // Two form lines above the eight averages.
+    await expect(detail.teamStatRows()).toHaveCount(10);
+    await expect(detail.teamStatRow('Streak')).toContainText('W6');
+    await expect(detail.teamStatRow('Last 10')).toContainText('2-5');
+    await expect(detail.teamStatRow('Points Per Game')).toContainText('119.3');
+    await expect(detail.teamStatRow('Points Allowed')).toContainText('110.4');
+
+    // Nothing has been played, so neither of the other panels has anything.
+    await expect(page.getByRole('heading', { name: 'Linescore' })).toBeHidden();
+    await expect(page.getByRole('heading', { name: 'Game Leaders' })).toBeHidden();
+  });
+
+  test('a finished summary keeps its played stats @regression', async ({ page }) => {
+    const detail = new GameDetailPage(page);
+    await detail.goto(FINAL_GAME);
+
+    await expect(detail.teamStatsHeading()).toHaveText('Team Stats');
+    await expect(detail.teamStatRow('Points Per Game')).toHaveCount(0);
+  });
+
   test('box score switches between teams @regression', async ({ page }) => {
     const detail = new GameDetailPage(page);
     await detail.goto(FINAL_GAME, { tab: 'boxscore' });

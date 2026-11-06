@@ -139,6 +139,8 @@ export function aGameDetail(overrides: Overrides<GameDetail> = {}): GameDetail {
       teamStats: [
         { label: 'Rebounds', awayValue: '40', homeValue: '46', awayShare: 0.47 },
       ],
+      // Pre-game only, so the default game — which has played — carries none.
+      teamForm: [],
       boxScore,
       topPerformers: [homeLeader],
       statLeaders: [

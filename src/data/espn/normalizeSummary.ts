@@ -12,14 +12,20 @@ import type {
   Period,
   PlayEvent,
   PlayerStatLine,
+  TeamFormLine,
   TeamStat,
 } from '../types';
 import { pickStatLeaders } from '../statLeaders';
 import type { EspnBoxscoreTeam, EspnPlayerGroup, EspnSummary } from './espnSchemas';
 import { normalizeEspnGame, normalizeEspnPeriods, sideOf } from './normalizeEspn';
 
+interface StatLabel {
+  name: string;
+  label: string;
+}
+
 /** Stats we surface in the comparison, in the order the design shows them. */
-const TEAM_STAT_LABELS: { name: string; label: string }[] = [
+const TEAM_STAT_LABELS: StatLabel[] = [
   { name: 'fieldGoalPct', label: 'Field Goal %' },
   { name: 'threePointFieldGoalPct', label: '3-Point %' },
   { name: 'freeThrowPct', label: 'Free Throw %' },
@@ -28,6 +34,33 @@ const TEAM_STAT_LABELS: { name: string; label: string }[] = [
   { name: 'steals', label: 'Steals' },
   { name: 'turnovers', label: 'Turnovers' },
   { name: 'pointsInPaint', label: 'Points in Paint' },
+];
+
+/**
+ * Before tip-off ESPN fills the very same `boxscore.teams[].statistics` array
+ * with season averages instead of played stats. The two name sets overlap only
+ * on the two percentages, which is why reading a pre-game summary with
+ * `TEAM_STAT_LABELS` used to yield exactly two rows.
+ *
+ * No free-throw percentage here: the pre-game bag does not carry one, and a
+ * stat the source does not send is never invented.
+ */
+const SEASON_STAT_LABELS: StatLabel[] = [
+  { name: 'avgPoints', label: 'Points Per Game' },
+  { name: 'avgPointsAgainst', label: 'Points Allowed' },
+  { name: 'fieldGoalPct', label: 'Field Goal %' },
+  { name: 'threePointFieldGoalPct', label: '3-Point %' },
+  { name: 'avgRebounds', label: 'Rebounds' },
+  { name: 'avgAssists', label: 'Assists' },
+  { name: 'avgSteals', label: 'Steals' },
+  { name: 'avgTotalTurnovers', label: 'Turnovers' },
+];
+
+/** Records, not magnitudes — shown without bars. ESPN's name really does
+ *  carry spaces on the second one. */
+const FORM_STAT_LABELS: StatLabel[] = [
+  { name: 'streak', label: 'Streak' },
+  { name: 'Last Ten Games', label: 'Last 10' },
 ];
 
 /** "12-31" and "43" both need to become a number to size a bar. */
@@ -52,10 +85,11 @@ function findStat(team: EspnBoxscoreTeam | undefined, name: string): string | un
 export function normalizeTeamStats(
   away: EspnBoxscoreTeam | undefined,
   home: EspnBoxscoreTeam | undefined,
+  labels: StatLabel[] = TEAM_STAT_LABELS,
 ): TeamStat[] {
   const stats: TeamStat[] = [];
 
-  for (const { name, label } of TEAM_STAT_LABELS) {
+  for (const { name, label } of labels) {
     const awayValue = findStat(away, name);
     const homeValue = findStat(home, name);
     // A stat ESPN did not send is omitted rather than rendered as a zero bar.
@@ -71,6 +105,23 @@ export function normalizeTeamStats(
   }
 
   return stats;
+}
+
+export function normalizeTeamForm(
+  away: EspnBoxscoreTeam | undefined,
+  home: EspnBoxscoreTeam | undefined,
+): TeamFormLine[] {
+  const lines: TeamFormLine[] = [];
+
+  for (const { name, label } of FORM_STAT_LABELS) {
+    const awayValue = findStat(away, name);
+    const homeValue = findStat(home, name);
+    if (awayValue === undefined || homeValue === undefined) continue;
+
+    lines.push({ label, awayValue, homeValue });
+  }
+
+  return lines;
 }
 
 /** Minutes arrive as "29"; a player who did not appear has "--". */
@@ -166,10 +217,20 @@ export function normalizeEspnSummary(summary: EspnSummary): GameDetail {
     home: normalizePlayerGroup(byTeamId(homeCompetitor?.team.id)),
   };
 
+  // Which bag `boxscore.teams[].statistics` holds follows the game's state, so
+  // read it off the state rather than sniffing the names — an odd payload then
+  // yields no rows instead of a panel labelled as the wrong thing.
+  const pregame = game.state.status === 'scheduled';
+
   return {
     ...game,
     periods,
-    teamStats: normalizeTeamStats(awayBox, homeBox),
+    teamStats: normalizeTeamStats(
+      awayBox,
+      homeBox,
+      pregame ? SEASON_STAT_LABELS : TEAM_STAT_LABELS,
+    ),
+    teamForm: pregame ? normalizeTeamForm(awayBox, homeBox) : [],
     boxScore,
     topPerformers: pickTopPerformers(boxScore),
     statLeaders: pickStatLeaders(boxScore),

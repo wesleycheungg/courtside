@@ -348,6 +348,53 @@ describe('ESPN summary', () => {
     },
     TIMEOUT,
   );
+
+  /** The eight the pre-game Summary tab compares, by ESPN's own names. */
+  const SEASON_AVERAGE_NAMES = [
+    'avgPoints',
+    'avgPointsAgainst',
+    'fieldGoalPct',
+    'threePointFieldGoalPct',
+    'avgRebounds',
+    'avgAssists',
+    'avgSteals',
+    'avgTotalTurnovers',
+  ];
+
+  it(
+    'still carries the season averages the pre-game panel reads',
+    async () => {
+      const slateEvents = contractSchemas.scoreboard.parse(slate.payload).events;
+      const scheduled = slateEvents.find(
+        (event) => event.competitions[0]?.status.type.state === 'pre',
+      );
+      if (!scheduled) {
+        notes.push(
+          '_No scheduled game on the sampled slate; the pre-game season averages were not exercised._',
+        );
+        return;
+      }
+
+      const pregame = contractSchemas.summary.parse(
+        await fetchJson(espnUrls.summary(scheduled.id)),
+      );
+
+      // Before tip-off ESPN reuses `boxscore.teams[].statistics` for season
+      // averages instead of played stats. A rename here costs the panel a row
+      // in silence — the normalizer skips what it cannot find — so the names
+      // are asserted rather than the shape.
+      const teams = pregame.boxscore?.teams ?? [];
+      expect(teams.length).toBe(2);
+
+      for (const team of teams) {
+        const names = new Set(team.statistics.map((stat) => stat.name));
+        for (const name of SEASON_AVERAGE_NAMES) {
+          expect(names, `${team.team.abbreviation} is missing ${name}`).toContain(name);
+        }
+      }
+    },
+    TIMEOUT,
+  );
 });
 
 /* ── standings and teams ──────────────────────────────────────────────────── */

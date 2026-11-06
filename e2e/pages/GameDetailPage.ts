@@ -48,6 +48,23 @@ export class GameDetailPage {
     return this.page.locator('.plays__row');
   }
 
+  /**
+   * The paired-bar panel on the Summary tab. It is headed "Season Averages"
+   * before tip-off and "Team Stats" after it, so the heading is the assertion
+   * a caller usually wants.
+   */
+  teamStatsHeading(): Locator {
+    return this.page.getByRole('heading', { name: /^(Season Averages|Team Stats)$/ });
+  }
+
+  teamStatRows(): Locator {
+    return this.page.locator('.team-stats__row');
+  }
+
+  teamStatRow(label: string): Locator {
+    return this.teamStatRows().filter({ hasText: label });
+  }
+
   /** The pre-game roster table, which replaces the box score before tip-off. */
   rosterRows(): Locator {
     return this.page.locator('table.roster tbody tr');

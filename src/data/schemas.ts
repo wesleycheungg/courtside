@@ -62,6 +62,12 @@ export const teamStatSchema = z.object({
   awayShare: z.number().min(0).max(1),
 });
 
+export const teamFormLineSchema = z.object({
+  label: z.string().min(1),
+  awayValue: z.string().min(1),
+  homeValue: z.string().min(1),
+});
+
 export const playerStatLineSchema = z.object({
   playerId: z.string().min(1),
   name: z.string().min(1),
@@ -90,6 +96,7 @@ export const statLeaderSchema = z.object({
 export const gameDetailSchema = gameSchema.extend({
   periods: z.array(periodSchema),
   teamStats: z.array(teamStatSchema),
+  teamForm: z.array(teamFormLineSchema),
   boxScore: boxScoreSchema,
   topPerformers: z.array(playerStatLineSchema),
   statLeaders: z.array(statLeaderSchema),

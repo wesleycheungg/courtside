@@ -883,3 +883,86 @@ th:first-child` matches `#` instead. That is exactly what the pre-game
   fight, so names in both tables sit right-aligned against the rule's intent.
   Recorded in M9, unchanged here — fixing it moves every name in two tables
   and belongs in its own diff.
+
+## M9.2 — Pre-game season averages (2026-11-06)
+
+```
+Tests:    477 vitest (+15: 384 src · 93 api/db/contract) · 124 e2e (+6) · 18 visual
+          24 live contract (+1, scheduled — exercised by hand against the live slate)
+Coverage: 89.9% statements, 79.9% branches (was 89.8 / 79.6)
+Local:    unit 25.5s · e2e 26.9s · visual 11.9s
+```
+
+Before tip-off the Summary tab showed a panel headed `Team Stats` with two rows
+in it: Field Goal % and 3-Point %. It now shows eight season averages under
+`Season Averages`, with each side's streak and last-ten record ruled off above
+them.
+
+Bugs caught by tests:
+
+- None. This was a bug the tests could not catch, because nothing asserted the
+  pre-game panel at all — `GameDetailPage.test.tsx` covered the linescore and
+  the empty state, `GameLeaders.test.tsx` covered the leaders, and the stat
+  comparison had no test of its own at any level. Two rows where eight belong
+  is exactly the failure a missing assertion hides: nothing throws, nothing
+  parses wrong, the panel just quietly says less than it should. The gap is
+  closed from both ends now — `SummaryTab.test.tsx` and two e2e specs.
+
+Flaky:
+
+- None observed.
+
+Notes:
+
+- **`boxscore.teams[].statistics` means two different things.** After tip-off
+  it is that game's stats; before it, the team's season averages, plus
+  `streak` and `Last Ten Games`. Same key, same array shape, disjoint names —
+  the only two that appear in both sets are `fieldGoalPct` and
+  `threePointFieldGoalPct`, which is precisely why the pre-game panel rendered
+  two rows and no error. The normalizer's "a stat ESPN did not send is
+  omitted rather than rendered as a zero bar" guard, added in M3 to be
+  careful, was silently eating ten fields.
+- **M9's note was right about players and wrong by implication.** It recorded
+  that a pre-game summary "carries no roster and no player stats", which is
+  true and is why `getTeamRoster` exists. It did not say that the same payload
+  is carrying _team_ season averages, because the search was for player data.
+  Worth remembering: "endpoint X has nothing for us" is a claim about the
+  question asked, not about the payload.
+- **The state decides, not the names.** `normalizeEspnSummary` picks the label
+  set from `game.state.status`, not from which names happen to be present.
+  Sniffing would be more tolerant of a mid-game payload that carries both bags,
+  but tolerant of the wrong thing — a panel headed `Season Averages` showing
+  played stats is worse than a panel with no rows.
+- **Form is not a `TeamStat`.** `TeamStat.awayShare` is required and always
+  sizes a bar. "W5" and "8-1" have no magnitude to split, so they are
+  `TeamFormLine` on a separate `GameDetail.teamForm` field rather than a
+  `TeamStat` with an optional share. One more field, but the invariant that a
+  share always means a bar survives.
+- **The bars size by magnitude, not by goodness.** On Points Allowed and
+  Turnovers the longer bar belongs to the worse team. Inverting those two and
+  not the rest would make the panel harder to read, not easier, and the live
+  panel has treated Turnovers this way since M3. Left consistent, recorded
+  here rather than fixed.
+- **No schema change, so no snapshot churn.** `espnTeamStatSchema` is
+  `{ name, displayValue, label?, abbreviation? }` and already parsed the
+  pre-game bag. `contract/snapshots/summary.json` is untouched; the new
+  contract test asserts the eight names have not moved, the same way the
+  roster suite asserts its four.
+- **Checked against the whole slate, not one game.** All nine scheduled games
+  on 2026-11-06 carry all ten names on both teams. The captured fixture is one
+  of them, PHI @ CLE.
+- **`Last Ten Games` has spaces in its `name`.** Every other name in the array
+  is camelCase. Recorded in the fixtures README.
+
+### Not done
+
+- No visual baseline for the pre-game summary. The existing `game-summary`
+  screen is the live sim game and is unaffected; adding a scheduled screen
+  means a new macOS-only PNG, and the 18 existing baselines are already stale
+  by M9.1's reckoning. It belongs with a full regeneration, not here.
+- `avgBlocks` and `avgTeamTurnovers` come through on the wire and are dropped.
+  Eight is the cap the panel was designed to, and `avgTotalTurnovers` is the
+  turnover number that matters.
+- The sim game never has a `scheduled` state — it is live or final at every
+  offset — so the pre-game panel has no simulated-clock coverage. The two
+  static `mock-sched-*` fixtures carry it instead.
