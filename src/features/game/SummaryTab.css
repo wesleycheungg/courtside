@@ -71,6 +71,18 @@
   margin-bottom: var(--space-4);
 }
 
+/* No bar on the second grid row, so the row needs less of a gap under it. The
+   last one rules the pre-game form pair off from the averages below. */
+.team-stats__row--form {
+  margin-bottom: var(--space-2);
+}
+
+.team-stats__row--form-last {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-4);
+}
+
 .team-stats__value {
   font-weight: var(--weight-semibold);
   font-variant-numeric: tabular-nums;
