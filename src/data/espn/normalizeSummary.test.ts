@@ -74,7 +74,7 @@ describe('normalizePlayerGroup', () => {
           labels: ['PTS', 'MIN', '+/-', 'AST', 'REB', 'FG'],
           athletes: [
             {
-              athlete: { id: '9', displayName: 'Test Player' },
+              athlete: { id: '9', displayName: 'Test Player', jersey: '13' },
               stats: ['28', '30', '-4', '5', '9', '10-19'],
             },
           ],
@@ -87,6 +87,7 @@ describe('normalizePlayerGroup', () => {
         playerId: '9',
         name: 'Test Player',
         position: '—',
+        jerseyNumber: '13',
         minutes: 30,
         points: 28,
         rebounds: 9,
@@ -117,6 +118,26 @@ describe('normalizePlayerGroup', () => {
     };
 
     expect(normalizePlayerGroup(group).map((l) => l.playerId)).toEqual(['1']);
+  });
+
+  it('empties a jersey the summary omits or nulls, rather than dropping the row', () => {
+    const group = {
+      team: { id: '1', abbreviation: 'BOS', displayName: 'Boston Celtics' },
+      statistics: [
+        {
+          labels: ['MIN', 'PTS'],
+          athletes: [
+            { athlete: { id: '1', displayName: 'No jersey key' }, stats: ['30', '28'] },
+            {
+              athlete: { id: '2', displayName: 'Null jersey', jersey: null },
+              stats: ['12', '4'],
+            },
+          ],
+        },
+      ],
+    };
+
+    expect(normalizePlayerGroup(group).map((l) => l.jerseyNumber)).toEqual(['', '']);
   });
 });
 
@@ -158,6 +179,14 @@ describe('normalizeEspnSummary over the captured response', () => {
   it('builds a box score for both sides', () => {
     expect(detail.boxScore.away.length).toBeGreaterThan(0);
     expect(detail.boxScore.home.length).toBeGreaterThan(0);
+  });
+
+  it('carries a jersey number for every player who appeared', () => {
+    const lines = [...detail.boxScore.away, ...detail.boxScore.home];
+
+    // Every athlete in the captured response has one, so an empty string here
+    // means the field was dropped on the way through rather than missing.
+    expect(lines.every((line) => /^\d+$/.test(line.jerseyNumber))).toBe(true);
   });
 
   it('produces team stats with shares inside 0 to 1', () => {

@@ -813,3 +813,73 @@ Notes:
 - The roster links each name to `/player/<id>`, but mock `players.json` still
   holds only `tatum` and `brunson`, so those links dead-end under the mock
   provider. Pre-existing — the final-game box score has the same gap.
+
+## M9.1 — Jersey numbers in the played box score (2026-11-05)
+
+```
+Tests:    462 vitest (+7: 369 src · 93 api/db/contract) · 118 e2e (+4) · 18 visual
+          23 live contract (+1, scheduled — not run locally)
+Coverage: 89.8% statements, 79.6% branches (was 89.8 / 79.5)
+Local:    unit 11.6s · e2e 32.0s · visual 20.0s
+```
+
+M9 gave the pre-game roster a leading `#` column. The box score it hands over
+to at tip-off still had none, so the same table lost a column the moment the
+game started. `PlayerStatLine` now carries `jerseyNumber` and both tables read
+the same from the first column across.
+
+Bugs caught by tests:
+
+- None. The change is one field carried end to end, and every layer that had
+  to learn about it — domain schema, mock fixture, builders — failed loudly
+  until it did. `mockProvider.test.ts` parsing the sim detail against
+  `gameDetailSchema` is what caught `details.json` before anything rendered.
+
+Flaky:
+
+- None observed.
+
+Notes:
+
+- **ESPN already sends it.** `boxscore.players[].statistics[].athletes[]
+.athlete.jersey` was in the captured response all along and simply was not
+  read. Adding it to the schema moved one line in `contract/snapshots/
+summary.json`, which is the diff worth reviewing.
+- **Nullish, like the roster's.** The roster schema learned in M9 that ESPN
+  sends `jersey: null` rather than omitting it. The summary's is typed the
+  same way for the same reason, even though all 23 athletes in the captured
+  fixture carry one.
+- **Empty, not a dash.** A missing stat is dashed on the roster because zero
+  would be a false claim. A missing jersey is not a claim at all, so the cell
+  is left blank. Covered both ways in `BoxScoreTab.test.tsx`.
+- **`'00'` is why the field is a string.** Kuminga's number in the mock
+  fixture, and a component test pins that it survives as typed rather than
+  being normalized to `0`.
+- **One CSS rule, not two.** `.roster__jersey` became `.box-score__jersey` and
+  is now shared by both tables. It keeps the element qualifier M9 gave it for
+  the specificity reason recorded above.
+- **The `Player` header is right-aligned now**, because `.box-score thead
+th:first-child` matches `#` instead. That is exactly what the pre-game
+  roster has looked like since M9, so the two tables agree — but it is a
+  visible change to the played box score, not a no-op.
+- **The `game-boxscore` mobile baseline was already stale.** M9 recorded it as
+  "confirmed unmoved"; it was not. The stored PNG dates from 2026-11-03
+  (`3789532`) and thirteen commits touched `src/features/game/` after it,
+  including M9's own chip reorder and the Game Leaders redesign that dropped
+  `· Away` / `· Home` from the header. Regenerating it for this change
+  silently absorbed all of that. The desktop baseline still passes only
+  because `maxDiffPixelRatio: 0.02` covers the difference, so it is stale too
+  and was left alone.
+
+### Not done
+
+- The other 16 visual baselines were not regenerated. They are stale by the
+  same thirteen commits, and a full `test:visual:update` is its own change —
+  18 binary files that would bury a one-field diff.
+- The extra column pushes a stat off a 390px viewport; `.panel__scroll` makes
+  it scrollable, as it already did for the roster's seven columns. Not sized
+  down, because a narrower `#` would stop matching the roster.
+- `.box-score__player`'s `text-align: left` is still losing its specificity
+  fight, so names in both tables sit right-aligned against the rule's intent.
+  Recorded in M9, unchanged here — fixing it moves every name in two tables
+  and belongs in its own diff.

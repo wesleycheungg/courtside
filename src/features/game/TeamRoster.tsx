@@ -28,7 +28,7 @@ function RosterTable({ entries }: { entries: RosterEntry[] }) {
         <tbody>
           {entries.map((entry) => (
             <tr key={entry.playerId}>
-              <td className="roster__jersey">{entry.jerseyNumber}</td>
+              <td className="box-score__jersey">{entry.jerseyNumber}</td>
               <th scope="row" className="box-score__player">
                 <Link to={`/player/${entry.playerId}`}>{abbreviateName(entry.name)}</Link>
               </th>

@@ -208,6 +208,21 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 
 ---
 
+## M9.1 — Jersey numbers in the played box score ☑
+
+**Acceptance criteria**
+
+- ☑ A live or finished box score leads with the same `#` column the pre-game roster
+  does, so the table does not lose a column at tip-off.
+- ☑ The number comes from the provider, carried on `PlayerStatLine` end to end, and is
+  a string — `00` stays `00`.
+- ☑ A jersey the source omits or nulls leaves the cell empty rather than dashed or
+  zeroed; a missing jersey is not a claim about the player.
+- ☑ The summary's `jersey` field is under contract snapshot and asserted by the live
+  suite.
+
+---
+
 ## Later
 
 Shot charts · win probability · following and alerts · other leagues (the data model and

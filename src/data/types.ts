@@ -71,6 +71,8 @@ export interface PlayerStatLine {
   playerId: string;
   name: string;
   position: string;
+  /** As the source formats it; empty where the source omits it. */
+  jerseyNumber: string;
   minutes: number;
   points: number;
   rebounds: number;

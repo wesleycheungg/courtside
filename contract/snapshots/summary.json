@@ -1,7 +1,7 @@
 {
   "schema": "summary",
   "snapshotVersion": 1,
-  "fingerprint": "d210e79ad3dc",
+  "fingerprint": "e4e258bef695",
   "fields": {
     "boxscore": "object?",
     "boxscore.players": "array?",
@@ -13,6 +13,7 @@
     "boxscore.players[].statistics[].athletes[].athlete": "object",
     "boxscore.players[].statistics[].athletes[].athlete.displayName": "string",
     "boxscore.players[].statistics[].athletes[].athlete.id": "string",
+    "boxscore.players[].statistics[].athletes[].athlete.jersey": "string|null?",
     "boxscore.players[].statistics[].athletes[].athlete.position": "object?",
     "boxscore.players[].statistics[].athletes[].athlete.position.abbreviation": "string?",
     "boxscore.players[].statistics[].athletes[].athlete.shortName": "string?",

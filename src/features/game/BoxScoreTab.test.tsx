@@ -6,11 +6,13 @@ import { renderWithProviders } from '../../test/render';
 import {
   aGameDetail,
   aRosterEntry,
+  aStatLine,
   finalState,
+  liveState,
   scheduledState,
   stubProvider,
 } from '../../test/builders';
-import type { RosterEntry } from '../../data/types';
+import type { GameDetail, RosterEntry } from '../../data/types';
 
 /** Scheduled, with the empty box score a game before tip-off really has. */
 const pregame = aGameDetail({
@@ -156,6 +158,19 @@ describe('BoxScoreTab before tip-off', () => {
 });
 
 describe('BoxScoreTab after tip-off', () => {
+  function renderPlayed(state = finalState, boxScore?: GameDetail['boxScore']) {
+    return renderWithProviders(<GameDetailPage />, {
+      path: '/game/:gameId',
+      route: '/game/g1?tab=boxscore',
+      provider: stubProvider({
+        getGame: () =>
+          Promise.resolve(
+            aGameDetail({ id: 'g1', state, ...(boxScore ? { boxScore } : {}) }),
+          ),
+      }),
+    });
+  }
+
   it('never asks for a roster once there is a real box score', async () => {
     const getTeamRoster = vi.fn(() => Promise.resolve(celtics));
 
@@ -171,5 +186,63 @@ describe('BoxScoreTab after tip-off', () => {
     expect(await screen.findByRole('link', { name: 'J. Tatum' })).toBeInTheDocument();
     expect(screen.queryByText('Season averages')).not.toBeInTheDocument();
     expect(getTeamRoster).not.toHaveBeenCalled();
+  });
+
+  it('heads the table with the jersey, player and six stat columns', async () => {
+    renderPlayed();
+
+    await screen.findByRole('link', { name: 'J. Tatum' });
+    const headers = screen.getAllByRole('columnheader').map((th) => th.textContent);
+
+    expect(headers).toEqual(['#', 'Player', 'MIN', 'PTS', 'REB', 'AST', 'FG', '+/−']);
+  });
+
+  it('shows the jersey number alongside the name of a finished game', async () => {
+    renderPlayed();
+
+    await screen.findByRole('link', { name: 'J. Tatum' });
+    const row = screen.getByRole('row', { name: /J\. Tatum/ });
+
+    expect(within(row).getByRole('cell', { name: '0' })).toBeInTheDocument();
+  });
+
+  it('shows the jersey number while the game is still live', async () => {
+    const user = userEvent.setup();
+    renderPlayed(liveState);
+
+    // The away side, to cover the chip switch as well as the live state.
+    await user.click(await screen.findByRole('button', { name: 'NYK' }));
+
+    const row = screen.getByRole('row', { name: /J\. Brunson/ });
+    expect(within(row).getByRole('cell', { name: '11' })).toBeInTheDocument();
+  });
+
+  /** A two-digit leading zero is why the field is a string and not a number. */
+  it('keeps a jersey the source pads, rather than normalizing it to a number', async () => {
+    renderPlayed(finalState, {
+      away: [],
+      home: [
+        aStatLine({ playerId: 'kuminga', name: 'Jonathan Kuminga', jerseyNumber: '00' }),
+      ],
+    });
+
+    await screen.findByRole('link', { name: 'J. Kuminga' });
+    const row = screen.getByRole('row', { name: /J\. Kuminga/ });
+
+    expect(within(row).getByRole('cell', { name: '00' })).toBeInTheDocument();
+  });
+
+  it('leaves the jersey cell empty when the source has no number', async () => {
+    renderPlayed(finalState, {
+      away: [],
+      home: [aStatLine({ jerseyNumber: '' })],
+    });
+
+    await screen.findByRole('link', { name: 'J. Tatum' });
+    const row = screen.getByRole('row', { name: /J\. Tatum/ });
+
+    // Empty, not a dash: a missing jersey is nothing to report, unlike a
+    // missing stat, which the roster dashes out.
+    expect(within(row).getAllByRole('cell')[0]).toBeEmptyDOMElement();
   });
 });
