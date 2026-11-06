@@ -223,6 +223,27 @@ catch-up as well as the new quality tooling. It is the gate where CI starts bloc
 
 ---
 
+## M9.2 — Pre-game season averages ☑
+
+**Acceptance criteria**
+
+- ☑ Before tip-off the Summary tab compares eight team season averages, headed
+  "Season Averages", instead of the two played-game percentages that happened to
+  survive the played-stat filter.
+- ☑ Current streak and last-ten record sit above the averages as a form pair, rendered
+  without comparison bars because a record has no magnitude to split.
+- ☑ A live or finished game is unaffected: the same panel still reads "Team Stats" and
+  still shows that game's played stats.
+- ☑ Which stat set to read is decided by the game's state, not by sniffing stat names,
+  so an unexpected payload yields no rows rather than a mislabelled panel.
+- ☑ A stat the source omits is left out rather than rendered as a zero bar, and the tab
+  still falls through to its pending message when there is nothing at all.
+- ☑ The pre-game stat names are pinned by a captured fixture and asserted by the live
+  contract suite.
+- ☑ No serious or critical a11y violations on the pre-game summary.
+
+---
+
 ## Later
 
 Shot charts · win probability · following and alerts · other leagues (the data model and
