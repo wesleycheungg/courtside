@@ -67,6 +67,17 @@ export interface TeamStat {
   awayShare: number;
 }
 
+/**
+ * A pre-game context line — streak, last ten — shown beside the season
+ * averages. Separate from `TeamStat` because "W5" and "8-1" are records, not
+ * magnitudes: there is no share to split, so there is no bar to draw.
+ */
+export interface TeamFormLine {
+  label: string;
+  awayValue: string;
+  homeValue: string;
+}
+
 export interface PlayerStatLine {
   playerId: string;
   name: string;
@@ -96,7 +107,10 @@ export interface BoxScore {
 
 export interface GameDetail extends Game {
   periods: Period[];
+  /** Played stats once the game tips off; season averages before it. */
   teamStats: TeamStat[];
+  /** Pre-game only; empty for a live or finished game. */
+  teamForm: TeamFormLine[];
   boxScore: BoxScore;
   topPerformers: PlayerStatLine[];
   statLeaders: StatLeader[];

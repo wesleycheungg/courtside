@@ -4,15 +4,18 @@ import {
   normalizeEspnPlays,
   normalizeEspnSummary,
   normalizePlayerGroup,
+  normalizeTeamForm,
   pickTopPerformers,
   shareOf,
   statToNumber,
 } from './normalizeSummary';
 import { gameDetailSchema, parseOrThrow } from '../schemas';
 import summaryFixture from './fixtures/summary-final-401909907.json';
+import pregameFixture from './fixtures/summary-pregame-401909289.json';
 import { aBoxScore, aStatLine } from '../../test/builders';
 
 const summary = espnSummarySchema.parse(summaryFixture);
+const pregameSummary = espnSummarySchema.parse(pregameFixture);
 
 describe('statToNumber', () => {
   it('takes the makes from a made-attempted pair', () => {
@@ -195,6 +198,88 @@ describe('normalizeEspnSummary over the captured response', () => {
       expect(stat.awayShare).toBeGreaterThanOrEqual(0);
       expect(stat.awayShare).toBeLessThanOrEqual(1);
     }
+  });
+
+  it('carries no pre-game form once the game has been played', () => {
+    expect(detail.teamForm).toEqual([]);
+  });
+});
+
+/**
+ * Before tip-off ESPN reuses `boxscore.teams[].statistics` for season
+ * averages. Reading it with the played-game labels is what used to leave the
+ * panel with two rows.
+ */
+describe('normalizeEspnSummary — before tip-off', () => {
+  const detail = normalizeEspnSummary(pregameSummary);
+
+  it('is a scheduled game with nothing played to show', () => {
+    expect(detail.state.status).toBe('scheduled');
+    expect(detail.periods).toEqual([]);
+    expect(detail.boxScore.away).toEqual([]);
+    expect(detail.boxScore.home).toEqual([]);
+  });
+
+  it('reads the eight season averages in the order the design shows them', () => {
+    expect(detail.teamStats.map((stat) => stat.label)).toEqual([
+      'Points Per Game',
+      'Points Allowed',
+      'Field Goal %',
+      '3-Point %',
+      'Rebounds',
+      'Assists',
+      'Steals',
+      'Turnovers',
+    ]);
+  });
+
+  it('suffixes only the percentages and leaves the averages alone', () => {
+    const byLabel = new Map(detail.teamStats.map((stat) => [stat.label, stat]));
+
+    // ESPN sends "45", not "45%" — the suffix is ours.
+    expect(byLabel.get('Field Goal %')?.awayValue).toMatch(/^\d+(\.\d+)?%$/);
+    expect(byLabel.get('Points Per Game')?.awayValue).not.toContain('%');
+  });
+
+  it('sizes every bar from the pair', () => {
+    for (const stat of detail.teamStats) {
+      expect(stat.awayShare).toBeGreaterThan(0);
+      expect(stat.awayShare).toBeLessThan(1);
+    }
+  });
+
+  it('reads streak and last ten as form, with no share to split', () => {
+    expect(detail.teamForm).toEqual([
+      { label: 'Streak', awayValue: expect.any(String), homeValue: expect.any(String) },
+      { label: 'Last 10', awayValue: expect.any(String), homeValue: expect.any(String) },
+    ]);
+  });
+
+  it('satisfies the domain schema', () => {
+    expect(() => parseOrThrow(gameDetailSchema, detail, detail.id)).not.toThrow();
+  });
+});
+
+describe('normalizeTeamForm', () => {
+  const team = (statistics: { name: string; displayValue: string }[]) => ({
+    team: { id: '1', abbreviation: 'AAA', displayName: 'Team A' },
+    statistics,
+  });
+
+  it('omits a line one side is missing rather than half-filling it', () => {
+    const lines = normalizeTeamForm(
+      team([{ name: 'streak', displayValue: 'W5' }]),
+      team([
+        { name: 'streak', displayValue: 'L2' },
+        { name: 'Last Ten Games', displayValue: '4-6' },
+      ]),
+    );
+
+    expect(lines.map((line) => line.label)).toEqual(['Streak']);
+  });
+
+  it('returns nothing when a side is absent entirely', () => {
+    expect(normalizeTeamForm(undefined, undefined)).toEqual([]);
   });
 });
 

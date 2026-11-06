@@ -114,12 +114,28 @@ describe('MockProvider.getGame', () => {
     expect(detail.topPerformers[0]?.points).toBe(28);
   });
 
-  it('gives a scheduled game empty stats rather than fabricated ones', async () => {
+  it('gives a scheduled game season averages, not fabricated game stats', async () => {
     const detail = await providerAt(DURING_Q3).getGame('mock-sched-cle-mil');
 
+    // Nothing has been played, so there is nothing to invent: no periods and
+    // no box score. The team panel carries season form instead.
     expect(detail.periods).toEqual([]);
-    expect(detail.teamStats).toEqual([]);
     expect(detail.boxScore.away).toEqual([]);
+
+    expect(detail.teamStats.map((stat) => stat.label)).toEqual([
+      'Points Per Game',
+      'Points Allowed',
+      'Field Goal %',
+      '3-Point %',
+      'Rebounds',
+      'Assists',
+      'Steals',
+      'Turnovers',
+    ]);
+    expect(detail.teamForm.map((line) => line.label)).toEqual(['Streak', 'Last 10']);
+    expect(() =>
+      parseOrThrow(gameDetailSchema, detail, 'mock-sched-cle-mil'),
+    ).not.toThrow();
   });
 
   it('throws on an unknown game id', async () => {

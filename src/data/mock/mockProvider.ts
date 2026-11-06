@@ -16,6 +16,7 @@ import type {
   Player,
   PlayerStatLine,
   RosterEntry,
+  TeamFormLine,
   TeamStat,
 } from '../types';
 import { pickStatLeaders } from '../statLeaders';
@@ -44,6 +45,8 @@ import rostersFixture from './fixtures/rosters.json';
 
 interface DetailFixture {
   teamStats: TeamStat[];
+  /** Pre-game only, so the played fixtures leave it out entirely. */
+  teamForm?: TeamFormLine[];
   boxScore: BoxScore;
   topPerformerIds: string[];
 }
@@ -105,6 +108,7 @@ function buildDetail(game: Game, clock: Clock): GameDetail {
     ...game,
     periods: [],
     teamStats: fixture.teamStats,
+    teamForm: fixture.teamForm ?? [],
     boxScore: fixture.boxScore,
     topPerformers,
     statLeaders: pickStatLeaders(fixture.boxScore),
