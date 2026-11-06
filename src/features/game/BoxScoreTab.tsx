@@ -15,6 +15,9 @@ function StatTable({ lines }: { lines: PlayerStatLine[] }) {
       <table className="box-score">
         <thead>
           <tr>
+            <th scope="col">
+              <abbr title="Jersey number">#</abbr>
+            </th>
             <th scope="col">Player</th>
             <th scope="col">MIN</th>
             <th scope="col">PTS</th>
@@ -29,6 +32,7 @@ function StatTable({ lines }: { lines: PlayerStatLine[] }) {
         <tbody>
           {lines.map((line) => (
             <tr key={line.playerId}>
+              <td className="box-score__jersey">{line.jerseyNumber}</td>
               <th scope="row" className="box-score__player">
                 <Link to={`/player/${line.playerId}`}>{abbreviateName(line.name)}</Link>
               </th>
@@ -57,7 +61,7 @@ export function BoxScoreTab({ game }: { game: GameDetail }) {
   return (
     <section className="panel">
       <div className="box-score__switch" role="group" aria-label="Choose a team">
-        {(['home', 'away'] as const).map((option) => (
+        {(['away', 'home'] as const).map((option) => (
           <button
             key={option}
             type="button"

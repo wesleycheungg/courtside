@@ -66,6 +66,7 @@ export const playerStatLineSchema = z.object({
   playerId: z.string().min(1),
   name: z.string().min(1),
   position: z.string().min(1),
+  jerseyNumber: z.string(),
   minutes: z.number().nonnegative(),
   points: z.number().int().nonnegative(),
   rebounds: z.number().int().nonnegative(),

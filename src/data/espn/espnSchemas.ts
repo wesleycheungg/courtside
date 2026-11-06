@@ -169,6 +169,8 @@ export const espnPlayerGroupSchema = z.object({
             id: z.string(),
             displayName: z.string(),
             shortName: z.string().optional(),
+            // Nullish like the roster's, which arrives `null` rather than absent.
+            jersey: z.string().nullish(),
             position: z.object({ abbreviation: z.string().optional() }).optional(),
           }),
           stats: z.array(z.string()),

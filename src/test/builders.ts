@@ -91,6 +91,7 @@ export function aStatLine(overrides: Overrides<PlayerStatLine> = {}): PlayerStat
       playerId: 'tatum',
       name: 'Jayson Tatum',
       position: 'F',
+      jerseyNumber: '0',
       minutes: 30,
       points: 28,
       rebounds: 9,
@@ -106,7 +107,14 @@ export function aStatLine(overrides: Overrides<PlayerStatLine> = {}): PlayerStat
 export function aBoxScore(overrides: Overrides<BoxScore> = {}): BoxScore {
   return build(
     {
-      away: [aStatLine({ playerId: 'brunson', name: 'Jalen Brunson', points: 31 })],
+      away: [
+        aStatLine({
+          playerId: 'brunson',
+          name: 'Jalen Brunson',
+          jerseyNumber: '11',
+          points: 31,
+        }),
+      ],
       home: [aStatLine()],
     },
     overrides,

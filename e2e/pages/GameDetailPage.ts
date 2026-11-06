@@ -57,6 +57,20 @@ export class GameDetailPage {
     return this.rosterRows().filter({ hasText: player });
   }
 
+  /** Stat lines once the game has tipped off, as opposed to `rosterRows`. */
+  boxScoreRows(): Locator {
+    return this.page.locator('table.box-score:not(.roster) tbody tr');
+  }
+
+  boxScoreRow(player: string): Locator {
+    return this.boxScoreRows().filter({ hasText: player });
+  }
+
+  /** The leading `#` cell of a row in either table. */
+  jersey(row: Locator): Locator {
+    return row.locator('.box-score__jersey');
+  }
+
   /** Each team's quarter values, so a test can check they sum to the total. */
   async quarterTotals(): Promise<{ label: string; cells: number[]; total: number }[]> {
     return this.page.locator('.quarters tbody tr').evaluateAll((rows) =>

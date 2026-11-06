@@ -323,6 +323,31 @@ describe('ESPN summary', () => {
     },
     TIMEOUT,
   );
+
+  it(
+    'still carries a jersey number on each box score athlete',
+    () => {
+      const parsed = contractSchemas.summary.parse(summary);
+      const athletes = (parsed.boxscore?.players ?? []).flatMap((group) =>
+        group.statistics.flatMap((block) => block.athletes),
+      );
+
+      if (athletes.length === 0) {
+        notes.push(
+          `_Summary ${eventId} carried no player box score; the jersey column was not exercised._`,
+        );
+        return;
+      }
+
+      // The schema keeps `jersey` nullish, so a disappearance would empty the
+      // box score's first column in silence rather than failing to parse.
+      const numbered = athletes.filter(
+        (entry) => (entry.athlete.jersey ?? '').length > 0,
+      );
+      expect(numbered.length).toBeGreaterThan(0);
+    },
+    TIMEOUT,
+  );
 });
 
 /* ── standings and teams ──────────────────────────────────────────────────── */

@@ -102,6 +102,31 @@ test.describe('game detail', () => {
     await expect(page.getByRole('link', { name: 'D. Lillard' })).toBeHidden();
   });
 
+  test('a finished box score numbers every player @regression', async ({ page }) => {
+    const detail = new GameDetailPage(page);
+    await detail.goto(FINAL_GAME, { tab: 'boxscore' });
+
+    await expect(page.getByRole('columnheader', { name: '#' })).toBeVisible();
+    await expect(detail.jersey(detail.boxScoreRow('S. Gilgeous-Alexander'))).toHaveText(
+      '2',
+    );
+
+    // No blank cells: every fixture line carries a number.
+    const jerseys = await detail.jersey(detail.boxScoreRows()).allInnerTexts();
+    expect(jerseys).toHaveLength(await detail.boxScoreRows().count());
+    expect(jerseys.every((value) => value.trim().length > 0)).toBe(true);
+  });
+
+  test('a live box score numbers every player @regression', async ({ page }) => {
+    const detail = new GameDetailPage(page);
+    await detail.goto(SIM_GAME, { tab: 'boxscore', simTime: simTime.thirdQuarter });
+
+    await expect(detail.jersey(detail.boxScoreRow('J. Tatum'))).toHaveText('0');
+
+    await detail.teamChip('NYK').click();
+    await expect(detail.jersey(detail.boxScoreRow('J. Brunson'))).toHaveText('11');
+  });
+
   test('a box score row opens that player @regression', async ({ page }) => {
     const detail = new GameDetailPage(page);
     await detail.goto(SIM_GAME, { tab: 'boxscore', simTime: simTime.thirdQuarter });

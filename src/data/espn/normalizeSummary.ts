@@ -115,6 +115,7 @@ export function normalizePlayerGroup(
         playerId: entry.athlete.id,
         name: entry.athlete.shortName ?? entry.athlete.displayName,
         position: entry.athlete.position?.abbreviation ?? '—',
+        jerseyNumber: entry.athlete.jersey ?? '',
         minutes: toNumber(at(entry.stats, min)),
         points: toNumber(at(entry.stats, pts)),
         rebounds: toNumber(at(entry.stats, reb)),
